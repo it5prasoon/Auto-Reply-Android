@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.matrix.autoreply">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <!-- Specific apps Watomatic interacts with. Required for Android 11+ -->
+        <package android:name="com.whatsapp" />
+        <package android:name="com.facebook.orca" />
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WaReply">
+
+        <activity android:name="com.matrix.autoreply.activity.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.matrix.autoreply.activity.customreplyeditor.CustomReplyEditorActivity"
+            android:label="@string/mainAutoReplyLabel"
+            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity">
+            <intent-filter android:label="global-auto-reply-message-intent">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="watomatic"
+                    android:host="auto-reply" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.matrix.autoreply.activity.settings.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity"
+            >
+        </activity>
+
+        <activity
+            android:name="com.matrix.autoreply.activity.notification.NotificationIntentActivity"
+            android:launchMode="singleTop"
+            >
+        </activity>
+
+        <service
+            android:name="com.matrix.autoreply.ForegroundNotificationService"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

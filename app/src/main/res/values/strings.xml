@@ -1,0 +1,125 @@
+<resources>
+    <string name="app_name">Auto Reply</string>
+    <string name="url_privacy_policy">https://it5prasoon.github.io/autoreply/#/privacy-policy.md</string>
+
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="privacy_policy_label">Privacy Policy</string>
+    <string name="service_name">Auto Reply</string>
+    <string name="mainAutoReplyTextPlaceholder">(Custom Reply)</string>
+    <string name="auto_reply_default_message">Auto Reply\n⚠️ User not available</string>
+    <string name="mainAutoReplyLabel">Auto reply text</string>
+    <string name="mainAutoReplySwitchOffLabel">Auto reply OFF</string>
+    <string name="mainAutoReplySwitchOnLabel">Auto reply ON</string>
+    <string name="mainAutoReplyEditBtnTooltip">Click to edit auto reply text</string>
+    <string name="to_help_you_leave_whatsapp">Leave messages without touching phone</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="sure">I\'m Sure</string>
+    <string name="retry">Retry</string>
+    <string name="permission_dialog_title">Permission Required</string>
+    <string name="permission_dialog_msg">This app requires Notification Access permissions to work.</string>
+    <string name="permission_dialog_denied_title">Permission Denied</string>
+    <string name="permission_dialog_denied_msg">Without this permission app is unable to auto-reply to the notifications. Are you sure you want to deny the permission?</string>
+
+    <!-- Select apps to auto reply -->
+    <string name="enable_for_apps">Enable for apps</string>
+    <string name="enable_auto_reply_switch_msg">Enable Auto Reply Switch First.</string>
+    <string name="error_atleast_single_app_must_be_selected">Error: Select at-least a single app</string>
+
+    <!-- Group chats -->
+    <string name="groupReplySwitchLabel">Auto reply for Group chats</string>
+    <string name="group_reply_on_info_message">Enabled auto reply for group chats</string>
+    <string name="group_reply_off_info_message">Disabled auto reply for group chats</string>
+
+    <string name="time_picker_title">Reply frequency</string>
+    <string name="time_picker_sub_title_default">Respond to all messages without control</string>
+    <string name="time_picker_sub_title">Respond only once every %1$d day\/s for each person\/group</string>
+    <string name="time_format_placeholder">00:00</string>
+    <string name="time_picker_edit_btn_tooltip">Click to edit time delay between replies</string>
+    <string name="app_version">v%1$s</string>
+
+    <!-- Custom message editor -->
+    <string name="save">Save</string>
+    <string name="tip_view_messages_from_fellow_users">🦩 <u>View templates from community and share yours too ➚</u></string>
+    <string name="append_autoreply_arribution_checkbox_label">Add Autoreply attribute to the messege.</string>
+    <string name="sent_using_autoreply">Sent using AutoReply</string>
+
+    <string name="share">Share</string>
+    <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>
+    <string name="autoreply_subreddit_label"><u>Let\'s discuss\nr/autoreply</u></string>
+    <string name="autoreply_github_url" translatable="false">https://github.com/it5prasoon/Auto-Reply-Android</string>
+    <string name="autoreply_github_latest_release_url" translatable="false">https://github.com/it5prasoon/Auto-Reply-Android/releases/latest</string>
+
+    <!-- Share debug logs -->
+    <string name="app_logs_file_name" translatable="false">AutoreplyLogs.txt</string>
+    <string name="share_email_body" translatable="false">Hi Team Autoreply,\nPlease find the attachment of the app logs.</string>
+    <string name="share_email_subject" translatable="false">Autoreply AppLogs</string>
+    <string name="share_email_id" translatable="false">autoreply@deekshith.in</string>
+    <string name="share_email_err_msg" translatable="false">Couldnot find any application to process this request</string>
+
+    <!-- keys and app internal strings -->
+    <string name="key_pref_app_language" translatable="false">pref_app_language</string>
+    <string name="pref_show_notification_replied_msg" translatable="false">pref_show_notification_replied_msg</string>
+
+    <!-- app settings -->
+    <string name="show_notification_label">Show notification for replied messages</string>
+
+    <!-- Local language names (non translatable) -->
+    <string name="lang_en" translatable="false">English (en)</string>
+    <string name="lang_ar_rSA" translatable="false">اَلْعَرَبِيَّةُ (ar-rSA)</string>
+    <string name="lang_ca_rES" translatable="false">Català (ca-rES)</string>
+    <string name="lang_de_rDE" translatable="false">Deutsch (de-rDE)</string>
+    <string name="lang_es_rES" translatable="false">Español (es-rES)</string>
+    <string name="lang_es_rMX" translatable="false">Español (México) (es-rMX)</string>
+    <string name="lang_eu_rES" translatable="false">Euskara (eu-rES)</string> <!-- Basque -->
+    <string name="lang_fi_rFI" translatable="false">Suomi (fi_rFI)</string>
+    <string name="lang_fr_rFR" translatable="false">Français (fr-rFR)</string>
+    <string name="lang_in_rID" translatable="false">Indonesian (in-rID)</string>
+    <string name="lang_it_rIT" translatable="false">Italiano (it-rIT)</string>
+    <string name="lang_mk_rMK" translatable="false">македонски јазик (mk-rMK)</string>
+    <string name="lang_nl_rNL" translatable="false">Nederlands (nl-rNL)</string>
+    <string name="lang_pt_rBR" translatable="false">Portuguese (pt-rBR)</string>
+    <string name="lang_ru_rRU" translatable="false">Pусский (ru-rRU)</string>
+    <string name="lang_ta_rIN" translatable="false">தமிழ் (ta-rIN)</string>
+    <string name="lang_tr_rTR" translatable="false">Türkçe (tr-rTR)</string>
+
+    <!-- Language codes (non translatable) -->
+    <string name="lang_code_en" translatable="false">en</string>
+    <string name="lang_code_ar_rSA" translatable="false">ar-SA</string>
+    <string name="lang_code_ca_rES" translatable="false">ca-ES</string>
+    <string name="lang_code_de_rDE" translatable="false">de-DE</string>
+    <string name="lang_code_es_rES" translatable="false">es-ES</string>
+    <string name="lang_code_es_rMX" translatable="false">es-MX</string>
+    <string name="lang_code_eu_rES" translatable="false">eu-ES</string>
+    <string name="lang_code_fi_rFI" translatable="false">fi-FI</string>
+    <string name="lang_code_fr_rFR" translatable="false">fr-FR</string>
+    <string name="lang_code_in_rID" translatable="false">in-ID</string>
+    <string name="lang_code_it_rIT" translatable="false">it-IT</string>
+    <string name="lang_code_mk_rMK" translatable="false">mk-MK</string>
+    <string name="lang_code_nl_rNL" translatable="false">nl-NL</string>
+    <string name="lang_code_pt_rBR" translatable="false">pt-BR</string>
+    <string name="lang_code_ru_rRU" translatable="false">ru-RU</string>
+    <string name="lang_code_ta_rIN" translatable="false">ta-IN</string>
+    <string name="lang_code_tr_rTR" translatable="false">tr-TR</string>
+
+    <!-- App Language selection -->
+    <string name="app_language">App Language</string>
+
+    <!-- App Rating Dialog -->
+    <string name="app_rating_dialog_title">What do you think?</string>
+    <string name="app_rating_dialog_msg">We are interested in what you think of the app. Tap the stars above to rate it.</string>
+    <string name="app_rating_dialog_rate_button_title">Rate it!</string>
+    <string name="app_rating_dialog_rate_later_title">May be later</string>
+    <string name="app_rating_goto_store_dialog_title">We\'re happy!</string>
+    <string name="celebrate_emoji" translatable="false">😃🙌</string>
+    <string name="app_rating_goto_store_dialog_msg">Please share this rating of our app on the Google Play Store by tapping \"Continue\"\!</string>
+    <string name="app_rating_pitch">This app is free, no ads, no tracking, open source and is made by contributors like you and me.
+        Your feedback is our only encouragement.</string>
+    <string name="app_rating_goto_store_dialog_button1_title">Not Interested</string>
+    <string name="app_rating_goto_store_dialog_button2_title">Continue</string>
+    <string name="app_rating_feedback_dialog_title">Contact us</string>
+    <string name="app_rating_feedback_dialog_msg">Let us know how we can improve.</string>
+    <string name="app_rating_feedback_dialog_mail_button_title">Email Us</string>
+    <string name="app_rating_feedback_dialog_telegram_button_title">Telegram</string>
+</resources>
