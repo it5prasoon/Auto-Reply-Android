@@ -55,7 +55,7 @@ public class NotificationHelper {
     public void sendNotification(String title, String message, String packageName){
         for (App supportedApp: Constants.SUPPORTED_APPS) {
             if(supportedApp.getPackageName().equalsIgnoreCase(packageName)){
-                title = supportedApp.getName() + ":" + title;
+                title = supportedApp.getName() + ": " + title;
                 break;
             }
         }
@@ -65,7 +65,7 @@ public class NotificationHelper {
         PendingIntent pIntent = PendingIntent.getActivity(appContext, 0, intent, 0);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(appContext, Constants.NOTIFICATION_CHANNEL_ID)
-                .setGroup("watomatic-" + packageName)
+                .setGroup("autoreply-" + packageName)
                 .setGroupSummary(false)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
@@ -97,9 +97,9 @@ public class NotificationHelper {
                 appsList.put(packageName, true);
                 //Need to create one summary notification, this will help group all individual notifications
                 NotificationCompat.Builder summaryNotificationBuilder = new NotificationCompat.Builder(appContext, Constants.NOTIFICATION_CHANNEL_ID)
-                        .setGroup("watomatic-" + packageName)
+                        .setGroup("autoreply-" + packageName)
                         .setGroupSummary(true)
-                        .setSmallIcon(R.drawable.ic_logo_full)
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setAutoCancel(true)
                         .setContentIntent(pIntent);
                 notificationManager.notify(notifId + 1, summaryNotificationBuilder.build());
@@ -110,7 +110,7 @@ public class NotificationHelper {
     }
 
     private void setNotificationSummaryShown(String packageName){
-        packageName = packageName.replace("watomatic-", "");
+        packageName = packageName.replace("autoreply-", "");
         try {
             appsList.put(packageName, true);
         } catch (JSONException e) {
@@ -119,7 +119,7 @@ public class NotificationHelper {
     }
 
     public void markNotificationDismissed(String packageName){
-        packageName = packageName.replace("watomatic-", "");
+        packageName = packageName.replace("autoreply-", "");
         try {
             appsList.put(packageName, false);
         } catch (JSONException e) {

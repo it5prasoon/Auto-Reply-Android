@@ -8,10 +8,10 @@
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/about"
-        android:title="@string/about"
-        android:icon="@drawable/ic_baseline_info_24"
-        app:showAsAction="never"/>
+<!--    <item-->
+<!--        android:id="@+id/about"-->
+<!--        android:title="@string/about"-->
+<!--        android:icon="@drawable/ic_baseline_info_24"-->
+<!--        app:showAsAction="never"/>-->
 
 </menu>

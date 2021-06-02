@@ -83,7 +83,6 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         setHasOptionsMenu(true);
-
         mActivity = getActivity();
 
         customRepliesData = CustomRepliesData.getInstance(mActivity);
@@ -161,7 +160,6 @@ public class MainFragment extends Fragment {
         setNumDays();
 
         createSupportedAppCheckboxes();
-
         return view;
     }
 
@@ -518,8 +516,6 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.setting){
             loadSettingsActivity();
-        } else if(item.getItemId() == R.id.about) {
-            Toast.makeText(getActivity(), "Under construction", Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }

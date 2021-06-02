@@ -7,7 +7,7 @@
     <string name="privacy_policy_label">Privacy Policy</string>
     <string name="service_name">Auto Reply</string>
     <string name="mainAutoReplyTextPlaceholder">(Custom Reply)</string>
-    <string name="auto_reply_default_message">Auto Reply\n⚠️ User not available</string>
+    <string name="auto_reply_default_message">⚠ User is not available.</string>
     <string name="mainAutoReplyLabel">Auto reply text</string>
     <string name="mainAutoReplySwitchOffLabel">Auto reply OFF</string>
     <string name="mainAutoReplySwitchOnLabel">Auto reply ON</string>
@@ -42,8 +42,8 @@
     <!-- Custom message editor -->
     <string name="save">Save</string>
     <string name="tip_view_messages_from_fellow_users">🦩 <u>View templates from community and share yours too ➚</u></string>
-    <string name="append_autoreply_arribution_checkbox_label">Add Autoreply attribute to the messege.</string>
-    <string name="sent_using_autoreply">Sent using AutoReply</string>
+    <string name="append_autoreply_arribution_checkbox_label">Add autoreply attribute to the messege.</string>
+    <string name="sent_using_autoreply">Sent by Auto reply</string>
 
     <string name="share">Share</string>
     <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>
