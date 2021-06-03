@@ -8,12 +8,12 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # Features: <br>
 <ul>
-<li>Reply automation to simple message as well as group chats</li><br>
-<li>Respects your privacy by not taking any information</li><br>
-<li>Add reply frequency for single user</li><br>
-<li>No tracking</li><br>
-<li>Free</li><br>
-<li>Open source</li><br>
+<li>Reply automation to simple message as well as group chats</li>
+<li>Respects your privacy by not taking any information</li>
+<li>Add reply frequency for single user</li>
+<li>No tracking</li>
+<li>Free</li>
+<li>Open source</li>
 <ul>
 
 # Tools: <br>
