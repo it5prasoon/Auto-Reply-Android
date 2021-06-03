@@ -122,4 +122,9 @@
     <string name="app_rating_feedback_dialog_msg">Let us know how we can improve.</string>
     <string name="app_rating_feedback_dialog_mail_button_title">Email Us</string>
     <string name="app_rating_feedback_dialog_telegram_button_title">Telegram</string>
+
+
+    <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="tab_text_1">Main</string>
+    <string name="tab_text_2">Settings</string>
 </resources>

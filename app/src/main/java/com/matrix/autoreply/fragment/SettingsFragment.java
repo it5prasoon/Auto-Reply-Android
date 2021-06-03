@@ -7,7 +7,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.matrix.autoreply.R;
-import com.matrix.autoreply.activity.main.MainActivity;
+import com.matrix.autoreply.activity.MainActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 //    private ListPreference languagePref;

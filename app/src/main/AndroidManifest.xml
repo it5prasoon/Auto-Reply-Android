@@ -6,7 +6,7 @@
 
     <queries>
 
-        <!-- Specific apps Watomatic interacts with. Required for Android 11+ -->
+        <!-- Specific apps Autoreply interacts with. Required for Android 11+ -->
         <package android:name="com.whatsapp" />
         <package android:name="com.facebook.orca" />
     </queries>
@@ -18,21 +18,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WaReply">
-        <activity android:name="com.matrix.autoreply.activity.SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_activity_tabbed"
+            android:theme="@style/Theme.WaReply.NoActionBar" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.matrix.autoreply.activity.main.MainActivity" android:label="Auto Reply">
-        </activity>
-
         <activity
-            android:name="com.matrix.autoreply.activity.customreplyeditor.CustomReplyEditorActivity"
+            android:name=".activity.customreplyeditor.CustomReplyEditorActivity"
             android:label="@string/mainAutoReplyLabel"
-            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity">
+            android:parentActivityName=".activity.MainActivity">
             <intent-filter android:label="global-auto-reply-message-intent">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -44,13 +46,12 @@
                     android:scheme="autoreply" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.matrix.autoreply.activity.settings.SettingsActivity"
+            android:name=".activity.settings.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity" />
+            android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name="com.matrix.autoreply.activity.notification.NotificationIntentActivity"
+            android:name=".activity.notification.NotificationIntentActivity"
             android:launchMode="singleTop" />
 
         <service
