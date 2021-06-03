@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.main.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="397dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:paddingTop="45dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:text="@string/app_name"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView5"
@@ -27,9 +14,12 @@
         android:text="@string/to_help_you_leave_whatsapp"
         android:textAlignment="center"
         android:paddingBottom="15dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Main Auto Reply enable switch -->
     <com.google.android.material.card.MaterialCardView
@@ -83,6 +73,7 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/mainAutoReplyTextPlaceholder"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#171D3B"
-    android:gravity="center"
-    android:orientation="vertical">
-
+    android:background="@color/colorPrimary">
 
     <ImageView
-        android:id="@+id/logosplash"
+        android:id="@+id/app_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher_foreground" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/app_name_text_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/app_image_view"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textStyle="bold" />-->
 
 
-</LinearLayout>
+</RelativeLayout>

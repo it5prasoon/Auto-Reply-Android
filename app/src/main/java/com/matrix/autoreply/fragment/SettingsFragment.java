@@ -3,14 +3,11 @@ package com.matrix.autoreply.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.matrix.autoreply.R;
 import com.matrix.autoreply.activity.main.MainActivity;
-import com.matrix.autoreply.model.preferences.PreferencesManager;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 //    private ListPreference languagePref;

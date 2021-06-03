@@ -1,6 +1,5 @@
 package com.matrix.autoreply.activity.main
 
-import android.app.ActionBar
 import android.os.Bundle
 import com.matrix.autoreply.R
 import com.matrix.autoreply.activity.BaseActivity

@@ -8,9 +8,9 @@
     <string name="service_name">Auto Reply</string>
     <string name="mainAutoReplyTextPlaceholder">(Custom Reply)</string>
     <string name="auto_reply_default_message">⚠ User is not available.</string>
-    <string name="mainAutoReplyLabel">Auto reply text</string>
-    <string name="mainAutoReplySwitchOffLabel">Auto reply OFF</string>
-    <string name="mainAutoReplySwitchOnLabel">Auto reply ON</string>
+    <string name="mainAutoReplyLabel">Set custom text to reply</string>
+    <string name="mainAutoReplySwitchOffLabel">Status: OFF</string>
+    <string name="mainAutoReplySwitchOnLabel">Status: ON</string>
     <string name="mainAutoReplyEditBtnTooltip">Click to edit auto reply text</string>
     <string name="to_help_you_leave_whatsapp">Leave messages without touching phone</string>
     <string name="decline">Decline</string>
@@ -28,7 +28,7 @@
     <string name="error_atleast_single_app_must_be_selected">Error: Select at-least a single app</string>
 
     <!-- Group chats -->
-    <string name="groupReplySwitchLabel">Auto reply for Group chats</string>
+    <string name="groupReplySwitchLabel">Auto reply group chats</string>
     <string name="group_reply_on_info_message">Enabled auto reply for group chats</string>
     <string name="group_reply_off_info_message">Disabled auto reply for group chats</string>
 
@@ -43,7 +43,7 @@
     <string name="save">Save</string>
     <string name="tip_view_messages_from_fellow_users">🦩 <u>View templates from community and share yours too ➚</u></string>
     <string name="append_autoreply_arribution_checkbox_label">Add autoreply attribute to the messege.</string>
-    <string name="sent_using_autoreply">Sent by Auto reply</string>
+    <string name="sent_using_autoreply">Sent by auto reply!</string>
 
     <string name="share">Share</string>
     <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>

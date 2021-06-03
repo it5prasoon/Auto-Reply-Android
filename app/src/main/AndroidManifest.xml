@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WaReply">
-        <activity android:name=".activity.SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="com.matrix.autoreply.activity.SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.main.MainActivity" android:label="Hi, User">
+        <activity android:name="com.matrix.autoreply.activity.main.MainActivity" android:label="Auto Reply">
         </activity>
 
         <activity
-            android:name=".activity.customreplyeditor.CustomReplyEditorActivity"
+            android:name="com.matrix.autoreply.activity.customreplyeditor.CustomReplyEditorActivity"
             android:label="@string/mainAutoReplyLabel"
-            android:parentActivityName=".activity.main.MainActivity">
+            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity">
             <intent-filter android:label="global-auto-reply-message-intent">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,11 +46,11 @@
         </activity>
 
         <activity
-            android:name=".activity.settings.SettingsActivity"
+            android:name="com.matrix.autoreply.activity.settings.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".activity.main.MainActivity" />
+            android:parentActivityName="com.matrix.autoreply.activity.main.MainActivity" />
         <activity
-            android:name=".activity.notification.NotificationIntentActivity"
+            android:name="com.matrix.autoreply.activity.notification.NotificationIntentActivity"
             android:launchMode="singleTop" />
 
         <service
