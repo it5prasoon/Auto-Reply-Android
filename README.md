@@ -14,14 +14,41 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <li>No tracking</li>
 <li>Free</li>
 <li>Open source</li>
+<li> AI chat features</li>
+</ul>
+
+# ToDo
+<ul>
+<li> AI chat features</li>
 </ul>
 
 # Tools: <br>
+<ul>
+<li>Kotlin</li>
+<li>Java</li>
+<li>Python (For AI bot)</li>
+<li>Chaquopy SDK for pythoj</li>
+<li>Python tools:</li>
+  
+``` text
+  tqdm
+  matplotlib
+  stop_words
+  wordcloud
+  parse>= 1.15.0
+  PyYAML==5.3.1
+  knockknock==0.1.8.1
+```
+  
+</ul>
 
-To be added .....
 
 For source code:<br>
 https://www.github.com/it5prasoon/Auto-Reply-Android<br>
+
+# Open Source Repository Used:
+https://github.com/pistocop/messaging-chat-parser<br>
+https://github.com/pistocop/pistoBot
 
 The application is under development phase so your code contribution helps us a lot. Check out the github repository, fork it and make pull requests. So see you there.<br>
 
