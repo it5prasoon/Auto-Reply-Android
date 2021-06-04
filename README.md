@@ -38,6 +38,8 @@ It sends replies automatically to all the contacts who contacts you on the insta
   parse>= 1.15.0
   PyYAML==5.3.1
   knockknock==0.1.8.1
+  pytorch-lightning==0.7.6
+  aitextgen~=0.2.0
 ```
   
 </ul>
