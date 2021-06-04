@@ -126,5 +126,6 @@
 
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Main</string>
-    <string name="tab_text_2">Settings</string>
+    <string name="tab_text_2">Single</string>
+    <string name="tab_text_3">Settings</string>
 </resources>
