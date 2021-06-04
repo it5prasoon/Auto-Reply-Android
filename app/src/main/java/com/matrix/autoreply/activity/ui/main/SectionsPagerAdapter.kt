@@ -7,10 +7,12 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.matrix.autoreply.R
 import com.matrix.autoreply.fragment.MainFragment
 import com.matrix.autoreply.fragment.SettingsFragment
+import com.matrix.autoreply.fragment.SingleFriendFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_text_1,
-        R.string.tab_text_2
+        R.string.tab_text_2,
+        R.string.tab_text_3
 )
 
 /**
@@ -25,7 +27,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
 
         when (position) {
             0 -> fragment = MainFragment()
-            1 -> fragment = SettingsFragment()
+            1 -> fragment = SingleFriendFragment()
+            2 -> fragment = SettingsFragment()
         }
 
         return fragment!!
@@ -37,6 +40,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
 
     override fun getCount(): Int {
         // Show 2 total pages.
-        return 2
+        return 3
     }
 }

@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.chaquo.python'
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -13,6 +14,7 @@ android {
         targetSdkVersion 30
         versionCode 3
         versionName "1.0.0"
+        multiDexEnabled true //important
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -21,7 +23,33 @@ android {
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // For python chaquopy extension
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+        python {
+            buildPython "C:/Users/Prasoon/AppData/Local/Programs/Python/Python38"
+            buildPython "python"
+
+//            pip {
+//                    // "-r"` followed by a requirements filename, relative to the
+//                    // project directory:
+//                    install "-r", "requirements.txt"
+//                }
+        }
+
     }
+
+    // For python chaquopy extension
+    sourceSets {
+        main {
+            python.srcDir "src/main/python"
+        }
+    }
+
+
 
     buildTypes {
         release {
@@ -69,11 +97,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     annotationProcessor 'androidx.room:room-compiler:2.3.0'
-    
+
     implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
