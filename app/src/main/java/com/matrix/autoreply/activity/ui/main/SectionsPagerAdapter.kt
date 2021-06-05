@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.matrix.autoreply.R
 import com.matrix.autoreply.fragment.MainFragment
 import com.matrix.autoreply.fragment.SettingsFragment
-import com.matrix.autoreply.fragment.SingleFriendFragment
+import com.matrix.autoreply.fragment.DeletedMessageFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_text_1,
@@ -27,7 +27,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
 
         when (position) {
             0 -> fragment = MainFragment()
-            1 -> fragment = SingleFriendFragment()
+            1 -> fragment = DeletedMessageFragment()
             2 -> fragment = SettingsFragment()
         }
 

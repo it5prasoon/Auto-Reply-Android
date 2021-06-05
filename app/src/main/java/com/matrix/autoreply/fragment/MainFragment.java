@@ -507,21 +507,5 @@ public class MainFragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        mActivity.getMenuInflater().inflate(R.menu.main_menu, menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.setting){
-            loadSettingsActivity();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void loadSettingsActivity(){
-        Intent intent = new Intent(mActivity, SettingsActivity.class);
-        mActivity.startActivity(intent);
-    }
 }

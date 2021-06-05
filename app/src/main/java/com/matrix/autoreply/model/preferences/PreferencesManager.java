@@ -157,7 +157,7 @@ public class PreferencesManager {
         editor.apply();
     }
 
-    public boolean isAppendWatomaticAttributionEnabled() {
+    public boolean isAppendAutoreplyAttributionEnabled() {
         return _sharedPrefs.getBoolean(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION,false);
     }
 

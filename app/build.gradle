@@ -1,9 +1,10 @@
 plugins {
     id 'com.android.application'
-    id 'com.chaquo.python'
+//    id 'com.chaquo.python'
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
@@ -25,29 +26,29 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // For python chaquopy extension
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-
-        python {
-            buildPython "C:/Users/Prasoon/AppData/Local/Programs/Python/Python38"
-            buildPython "python"
-
-//            pip {
-//                    // "-r"` followed by a requirements filename, relative to the
-//                    // project directory:
-//                    install "-r", "requirements.txt"
-//                }
-        }
+//        ndk {
+//            abiFilters "armeabi-v7a", "x86"
+//        }
+//
+//        python {
+//            buildPython "C:/Users/Prasoon/AppData/Local/Programs/Python/Python38"
+//            buildPython "python3"
+//        }
+//
+////        python {
+////            pip {
+////                install "chatterbot"
+////            }
+////        }
 
     }
 
-    // For python chaquopy extension
-    sourceSets {
-        main {
-            python.srcDir "src/main/python"
-        }
-    }
+//    // For python chaquopy extension
+//    sourceSets {
+//        main {
+//            python.srcDir "src/main/python"
+//        }
+//    }
 
 
 

@@ -6,7 +6,7 @@ buildscript {
         google()
         jcenter()
         // For python chaquopy extension
-        maven { url "https://chaquo.com/maven" }
+//        maven { url "https://chaquo.com/maven" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
@@ -16,7 +16,7 @@ buildscript {
 
 
         // For python chaquopy extension
-        classpath "com.chaquo.python:gradle:9.1.0"
+//        classpath "com.chaquo.python:gradle:9.1.0"
     }
 }
 
