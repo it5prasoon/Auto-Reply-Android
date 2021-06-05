@@ -18,27 +18,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"
+            android:layout_gravity="center"
             android:textSize="18sp"
+            android:layout_marginTop="20dp"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/view_wa_log_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="40dp"
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="WhatsApp" />
 
         <Button
             android:id="@+id/view_wabus_log_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="WhatsApp business" />
 
         <Button
             android:id="@+id/view_signal_log_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="Signal" />
