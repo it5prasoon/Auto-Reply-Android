@@ -14,7 +14,6 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <li>No tracking</li>
 <li>Free</li>
 <li>Open source</li>
-<li> AI chat features</li>
 </ul>
 
 # ToDo
