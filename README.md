@@ -26,7 +26,7 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <li>Kotlin</li>
 <li>Java</li>
 <li>Python (For AI bot)</li>
-<li>Chaquopy SDK for pythoj</li>
+<li>Chaquopy SDK for python</li>
 <li>Python tools:</li>
   
 ``` text
