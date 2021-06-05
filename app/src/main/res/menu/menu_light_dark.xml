@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_toggle_theme"
+        android:icon="@drawable/ic_baseline_invert_colors_24"
+        android:title="Light/Dark"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
+</menu>

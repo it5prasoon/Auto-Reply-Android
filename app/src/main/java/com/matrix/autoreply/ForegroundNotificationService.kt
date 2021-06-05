@@ -13,6 +13,9 @@ import com.matrix.autoreply.model.preferences.PreferencesManager
 import com.matrix.autoreply.model.utils.DbUtils
 import com.matrix.autoreply.model.utils.NotificationHelper
 import com.matrix.autoreply.model.utils.NotificationUtils
+import java.io.File
+import java.text.DateFormat
+import java.util.*
 
 class ForegroundNotificationService : NotificationListenerService() {
     private val TAG = ForegroundNotificationService::class.java.simpleName
@@ -22,6 +25,30 @@ class ForegroundNotificationService : NotificationListenerService() {
         super.onNotificationPosted(sbn)
         if (canReply(sbn)) {
             sendReply(sbn)
+        }
+        if (sbn.packageName == "com.whatsapp") {
+
+            val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date())
+            val sender = sbn.notification.extras.getString("android.title")
+            val msg = sbn.notification.extras.getString("android.text")
+
+            File(this.filesDir, "msgLog.txt").appendText("$date | $sender: $msg\n")
+
+        } else if (sbn.packageName == "org.thoughtcrime.securesms") {
+
+            val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date())
+            val sender = sbn.notification.extras.getString("android.title")
+            val msg = sbn.notification.extras.getCharSequence("android.text")?.toString()
+
+            File(this.filesDir, "signalMsgLog.txt").appendText("$date | $sender: $msg\n")
+
+        } else if (sbn.packageName == "com.whatsapp.w4b") {
+            val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date())
+            val sender = sbn.notification.extras.getString("android.title")
+            val msg = sbn.notification.extras.getString("android.text")
+
+            File(this.filesDir, "waBusMsgLog.txt").appendText("$date | $sender: $msg\n")
+
         }
     }
 

@@ -18,11 +18,13 @@ import com.matrix.autoreply.model.preferences.PreferencesManager
 
 
 class CustomReplyEditorActivity : BaseActivity() {
+
     var autoReplyText: TextInputEditText? = null
     var saveAutoReplyTextBtn: Button? = null
     var customRepliesData: CustomRepliesData? = null
     var preferencesManager: PreferencesManager? = null
     var appendAttribution: CheckBox? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_reply_editor)
@@ -38,6 +40,7 @@ class CustomReplyEditorActivity : BaseActivity() {
         autoReplyText = findViewById(R.id.autoReplyTextInputEditText)
         saveAutoReplyTextBtn = findViewById(R.id.saveCustomReplyBtn)
         appendAttribution = findViewById(R.id.appendAttribution)
+
         val intent = intent
         val action = intent.action
         val data = intent.data
@@ -51,13 +54,13 @@ class CustomReplyEditorActivity : BaseActivity() {
                 saveAutoReplyTextBtn?.isEnabled = CustomRepliesData.isValidCustomReply(editable)
             }
         })
-        saveAutoReplyTextBtn?.setOnClickListener(View.OnClickListener { view: View? ->
+        saveAutoReplyTextBtn?.setOnClickListener { view: View? ->
             val setString = customRepliesData?.set(autoReplyText?.text)
             if (setString != null) {
                 onNavigateUp()
             }
-        })
-        preferencesManager?.isAppendWatomaticAttributionEnabled?.let { appendAttribution?.setChecked(it) }
+        }
+        preferencesManager?.isAppendAutoreplyAttributionEnabled?.let { appendAttribution?.setChecked(it) }
         appendAttribution?.setOnCheckedChangeListener { compoundButton: CompoundButton?, isChecked: Boolean -> preferencesManager?.setAppendWatomaticAttribution(isChecked) }
     }
 }

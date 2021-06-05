@@ -11,6 +11,7 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <li>Reply automation to simple message as well as group chats</li>
 <li>Respects your privacy by not taking any information</li>
 <li>Add reply frequency for single user</li>
+<li>Stores message logs so that if message is deleted for everyone the also we can see that message</li>
 <li>No tracking</li>
 <li>Free</li>
 <li>Open source</li>
@@ -25,13 +26,13 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <ul>
 <li>Kotlin</li>
 <li>Java</li>
-<li>Python (For AI bot)</li>
-<li>Chaquopy SDK for python</li>
-<li>Python tools:</li>
+<!-- <li>Python (For AI bot)</li> -->
+<!-- <li>Chaquopy SDK for python</li> -->
+<!-- <li>Python tools:</li>
   
 ``` text
   
-```
+``` -->
   
 </ul>
 
