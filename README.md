@@ -26,9 +26,13 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <ul>
 <li>Kotlin</li>
 <li>Java</li>
+<li>Firebase Crashlytics</li>
+<li>Firebase Analytics</li>
+<li>Notification listener service</li>
 <!-- <li>Python (For AI bot)</li> -->
 <!-- <li>Chaquopy SDK for python</li> -->
 <!-- <li>Python tools:</li>
+
   
 ``` text
   

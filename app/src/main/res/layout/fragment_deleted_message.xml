@@ -23,11 +23,21 @@
             android:layout_marginTop="20dp"
             android:layout_weight="1" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="See all message logs here whether it is \n deleted or not deleted."
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1" />
+
         <Button
             android:id="@+id/view_wa_log_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="WhatsApp" />
 
