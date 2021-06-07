@@ -37,9 +37,7 @@ It sends replies automatically to all the contacts who contacts you on the insta
 ``` text
   
 ``` -->
-  
 </ul>
-
 
 For source code:<br>
 https://www.github.com/it5prasoon/Auto-Reply-Android<br>

@@ -1,5 +1,6 @@
 package com.matrix.autoreply.model.logs;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
@@ -39,6 +40,7 @@ public final class AppPackageDao_Impl implements AppPackageDao {
     };
   }
 
+  @SuppressLint("RestrictedApi")
   @Override
   public void insertAppPackage(final AppPackage appPackage) {
     __db.assertNotSuspendingTransaction();
@@ -51,10 +53,11 @@ public final class AppPackageDao_Impl implements AppPackageDao {
     }
   }
 
+  @SuppressLint("RestrictedApi")
   @Override
   public int getPackageIndex(final String packageName) {
     final String _sql = "SELECT [index] FROM app_packages WHERE package_name=?";
-    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    @SuppressLint("RestrictedApi") final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     if (packageName == null) {
       _statement.bindNull(_argIndex);

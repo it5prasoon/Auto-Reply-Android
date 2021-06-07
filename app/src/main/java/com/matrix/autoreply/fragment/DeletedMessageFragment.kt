@@ -7,19 +7,22 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.matrix.autoreply.activity.MsgLogViewerActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.matrix.autoreply.AlertDialogHelper
+import com.matrix.autoreply.NotificationListener
 import com.matrix.autoreply.R
+import com.matrix.autoreply.activity.MsgLogViewerActivity
 import java.io.File
 
 
@@ -31,8 +34,7 @@ class DeletedMessageFragment : Fragment() {
     private val msgLogFileName = "msgLog.txt"
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
-    private val whatsDeleted = File(Environment.getExternalStorageDirectory(),
-            "WhatsDeleted${File.separator}WhatsDeleted Images")
+
 
     private val checkEmoji = String(Character.toChars(0x2714))
     private val crossEmoji = String(Character.toChars(0x274C))
@@ -46,6 +48,8 @@ class DeletedMessageFragment : Fragment() {
         val viewWALogBtn = view.findViewById<Button>(R.id.view_wa_log_btn)
         val viewSignalLogBtn = view.findViewById<Button>(R.id.view_signal_log_btn)
         val viewW4bLogBtn = view.findViewById<Button>(R.id.view_wabus_log_btn)
+        val notificationListenerSwitch = view.findViewById<SwitchMaterial>(R.id.notification_listener_switch)
+        val test = view.findViewById<LinearLayout>(R.id.test)
 
 
         // TextView
@@ -73,66 +77,32 @@ class DeletedMessageFragment : Fragment() {
             startActivity(intent)
         }
 
-        // Request Storage Permission
-        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
-
+        notificationListenerSwitch.isChecked = requireActivity().isServiceRunning(NotificationListener::class.java)
+        notificationListenerSwitch.isClickable = false
+        test.setOnClickListener {
+            if (notificationListenerSwitch.isChecked) {
+                AlertDialogHelper.showDialog(
+                        requireContext(),
+                        "Turn off",
+                        "Settings > Apps  & notifications > Special app access > " +
+                                "Notification Access > Auto Reply Msg Log > Turn Off",
+                        getString(R.string.ok),
+                        null
+                ) { dialog, _ -> dialog.cancel() }
+            }
+            else {
+                AlertDialogHelper.showDialog(
+                        requireContext(),
+                        "Turn on",
+                        "Settings > Apps & notifications > Special app access > " +
+                                "Notification Access > Auto Reply Msg Log > Allow",
+                        getString(R.string.ok),
+                        null
+                ) { dialog, _ -> dialog.cancel() }
+            }
+        }
 
         return view
-    }
-
-    private fun createBackups() {
-        if (!whatsDeleted.exists()) {
-            if (!whatsDeleted.mkdirs())
-                Toast.makeText(requireContext(), getString(R.string.create_backup_dir_failed),
-                        Toast.LENGTH_SHORT).show()
-        }
-        if (!File(requireActivity().filesDir, msgLogFileName).exists()) {
-            if (!File(requireActivity().filesDir, msgLogFileName).createNewFile())
-                Toast.makeText(requireContext(), getString(R.string.create_msg_log_failed),
-                        Toast.LENGTH_SHORT).show()
-        }
-
-        if (!File(requireActivity().filesDir, signalMsgLogFileName).exists()) {
-            if (!File(requireActivity().filesDir, signalMsgLogFileName).createNewFile())
-                Toast.makeText(requireContext(), getString(R.string.create_msg_log_failed),
-                        Toast.LENGTH_SHORT).show()
-        }
-
-        if (!File(requireActivity().filesDir, w4bMsgLogFileName).exists()) {
-            if (!File(requireActivity().filesDir, w4bMsgLogFileName).createNewFile())
-                Toast.makeText(requireContext(), getString(R.string.create_msg_log_failed),
-                        Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @Suppress("SameParameterValue")
-    private fun requestPermission(permission: String, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(requireActivity(),
-                        permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(),
-                    arrayOf(permission), requestCode)
-        } else {
-            createBackups()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(requireContext(), getString(R.string.create_backup_dir), Toast.LENGTH_SHORT).show()
-                createBackups()
-            } else {
-                Toast.makeText(requireContext(), getString(R.string.allow_storage_permission_msg), Toast.LENGTH_LONG).show()
-            }
-            return
-        }
     }
 
     @Suppress("DEPRECATION")

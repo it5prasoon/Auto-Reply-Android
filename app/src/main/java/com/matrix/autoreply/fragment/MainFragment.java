@@ -13,9 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -32,10 +29,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.matrix.autoreply.BuildConfig;
-import com.matrix.autoreply.ForegroundNotificationService;
+import com.matrix.autoreply.services.ForegroundNotificationService;
 import com.matrix.autoreply.R;
 import com.matrix.autoreply.activity.customreplyeditor.CustomReplyEditorActivity;
-import com.matrix.autoreply.activity.settings.SettingsActivity;
 import com.matrix.autoreply.model.App;
 import com.matrix.autoreply.model.CustomRepliesData;
 import com.matrix.autoreply.model.preferences.PreferencesManager;
@@ -251,25 +247,6 @@ public class MainFragment extends Fragment {
         // Set user auto reply text
         autoReplyTextPreview.setText(customRepliesData.getTextToSendOrElse(autoReplyTextPlaceholder));
 
-        showAppRatingPopup();
-    }
-
-    private void showAppRatingPopup() {
-        boolean isFromStore = isAppInstalledFromStore(mActivity);
-        String status = preferencesManager.getPlayStoreRatingStatus();
-        long ratingLastTime = preferencesManager.getPlayStoreRatingLastTime();
-        if(isFromStore && !status.equals("Not Interested") && !status.equals("DONE") && ((System.currentTimeMillis() - ratingLastTime) > (10 * 24 * 60 * 60 * 1000L))){
-            if(isAppUsedSufficientlyToAskRating()){
-                CustomDialog customDialog = new CustomDialog(mActivity);
-                customDialog.showAppLocalRatingDialog(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showFeedbackPopup((int)v.getTag());
-                    }
-                });
-                preferencesManager.setPlayStoreRatingLastTime(System.currentTimeMillis());
-            }
-        }
     }
 
     //REF: https://stackoverflow.com/questions/37539949/detect-if-an-app-is-installed-from-play-store
@@ -282,131 +259,6 @@ public class MainFragment extends Fragment {
 
         // true if your app has been downloaded from Play Store
         return installer != null && validInstallers.contains(installer);
-    }
-
-    private boolean isAppUsedSufficientlyToAskRating(){
-        DbUtils dbUtils = new DbUtils(mActivity);
-        long firstRepliedTime = dbUtils.getFirstRepliedTime();
-        if(firstRepliedTime >0 && System.currentTimeMillis() - firstRepliedTime > 2 * 24 * 60 * 60 * 1000L && dbUtils.getNunReplies() >= MIN_REPLIES_TO_ASK_APP_RATING){
-            return true;
-        }
-        return false;
-    }
-
-    private void showFeedbackPopup(int rating){
-        CustomDialog customDialog = new CustomDialog(mActivity);
-        customDialog.showAppRatingDialog(rating, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tag = (String) v.getTag();
-                if(tag.equals(mActivity.getResources().getString(R.string.app_rating_goto_store_dialog_button1_title))){
-                    //not interested
-                    preferencesManager.setPlayStoreRatingStatus("Not Interested");
-                }else if(tag.equals(mActivity.getResources().getString(R.string.app_rating_goto_store_dialog_button2_title))){
-                    //Launch playstore rating page
-                    rateApp();
-                }else if(tag.equals(mActivity.getResources().getString(R.string.app_rating_feedback_dialog_mail_button_title))){
-                    launchEmailCompose();
-                }else if(tag.equals(mActivity.getResources().getString(R.string.app_rating_feedback_dialog_telegram_button_title))){
-                    launchFeedbackApp();
-                }
-            }
-        });
-    }
-
-    private void launchEmailCompose() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setType("plain/text");
-        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{Constants.EMAIL_ADDRESS});
-        intent.putExtra(Intent.EXTRA_SUBJECT, Constants.EMAIL_SUBJECT);
-        if (intent.resolveActivity(mActivity.getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }
-
-    private void launchFeedbackApp() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            launchAppLegacy();
-            return;
-        }
-        boolean isLaunched = false;
-        try {
-            // In order for this intent to be invoked, the system must directly launch a non-browser app.
-            // Ref: https://developer.android.com/training/package-visibility/use-cases#avoid-a-disambiguation-dialog
-            Intent intent = new Intent(ACTION_VIEW, Uri.parse(Constants.TELEGRAM_URL))
-                    .addCategory(CATEGORY_BROWSABLE)
-                    .setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_REQUIRE_NON_BROWSER |
-                            FLAG_ACTIVITY_REQUIRE_DEFAULT);
-            mActivity.startActivity(intent);
-            isLaunched = true;
-        } catch (ActivityNotFoundException e) {
-            // This code executes in one of the following cases:
-            // 1. Only browser apps can handle the intent.
-            // 2. The user has set a browser app as the default app.
-            // 3. The user hasn't set any app as the default for handling this URL.
-            isLaunched = false;
-        }
-        if (!isLaunched) { // Open Github latest release url in browser if everything else fails
-            String url = getString(R.string.autoreply_github_latest_release_url);
-            mActivity.startActivity(new Intent(ACTION_VIEW).setData(Uri.parse(url)));
-        }
-    }
-
-    private void launchAppLegacy() {
-        Intent intent = new Intent(ACTION_VIEW, Uri.parse(Constants.TELEGRAM_URL));
-        List<ResolveInfo> list = getActivity().getPackageManager()
-                .queryIntentActivities(intent, 0);
-        List<ResolveInfo> possibleBrowserIntents = getActivity().getPackageManager()
-                .queryIntentActivities(new Intent(ACTION_VIEW, Uri.parse("http://www.deekshith.in/")), 0);
-        Set<String> excludeIntents = new HashSet<>();
-        for (ResolveInfo eachPossibleBrowserIntent: possibleBrowserIntents) {
-            excludeIntents.add(eachPossibleBrowserIntent.activityInfo.name);
-        }
-        //Check for non browser application
-        for(ResolveInfo resolveInfo: list) {
-            if (!excludeIntents.contains(resolveInfo.activityInfo.name)) {
-                intent.setPackage(resolveInfo.activityInfo.packageName);
-                mActivity.startActivity(intent);
-                break;
-            }
-        }
-    }
-
-    /*
-     * Start with rating the app
-     * Determine if the Play Store is installed on the device
-     *
-     * */
-    public void rateApp()
-    {
-        try
-        {
-            Intent rateIntent = rateIntentForUrl("market://details");
-            startActivity(rateIntent);
-        }
-        catch (ActivityNotFoundException e)
-        {
-            Intent rateIntent = rateIntentForUrl("https://play.google.com/store/apps/details");
-            startActivity(rateIntent);
-        }
-    }
-
-    private Intent rateIntentForUrl(String url)
-    {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, BuildConfig.APPLICATION_ID)));
-        int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-        if (Build.VERSION.SDK_INT >= 21)
-        {
-            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-        }
-        else
-        {
-            //noinspection deprecation
-            flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-        }
-        intent.addFlags(flags);
-        return intent;
     }
 
     private void setSwitchState(){
@@ -433,7 +285,7 @@ public class MainFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.PERMISSION_DIALOG_TITLE, getString(R.string.permission_dialog_title));
         bundle.putString(Constants.PERMISSION_DIALOG_MSG, getString(R.string.permission_dialog_msg));
-        customDialog.showDialog(bundle, new DialogInterface.OnClickListener() {
+        customDialog.showDialog(bundle, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == -2){
@@ -453,7 +305,7 @@ public class MainFragment extends Fragment {
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_TITLE, getString(R.string.permission_dialog_denied_title));
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_MSG, getString(R.string.permission_dialog_denied_msg));
         bundle.putBoolean(Constants.PERMISSION_DIALOG_DENIED, true);
-        customDialog.showDialog(bundle, new DialogInterface.OnClickListener() {
+        customDialog.showDialog(bundle, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == -2){

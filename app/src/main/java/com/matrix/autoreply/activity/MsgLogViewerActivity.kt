@@ -7,10 +7,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.matrix.autoreply.AlertDialogHelper
-import com.matrix.autoreply.MsgLogAdapter
+import com.matrix.autoreply.adapters.MsgLogAdapter
 import com.matrix.autoreply.R
 import kotlinx.android.synthetic.main.activity_msg_log_viewer.*
 import java.io.File

@@ -16,7 +16,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import com.matrix.autoreply.R;
 import com.matrix.autoreply.model.preferences.PreferencesManager;
 
@@ -40,29 +39,36 @@ public class CustomDialog {
         this.mContext = context;
     }
 
-    public void showDialog(Bundle bundle, DialogInterface.OnClickListener onClickListener){
+    public void showDialog(Bundle bundle, String type, DialogInterface.OnClickListener onClickListener){
         if(bundle != null){
             MaterialAlertDialogBuilder materialAlertDialogBuilder;
-            if(bundle.containsKey(Constants.PERMISSION_DIALOG_DENIED)
+            if(type != null && type.equals("AutoStart")){
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(mContext)
+                        .setTitle(bundle.getString(Constants.PERMISSION_DIALOG_TITLE))
+                        .setMessage(bundle.getString(Constants.PERMISSION_DIALOG_MSG));
+                materialAlertDialogBuilder
+                        .setNegativeButton(mContext.getResources().getString(R.string.decline_auto_start_setting), onClickListener::onClick)
+                        .setPositiveButton(mContext.getResources().getString(R.string.enable_auto_start_setting), onClickListener::onClick);
+            }else if(bundle.containsKey(Constants.PERMISSION_DIALOG_DENIED)
                     && bundle.getBoolean(Constants.PERMISSION_DIALOG_DENIED)) {
-                 materialAlertDialogBuilder = new MaterialAlertDialogBuilder(mContext)
-                    .setTitle(bundle.getString(Constants.PERMISSION_DIALOG_DENIED_TITLE))
-                    .setIcon(mContext.getResources().getDrawable(R.drawable.ic_alert))
-                    .setMessage(bundle.getString(Constants.PERMISSION_DIALOG_DENIED_MSG));
+                materialAlertDialogBuilder = new MaterialAlertDialogBuilder(mContext)
+                        .setTitle(bundle.getString(Constants.PERMISSION_DIALOG_DENIED_TITLE))
+                        .setIcon(mContext.getResources().getDrawable(R.drawable.ic_alert))
+                        .setMessage(bundle.getString(Constants.PERMISSION_DIALOG_DENIED_MSG));
                 materialAlertDialogBuilder
                         .setNegativeButton(mContext.getResources().getString(R.string.sure), onClickListener::onClick)
                         .setPositiveButton(mContext.getResources().getString(R.string.retry), onClickListener::onClick);
             }else{
                 materialAlertDialogBuilder = new MaterialAlertDialogBuilder(mContext)
-                    .setTitle(bundle.getString(Constants.PERMISSION_DIALOG_TITLE))
-                    .setMessage(bundle.getString(Constants.PERMISSION_DIALOG_MSG));
+                        .setTitle(bundle.getString(Constants.PERMISSION_DIALOG_TITLE))
+                        .setMessage(bundle.getString(Constants.PERMISSION_DIALOG_MSG));
                 materialAlertDialogBuilder
                         .setNegativeButton(mContext.getResources().getString(R.string.decline), onClickListener::onClick)
                         .setPositiveButton(mContext.getResources().getString(R.string.accept), onClickListener::onClick);
             }
             materialAlertDialogBuilder
-                .setCancelable(false)
-                .show();
+                    .setCancelable(false)
+                    .show();
         }
     }
 
