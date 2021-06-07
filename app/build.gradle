@@ -15,8 +15,8 @@ android {
         applicationId "com.matrix.autoreply"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 4
-        versionName "1.1.0"
+        versionCode 6
+        versionName "1.20.10"
         multiDexEnabled true //important
 
         javaCompileOptions {
@@ -116,7 +116,7 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics:18.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.0.1'
 
 }
 repositories {

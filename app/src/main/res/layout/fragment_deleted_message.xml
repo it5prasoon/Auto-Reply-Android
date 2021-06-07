@@ -33,6 +33,30 @@
             android:layout_marginTop="30dp"
             android:layout_weight="1" />
 
+
+        <LinearLayout
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12sp"
+            android:paddingBottom="12sp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:text="Status:"
+                android:textSize="18sp" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/notification_listener_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
         <Button
             android:id="@+id/view_wa_log_btn"
             android:layout_width="match_parent"

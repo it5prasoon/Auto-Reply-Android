@@ -1,10 +1,11 @@
-package com.matrix.autoreply
+package com.matrix.autoreply.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.matrix.autoreply.R
 import kotlinx.android.synthetic.main.msg_log_item.view.*
 
 class MsgLogAdapter(private val msgList: List<String>) : RecyclerView.Adapter<MsgLogAdapter.MsgLogViewHolder>() {
