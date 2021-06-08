@@ -1,9 +1,12 @@
 package com.matrix.autoreply.activity
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,12 +19,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.matrix.autoreply.AlertDialogHelper
 import com.matrix.autoreply.R
 import com.matrix.autoreply.activity.ui.main.SectionsPagerAdapter
 import java.io.File
 
 private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
+private const val REQUEST_CODE = 1111
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,6 +59,36 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = resources.getColor(R.color.colorPrimary)
 
+        val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(this)
+
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                // Request the update.
+                Log.d(ContentValues.TAG, "Update available")
+                appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.FLEXIBLE,
+                        this,
+                        REQUEST_CODE)
+            } else {
+                Log.d(ContentValues.TAG, "No Update available")
+            }
+        }
+
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE) {
+            Toast.makeText(this, "Start download", Toast.LENGTH_SHORT).show()
+            if (resultCode != RESULT_OK) {
+                Log.d("Update", "UpdateFlow failure.")
+            }
+        }
     }
 
 
