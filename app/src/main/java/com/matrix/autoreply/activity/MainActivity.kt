@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.matrix.autoreply.AlertDialogHelper
 import com.matrix.autoreply.R
 import com.matrix.autoreply.activity.ui.main.SectionsPagerAdapter
 import java.io.File
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
 
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed)
@@ -36,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         toolbar.title = "Auto Reply"
         setSupportActionBar(toolbar)
-
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         // Request Storage Permission
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
-        
+
         window.statusBarColor = resources.getColor(R.color.colorPrimary)
 
     }
@@ -121,6 +122,26 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
+
+            R.id.help_menu -> {
+                AlertDialogHelper.showDialog(
+                        this,
+                        "Help",
+                        "1. Give the required permissions one for auto reply and other for message logs.\n" +
+                                "2. Set custom text for auto reply.\n" +
+                                "3. Select the applications for which you want auto reply.\n" +
+                                "4. If you want group chat reply then turn on that option.\n" +
+                                "5. If you increase the reply frequency then one person gets reply only the set value times.\n" +
+                                "6. In MSG LOGS section you can see all the messages of the respective application (BETA).\n" +
+                                "7. Enjoy!!\n\n" +
+                                "This application is still under development so kindly post any bugs to github issues section you find on settings tab.",
+                        getString(R.string.ok),
+                        null
+                ) { dialog, _ -> dialog.cancel() }
+
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -177,4 +177,8 @@
     <string name="decline_auto_start_setting">Cancel</string>
     <string name="pref_auto_start_permission" translatable="false">pref_auto_start_permission</string>
 
+    <!-- Strings related to the Alert Dialog -->
+    <string name="notification_listener_service">"Notification Listener Service"</string>
+    <string name="notification_listener_service_explanation">"For the the app. to work you need to enable the Notification Listener Service. Enable it now?"</string>
+    <string name="no">No</string>
 </resources>

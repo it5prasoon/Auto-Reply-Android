@@ -6,7 +6,7 @@
 
         <SwitchPreference android:title="@string/show_notification_label"
             android:key="@string/pref_show_notification_replied_msg"
-            app:icon="@drawable/ic_notification"
+            app:icon="@drawable/ic_baseline_notifications_24"
             />
 
         <Preference android:title="Want to contribute?"
