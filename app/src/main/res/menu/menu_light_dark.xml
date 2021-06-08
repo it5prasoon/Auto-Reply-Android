@@ -8,4 +8,12 @@
         android:title="Light/Dark"
         app:showAsAction="always"
         tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/help_menu"
+        android:icon="@drawable/ic_baseline_help_24"
+        android:title="Help"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
+
 </menu>

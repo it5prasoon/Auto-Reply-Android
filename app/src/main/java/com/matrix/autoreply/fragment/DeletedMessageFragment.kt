@@ -1,12 +1,15 @@
 package com.matrix.autoreply.fragment
 
-import android.Manifest
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,31 +17,31 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.matrix.autoreply.AlertDialogHelper
 import com.matrix.autoreply.NotificationListener
 import com.matrix.autoreply.R
 import com.matrix.autoreply.activity.MsgLogViewerActivity
+import com.matrix.autoreply.services.ForegroundNotificationService
 import java.io.File
 
 
-private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
-
-
-class DeletedMessageFragment : Fragment() {
+open class DeletedMessageFragment : Fragment() {
 
     private val msgLogFileName = "msgLog.txt"
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
-
+    private val REQ_NOTIFICATION_LISTENER = 1000
 
     private val checkEmoji = String(Character.toChars(0x2714))
     private val crossEmoji = String(Character.toChars(0x274C))
+    private var notificationListenerSwitch: SwitchMaterial? = null
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Nullable
     override fun onCreateView(inflater: LayoutInflater, @Nullable container: ViewGroup?, @Nullable savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_deleted_message, container, false)
@@ -48,14 +51,15 @@ class DeletedMessageFragment : Fragment() {
         val viewWALogBtn = view.findViewById<Button>(R.id.view_wa_log_btn)
         val viewSignalLogBtn = view.findViewById<Button>(R.id.view_signal_log_btn)
         val viewW4bLogBtn = view.findViewById<Button>(R.id.view_wabus_log_btn)
-        val notificationListenerSwitch = view.findViewById<SwitchMaterial>(R.id.notification_listener_switch)
+        notificationListenerSwitch = view.findViewById(R.id.notification_listener_switch)
         val test = view.findViewById<LinearLayout>(R.id.test)
 
+        msgLogStatus.text = getString(R.string.msg_log_status_str, checkEmoji)
 
-        // TextView
-        msgLogStatus.text = getString(R.string.msg_log_status_str,
-                if (File(requireActivity().filesDir, msgLogFileName).exists()
-                        && File(requireActivity().filesDir, signalMsgLogFileName).exists()) checkEmoji else crossEmoji)
+//        msgLogStatus.text = getString(R.string.msg_log_status_str,
+//                    if (File(requireActivity().filesDir, msgLogFileName).exists()
+//                            && File(requireActivity().filesDir, signalMsgLogFileName).exists()
+//                            && File(requireActivity().filesDir, w4bMsgLogFileName).exists()) checkEmoji else crossEmoji)
 
         // Button
         // DRY
@@ -77,31 +81,15 @@ class DeletedMessageFragment : Fragment() {
             startActivity(intent)
         }
 
-        notificationListenerSwitch.isChecked = requireActivity().isServiceRunning(NotificationListener::class.java)
-        notificationListenerSwitch.isClickable = false
+        notificationListenerSwitch?.isClickable = false
         test.setOnClickListener {
-            if (notificationListenerSwitch.isChecked) {
-                AlertDialogHelper.showDialog(
-                        requireContext(),
-                        "Turn off",
-                        "Settings > Apps  & notifications > Special app access > " +
-                                "Notification Access > Auto Reply Msg Log > Turn Off",
-                        getString(R.string.ok),
-                        null
-                ) { dialog, _ -> dialog.cancel() }
-            }
-            else {
-                AlertDialogHelper.showDialog(
-                        requireContext(),
-                        "Turn on",
-                        "Settings > Apps & notifications > Special app access > " +
-                                "Notification Access > Auto Reply Msg Log > Allow",
-                        getString(R.string.ok),
-                        null
-                ) { dialog, _ -> dialog.cancel() }
+            if (notificationListenerSwitch?.isChecked == true) {
+                openSomeActivityForResult()
+            } else {
+                openSomeActivityForResult()
             }
         }
-
+        notificationListenerSwitch?.isChecked = requireActivity().isServiceRunning(NotificationListener::class.java)
         return view
     }
 
@@ -112,13 +100,36 @@ class DeletedMessageFragment : Fragment() {
                 .any { it.service.className == service.name }
     }
 
-    private fun deleteRecursive(f: File) {
-        if (f.isDirectory) {
-            for (child in f.listFiles()) {
-                if (!child.deleteRecursively())
-                    Toast.makeText(requireContext(),
-                            getString(R.string.unable_to_delete, child.toString()),
-                            Toast.LENGTH_SHORT).show()
+
+    //https://stackoverflow.com/questions/20141727/check-if-user-has-granted-notificationlistener-access-to-my-app/28160115
+    //TODO: Use in UI to verify if it needs enabling or restarting
+    open fun isListenerEnabled(context: Context, notificationListenerCls: Class<*>?): Boolean {
+        val cn = ComponentName(context, notificationListenerCls!!)
+        val flat = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+        return flat != null && flat.contains(cn.flattenToString())
+    }
+
+
+    private fun openSomeActivityForResult() {
+        val NOTIFICATION_LISTENER_SETTINGS: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
+        } else {
+            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+        }
+        val i = Intent(NOTIFICATION_LISTENER_SETTINGS)
+        startActivityForResult(i, REQ_NOTIFICATION_LISTENER)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_NOTIFICATION_LISTENER) {
+            if (isListenerEnabled(requireContext(), NotificationListener::class.java)) {
+                Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_LONG).show()
+                if (requireActivity().isServiceRunning(NotificationListener::class.java))
+                    notificationListenerSwitch?.isChecked = true
+            } else {
+                Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_LONG).show()
+                notificationListenerSwitch?.isChecked = false
             }
         }
     }

@@ -285,16 +285,13 @@ public class MainFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.PERMISSION_DIALOG_TITLE, getString(R.string.permission_dialog_title));
         bundle.putString(Constants.PERMISSION_DIALOG_MSG, getString(R.string.permission_dialog_msg));
-        customDialog.showDialog(bundle, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == -2){
-                    //Decline
-                    showPermissionDeniedDialog();
-                }else{
-                    //Accept
-                    launchNotificationAccessSettings();
-                }
+        customDialog.showDialog(bundle, null, (dialog, which) -> {
+            if(which == -2){
+                //Decline
+                showPermissionDeniedDialog();
+            }else{
+                //Accept
+                launchNotificationAccessSettings();
             }
         });
     }
@@ -305,16 +302,13 @@ public class MainFragment extends Fragment {
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_TITLE, getString(R.string.permission_dialog_denied_title));
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_MSG, getString(R.string.permission_dialog_denied_msg));
         bundle.putBoolean(Constants.PERMISSION_DIALOG_DENIED, true);
-        customDialog.showDialog(bundle, null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == -2){
-                    //Decline
-                    setSwitchState();
-                }else{
-                    //Accept
-                    launchNotificationAccessSettings();
-                }
+        customDialog.showDialog(bundle, null, (dialog, which) -> {
+            if(which == -2){
+                //Decline
+                setSwitchState();
+            }else{
+                //Accept
+                launchNotificationAccessSettings();
             }
         });
     }
