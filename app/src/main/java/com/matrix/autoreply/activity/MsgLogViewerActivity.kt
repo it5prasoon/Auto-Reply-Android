@@ -68,8 +68,9 @@ class MsgLogViewerActivity : BaseActivity() {
                 refreshMsgLog()
                 return true
             }
-            R.id.action_goback -> {
-                onNavigateUp()
+            R.id.action_filter -> {
+                Toast.makeText(this, "Please wait for some day. This feature is under progress.", Toast.LENGTH_LONG).show()
+                return true
             }
             R.id.action_clear -> {
                 AlertDialogHelper.showDialog(
