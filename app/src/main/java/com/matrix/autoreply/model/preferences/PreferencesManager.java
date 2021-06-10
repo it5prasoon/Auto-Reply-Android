@@ -67,7 +67,7 @@ public class PreferencesManager {
         if (isFirstInstall(thisAppContext)) {
             // Set Append Watomatic attribution checked for new installs
             if (!_sharedPrefs.contains(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION)) {
-                setAppendWatomaticAttribution(true);
+                setAppendAutoreplyAttribution(true);
             }
         }
         else {
@@ -151,7 +151,7 @@ public class PreferencesManager {
         return serializeAndSetEnabledPackageList(enabledPackages);
     }
 
-    public void setAppendWatomaticAttribution(boolean enabled) {
+    public void setAppendAutoreplyAttribution(boolean enabled) {
         SharedPreferences.Editor editor = _sharedPrefs.edit();
         editor.putBoolean(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION, enabled);
         editor.apply();
@@ -223,16 +223,6 @@ public class PreferencesManager {
         editor.apply();
     }
 
-    public int getGithubReleaseNotesId(){
-        return _sharedPrefs.getInt(KEY_GITHUB_RELEASE_NOTES_ID,0);
-    }
-
-    public void setGithubReleaseNotesId(int id){
-        SharedPreferences.Editor editor = _sharedPrefs.edit();
-        editor.putInt(KEY_GITHUB_RELEASE_NOTES_ID, id);
-        editor.apply();
-    }
-
     public long getLastPurgedTime(){
         return _sharedPrefs.getLong(KEY_PURGE_MESSAGE_LOGS_LAST_TIME,0);
     }
@@ -243,23 +233,10 @@ public class PreferencesManager {
         editor.apply();
     }
 
-    public String getPlayStoreRatingStatus(){
-        return _sharedPrefs.getString(KEY_PLAY_STORE_RATING_STATUS, "");
-    }
-
     public void setPlayStoreRatingStatus(String status){
         SharedPreferences.Editor editor = _sharedPrefs.edit();
         editor.putString(KEY_PLAY_STORE_RATING_STATUS, status);
         editor.apply();
     }
 
-    public long getPlayStoreRatingLastTime(){
-        return _sharedPrefs.getLong(KEY_PLAY_STORE_RATING_LAST_TIME,0);
-    }
-
-    public void setPlayStoreRatingLastTime(long purgeMessageTime){
-        SharedPreferences.Editor editor = _sharedPrefs.edit();
-        editor.putLong(KEY_PLAY_STORE_RATING_LAST_TIME, purgeMessageTime);
-        editor.apply();
-    }
 }

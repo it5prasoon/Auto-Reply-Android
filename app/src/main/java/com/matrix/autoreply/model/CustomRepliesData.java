@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
+import android.text.method.LinkMovementMethod;
 
 import com.matrix.autoreply.R;
 import com.matrix.autoreply.model.preferences.PreferencesManager;
@@ -118,7 +119,7 @@ public class CustomRepliesData {
     public String getTextToSendOrElse (String defaultTextToSend) {
         String currentText = get();
         if (preferencesManager.isAppendAutoreplyAttributionEnabled()) {
-            currentText += "\n\n\n" + thisAppContext.getString(R.string.sent_using_autoreply);
+            currentText += "\n\n" + thisAppContext.getString(R.string.sent_using_autoreply);
         }
         return (currentText != null)
                 ? currentText

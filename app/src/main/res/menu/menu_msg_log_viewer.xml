@@ -10,10 +10,11 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_goback"
+        android:id="@+id/action_filter"
         android:orderInCategory="1"
-        android:title="Back"
-        android:visible="false"
+        android:title="Filter"
+        android:visible="true"
+        android:icon="@drawable/ic_baseline_filter_list_24"
         app:showAsAction="ifRoom" />
 
 

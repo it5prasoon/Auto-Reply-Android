@@ -115,5 +115,5 @@ class ForegroundNotificationService : NotificationListenerService() {
     }
 
     private val isServiceEnabled: Boolean
-        private get() = PreferencesManager.getPreferencesInstance(this).isServiceEnabled
+        get() = PreferencesManager.getPreferencesInstance(this).isServiceEnabled
 }
