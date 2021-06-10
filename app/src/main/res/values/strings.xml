@@ -43,7 +43,7 @@
     <string name="save">Save</string>
     <string name="tip_view_messages_from_fellow_users">🦩 <u>View templates from community and share yours too ➚</u></string>
     <string name="append_autoreply_arribution_checkbox_label">Add autoreply attribute to the messege.</string>
-    <string name="sent_using_autoreply">Sent by auto reply!</string>
+    <string name="sent_using_autoreply">Sent using git.io/JZCn4</string>
 
     <string name="share">Share</string>
     <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>

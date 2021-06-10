@@ -61,6 +61,6 @@ class CustomReplyEditorActivity : BaseActivity() {
             }
         }
         preferencesManager?.isAppendAutoreplyAttributionEnabled?.let { appendAttribution?.setChecked(it) }
-        appendAttribution?.setOnCheckedChangeListener { compoundButton: CompoundButton?, isChecked: Boolean -> preferencesManager?.setAppendWatomaticAttribution(isChecked) }
+        appendAttribution?.setOnCheckedChangeListener { compoundButton: CompoundButton?, isChecked: Boolean -> preferencesManager?.setAppendAutoreplyAttribution(isChecked) }
     }
 }
