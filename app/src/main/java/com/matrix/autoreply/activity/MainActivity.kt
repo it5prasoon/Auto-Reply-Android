@@ -1,16 +1,14 @@
 package com.matrix.autoreply.activity
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Intent
+import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -18,26 +16,32 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallState
+import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.tasks.Task
 import com.matrix.autoreply.AlertDialogHelper
 import com.matrix.autoreply.R
 import com.matrix.autoreply.activity.ui.main.SectionsPagerAdapter
 import java.io.File
 
+
 private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
-private const val REQUEST_CODE = 1111
+private const val FLEXIBLE_APP_UPDATE_REQ_CODE = 123
 
 class MainActivity : AppCompatActivity() {
-
-
     private val msgLogFileName = "msgLog.txt"
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
-
+    private var appUpdateManager: AppUpdateManager? = null
+    private var installStateUpdatedListener: InstallStateUpdatedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,34 +63,75 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = resources.getColor(R.color.colorPrimary)
 
-        val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        checkUpdate()
 
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                // Request the update.
-                Log.d(ContentValues.TAG, "Update available")
-                appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        AppUpdateType.FLEXIBLE,
-                        this,
-                        REQUEST_CODE)
+        installStateUpdatedListener = InstallStateUpdatedListener { state: InstallState ->
+            if (state.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackBarForCompleteUpdate()
+            } else if (state.installStatus() == InstallStatus.INSTALLED) {
+                removeInstallStateUpdateListener()
             } else {
-                Log.d(ContentValues.TAG, "No Update available")
+                Toast.makeText(this, "InstallStateUpdatedListener: state: " + state.installStatus(), Toast.LENGTH_LONG).show()
             }
         }
 
+        appUpdateManager!!.registerListener(installStateUpdatedListener!!)
+
+    }
+
+
+    private fun checkUpdate() {
+        val appUpdateInfoTask: Task<AppUpdateInfo> = appUpdateManager!!.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                startUpdateFlow(appUpdateInfo)
+            } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackBarForCompleteUpdate()
+            }
+        }
+    }
+
+
+    private fun startUpdateFlow(appUpdateInfo: AppUpdateInfo) {
+        try {
+            appUpdateManager?.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, FLEXIBLE_APP_UPDATE_REQ_CODE)
+        } catch (e: SendIntentException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun popupSnackBarForCompleteUpdate() {
+        Snackbar.make(findViewById<View>(android.R.id.content).rootView, "New app is ready!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Install") { view: View? ->
+                    if (appUpdateManager != null) {
+                        appUpdateManager!!.completeUpdate()
+                    }
+                }
+                .setActionTextColor(resources.getColor(R.color.colorPrimary))
+                .show()
+    }
+
+    private fun removeInstallStateUpdateListener() {
+        if (appUpdateManager != null) {
+            appUpdateManager!!.unregisterListener(installStateUpdatedListener!!)
+        }
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == FLEXIBLE_APP_UPDATE_REQ_CODE) {
             Toast.makeText(this, "Start download", Toast.LENGTH_SHORT).show()
-            if (resultCode != RESULT_OK) {
-                Log.d("Update", "UpdateFlow failure.")
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Update canceled by user! Result Code: $resultCode", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Update success! Result Code: $resultCode", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Update Failed! Result Code: $resultCode", Toast.LENGTH_LONG).show();
+                checkUpdate();
             }
         }
     }
@@ -184,5 +229,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        if (appUpdateManager != null) {
+            appUpdateManager!!.unregisterListener(installStateUpdatedListener!!)
+        }
+    }
 }
