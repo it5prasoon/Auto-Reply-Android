@@ -34,11 +34,12 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # Tools: <br>
 <ul>
-<li>Kotlin</li>
-<li>Java</li>
-<li>Firebase Crashlytics</li>
-<li>Firebase Analytics</li>
-<li>Notification listener service</li>
+  <li>Kotlin</li>
+  <li>Java</li>
+  <li>Lifecycle ViewModel</li>
+  <li>Room database</li>  
+  <li>Firebase Crashlytics</li>
+  <li>Notification listener service</li>
 </ul>
 
 # Contributors:
