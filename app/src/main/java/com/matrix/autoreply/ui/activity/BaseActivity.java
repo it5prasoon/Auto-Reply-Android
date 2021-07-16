@@ -1,4 +1,4 @@
-package com.matrix.autoreply.activity;
+package com.matrix.autoreply.ui.activity;
 
 import android.content.Context;
 import android.os.Build;

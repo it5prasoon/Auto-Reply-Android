@@ -4,11 +4,13 @@
     package="com.matrix.autoreply">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <queries>
+
         <!-- Specific apps Autoreply interacts with. Required for Android 11+ -->
         <package android:name="com.whatsapp" />
         <package android:name="com.facebook.orca" />
@@ -18,16 +20,17 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.WaReply">
+
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.matrix.autoreply.ui.activity.MainActivity"
             android:label="@string/title_activity_tabbed"
             android:theme="@style/Theme.WaReply.NoActionBar" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.matrix.autoreply.ui.activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,9 +39,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.customreplyeditor.CustomReplyEditorActivity"
+            android:name="com.matrix.autoreply.ui.activity.customreplyeditor.CustomReplyEditorActivity"
             android:label="@string/mainAutoReplyLabel"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName="com.matrix.autoreply.ui.activity.MainActivity">
             <intent-filter android:label="global-auto-reply-message-intent">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -51,11 +54,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.settings.SettingsActivity"
+            android:name="com.matrix.autoreply.ui.activity.settings.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName="com.matrix.autoreply.ui.activity.MainActivity" />
         <activity
-            android:name=".activity.notification.NotificationIntentActivity"
+            android:name="com.matrix.autoreply.ui.activity.notification.NotificationIntentActivity"
             android:launchMode="singleTop" />
 
         <service
@@ -66,22 +69,22 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
-
-        <service android:name=".services.KeepAliveService"
-            android:stopWithTask="false"/>
-
-        <!--https://techstop.github.io/android-broadcastreceiver/-->
-        <receiver android:name=".receivers.NotificationServiceRestartReceiver"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+        <service
+            android:name=".services.KeepAliveService"
+            android:stopWithTask="false" /> <!-- https://techstop.github.io/android-broadcastreceiver/ -->
+        <receiver
+            android:name=".receivers.NotificationServiceRestartReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <!--For HTC devices-->
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 
@@ -94,8 +97,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.MsgLogViewerActivity" />
-
+        <activity android:name="com.matrix.autoreply.ui.activity.MsgLogViewerActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.matrix.autoreply.activity
+package com.matrix.autoreply.ui.activity
 
 import android.Manifest
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -23,14 +24,14 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.matrix.autoreply.AlertDialogHelper
+import com.matrix.autoreply.helpers.AlertDialogHelper
 import com.matrix.autoreply.R
-import com.matrix.autoreply.activity.ui.main.SectionsPagerAdapter
+import com.matrix.autoreply.ui.activity.ui.main.SectionsPagerAdapter
+import com.matrix.autoreply.ui.fragment.SettingsFragment
 import java.io.File
 
 
 private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
-private const val FLEXIBLE_APP_UPDATE_REQ_CODE = 123
 private const val IMMEDIATE_APP_UPDATE_REQ_CODE = 124
 
 class MainActivity : AppCompatActivity() {
@@ -189,14 +190,15 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (appUpdateManager != null) {
-            appUpdateManager!!.unregisterListener(installStateUpdatedListener!!)
-        }
-    }
+//    private fun setCurrentFragment(fragment: Fragment) =
+//            supportFragmentManager.beginTransaction().apply {
+//                replace(R.id.view_pager, fragment)
+//                commit()
+//            }
+
 }

@@ -1,4 +1,4 @@
-package com.matrix.autoreply.fragment;
+package com.matrix.autoreply.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
-import com.matrix.autoreply.AutoStartHelper;
+import com.matrix.autoreply.helpers.AutoStartHelper;
 import com.matrix.autoreply.R;
-import com.matrix.autoreply.activity.MainActivity;
+import com.matrix.autoreply.ui.activity.MainActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreference showNotificationPref;

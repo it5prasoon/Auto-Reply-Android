@@ -1,4 +1,4 @@
-package com.matrix.autoreply.activity.customreplyeditor
+package com.matrix.autoreply.ui.activity.customreplyeditor
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,7 +12,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.ActionBar
 import com.google.android.material.textfield.TextInputEditText
 import com.matrix.autoreply.R
-import com.matrix.autoreply.activity.BaseActivity
+import com.matrix.autoreply.ui.activity.BaseActivity
 import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.model.preferences.PreferencesManager
 

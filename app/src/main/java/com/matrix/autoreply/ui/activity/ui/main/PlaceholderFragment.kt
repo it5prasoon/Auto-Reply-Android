@@ -1,4 +1,4 @@
-package com.matrix.autoreply.activity.ui.main
+package com.matrix.autoreply.ui.activity.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater

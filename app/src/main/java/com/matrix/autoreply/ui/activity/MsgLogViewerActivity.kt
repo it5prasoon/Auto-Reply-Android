@@ -1,4 +1,4 @@
-package com.matrix.autoreply.activity
+package com.matrix.autoreply.ui.activity
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,8 +8,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.matrix.autoreply.AlertDialogHelper
-import com.matrix.autoreply.adapters.MsgLogAdapter
+import com.matrix.autoreply.helpers.AlertDialogHelper
+import com.matrix.autoreply.ui.adapters.MsgLogAdapter
 import com.matrix.autoreply.R
 import kotlinx.android.synthetic.main.activity_msg_log_viewer.*
 import java.io.File

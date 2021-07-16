@@ -1,8 +1,8 @@
-package com.matrix.autoreply.activity.settings
+package com.matrix.autoreply.ui.activity.settings
 
 import android.os.Bundle
 import com.matrix.autoreply.R
-import com.matrix.autoreply.activity.BaseActivity
+import com.matrix.autoreply.ui.activity.BaseActivity
 
 class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

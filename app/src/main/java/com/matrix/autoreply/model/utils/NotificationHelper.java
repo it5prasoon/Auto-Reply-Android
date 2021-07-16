@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.matrix.autoreply.BuildConfig;
 import com.matrix.autoreply.R;
-import com.matrix.autoreply.activity.notification.NotificationIntentActivity;
+import com.matrix.autoreply.ui.activity.notification.NotificationIntentActivity;
 import com.matrix.autoreply.model.App;
 import org.json.JSONException;
 import org.json.JSONObject;
