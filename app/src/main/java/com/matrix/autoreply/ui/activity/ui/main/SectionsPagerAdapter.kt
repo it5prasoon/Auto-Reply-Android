@@ -1,13 +1,13 @@
-package com.matrix.autoreply.activity.ui.main
+package com.matrix.autoreply.ui.activity.ui.main
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.matrix.autoreply.R
-import com.matrix.autoreply.fragment.MainFragment
-import com.matrix.autoreply.fragment.SettingsFragment
-import com.matrix.autoreply.fragment.DeletedMessageFragment
+import com.matrix.autoreply.ui.fragment.MainFragment
+import com.matrix.autoreply.ui.fragment.SettingsFragment
+import com.matrix.autoreply.ui.fragment.DeletedMessageFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_text_1,

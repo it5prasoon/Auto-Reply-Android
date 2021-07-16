@@ -1,4 +1,4 @@
-package com.matrix.autoreply.fragment
+package com.matrix.autoreply.ui.fragment
 
 import android.app.ActivityManager
 import android.content.ComponentName
@@ -7,8 +7,6 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +15,13 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.matrix.autoreply.AlertDialogHelper
 import com.matrix.autoreply.NotificationListener
 import com.matrix.autoreply.R
-import com.matrix.autoreply.activity.MsgLogViewerActivity
-import com.matrix.autoreply.services.ForegroundNotificationService
-import java.io.File
+import com.matrix.autoreply.ui.activity.MsgLogViewerActivity
 
 
 open class DeletedMessageFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.matrix.autoreply
+package com.matrix.autoreply.helpers
 
 import android.content.Context
 import android.content.DialogInterface

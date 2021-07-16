@@ -1,14 +1,10 @@
-package com.matrix.autoreply.fragment;
+package com.matrix.autoreply.ui.fragment;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -28,32 +24,22 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.matrix.autoreply.BuildConfig;
 import com.matrix.autoreply.services.ForegroundNotificationService;
 import com.matrix.autoreply.R;
-import com.matrix.autoreply.activity.customreplyeditor.CustomReplyEditorActivity;
+import com.matrix.autoreply.ui.activity.customreplyeditor.CustomReplyEditorActivity;
 import com.matrix.autoreply.model.App;
 import com.matrix.autoreply.model.CustomRepliesData;
 import com.matrix.autoreply.model.preferences.PreferencesManager;
 import com.matrix.autoreply.model.utils.Constants;
 import com.matrix.autoreply.model.utils.CustomDialog;
-import com.matrix.autoreply.model.utils.DbUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import static android.content.Intent.ACTION_VIEW;
-import static android.content.Intent.CATEGORY_BROWSABLE;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_REQUIRE_DEFAULT;
-import static android.content.Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER;
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
 import static com.matrix.autoreply.model.utils.Constants.MAX_DAYS;
 import static com.matrix.autoreply.model.utils.Constants.MIN_DAYS;
-import static com.matrix.autoreply.model.utils.Constants.MIN_REPLIES_TO_ASK_APP_RATING;
 
 public class MainFragment extends Fragment {
 

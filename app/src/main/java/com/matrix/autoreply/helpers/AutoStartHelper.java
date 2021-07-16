@@ -1,4 +1,4 @@
-package com.matrix.autoreply;
+package com.matrix.autoreply.helpers;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.matrix.autoreply.R;
 import com.matrix.autoreply.model.utils.Constants;
 import com.matrix.autoreply.model.utils.CustomDialog;
 

@@ -1,11 +1,11 @@
-package com.matrix.autoreply.activity.notification;
+package com.matrix.autoreply.ui.activity.notification;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.matrix.autoreply.R;
-import com.matrix.autoreply.activity.BaseActivity;
+import com.matrix.autoreply.ui.activity.BaseActivity;
 import com.matrix.autoreply.model.utils.NotificationHelper;
 
 public class NotificationIntentActivity extends BaseActivity {
