@@ -15,8 +15,8 @@ android {
         applicationId "com.matrix.autoreply"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 22
-        versionName "1.20.62"
+        versionCode 23
+        versionName "1.20.63"
         multiDexEnabled true //important
 
         javaCompileOptions {
