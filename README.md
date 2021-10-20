@@ -30,7 +30,7 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # ToDo
 <ul>
-<li> AI chat features</li>
+<li> To make UI Design of message log</li>
 </ul>
 
 # Tools: <br>
