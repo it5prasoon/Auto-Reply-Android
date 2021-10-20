@@ -4,6 +4,7 @@ An application developed to provide automatic reply service for instant message.
 
 <a href='https://play.google.com/store/apps/details?id=com.matrix.autoreply&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="60" /></a>
 
+1000+ Installs
 
 [scr-page-link]: ./screenshots/screenshots/
 
