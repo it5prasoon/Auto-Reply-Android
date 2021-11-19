@@ -6,6 +6,7 @@ import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,24 +16,22 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.matrix.autoreply.helpers.AlertDialogHelper
 import com.matrix.autoreply.R
+import com.matrix.autoreply.helpers.AlertDialogHelper
 import com.matrix.autoreply.ui.activity.ui.main.SectionsPagerAdapter
-import com.matrix.autoreply.ui.fragment.SettingsFragment
 import java.io.File
 
 
 private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
 private const val IMMEDIATE_APP_UPDATE_REQ_CODE = 124
+private const val TAG = "AppUpdate"
 
 class MainActivity : AppCompatActivity() {
     private val msgLogFileName = "msgLog.txt"
@@ -40,10 +39,12 @@ class MainActivity : AppCompatActivity() {
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
     private var appUpdateManager: AppUpdateManager? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed)
 
+        appUpdateManager = AppUpdateManagerFactory.create(this)
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         toolbar.title = "Auto Reply"
         setSupportActionBar(toolbar)
@@ -59,28 +60,30 @@ class MainActivity : AppCompatActivity() {
                 MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
 
         window.statusBarColor = resources.getColor(R.color.colorPrimary)
-
-        appUpdateManager = AppUpdateManagerFactory.create(this)
-        checkUpdate()
-
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkUpdate()
+    }
 
     private fun checkUpdate() {
         val appUpdateInfoTask = appUpdateManager!!.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+        Log.d(TAG, "Checking for updates")
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)) {
                 startUpdateFlow(appUpdateInfo)
-            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                startUpdateFlow(appUpdateInfo)
+                Log.d(TAG, "Update available")
+            } else {
+                Log.d(TAG, "No Update available")
             }
         }
     }
 
     private fun startUpdateFlow(appUpdateInfo: AppUpdateInfo) {
         try {
-            appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, IMMEDIATE_APP_UPDATE_REQ_CODE)
+            appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, IMMEDIATE, this, IMMEDIATE_APP_UPDATE_REQ_CODE)
         } catch (e: SendIntentException) {
             e.printStackTrace()
         }
