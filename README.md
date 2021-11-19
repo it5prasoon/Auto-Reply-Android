@@ -12,13 +12,14 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # Features: <br>
 <ul>
-<li>Reply automation to simple message as well as group chats</li>
-<li>Respects your privacy by not taking any information</li>
-<li>Add reply frequency for single user</li>
-<li>Stores message logs so that if message is deleted for everyone the also we can see that message</li>
-<li>No tracking</li>
-<li>Free</li>
-<li>Open source</li>
+  <li>Reply automation to simple message as well as group chats</li>
+  <li>Respects your privacy by not taking any information</li>
+  <li>Add reply frequency for single user</li>
+  <li>Stores message logs so that if message is deleted for everyone the also we can see that message</li>
+  <li>No tracking</li>
+  <li>Free</li>
+  <li>In app update feature by play core</li>
+  <li>Open source</li>
 </ul>
 
 # ToDo
@@ -28,11 +29,13 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # Tools: <br>
 <ul>
-<li>Kotlin</li>
-<li>Java</li>
-<li>Firebase Crashlytics</li>
-<li>Firebase Analytics</li>
-<li>Notification listener service</li>
+  <li>Kotlin</li>
+  <li>Firebase Crashlytics</li>
+  <li>Firebase Analytics</li>
+  <li>Notification listener service</li>
+  <li>Retrofit Client</li>
+  <li>Coroutines</li>  
+  <li>Room database</li>
 </ul>
 
 # Point to be noted:
