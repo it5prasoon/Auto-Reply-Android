@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.logs
+package com.matrix.autoreply.logs.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

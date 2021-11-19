@@ -1,4 +1,4 @@
-package com.matrix.autoreply
+package com.matrix.autoreply.data
 
 import android.app.PendingIntent
 import android.os.Bundle

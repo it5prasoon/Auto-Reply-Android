@@ -19,7 +19,7 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.matrix.autoreply.NotificationListener
+import com.matrix.autoreply.services.NotificationListener
 import com.matrix.autoreply.R
 import com.matrix.autoreply.ui.activity.MsgLogViewerActivity
 

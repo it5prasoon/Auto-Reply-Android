@@ -2,8 +2,7 @@ package com.matrix.autoreply.model.utils
 
 import android.service.notification.StatusBarNotification
 import android.os.Parcelable
-import com.matrix.autoreply.model.utils.NotificationUtils
-import com.matrix.autoreply.NotificationWear
+import com.matrix.autoreply.data.NotificationWear
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput

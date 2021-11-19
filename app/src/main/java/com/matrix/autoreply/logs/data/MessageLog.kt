@@ -1,7 +1,6 @@
-package com.matrix.autoreply.model.logs
+package com.matrix.autoreply.logs.data
 
 import androidx.room.*
-import com.matrix.autoreply.model.logs.AppPackage
 
 @Entity(
     tableName = "message_logs",

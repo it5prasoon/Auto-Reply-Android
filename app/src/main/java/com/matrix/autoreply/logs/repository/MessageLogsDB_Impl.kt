@@ -1,11 +1,7 @@
-package com.matrix.autoreply.model.logs
+package com.matrix.autoreply.logs.repository
 
-import com.matrix.autoreply.model.logs.MessageLogsDao_Impl.Companion.requiredConverters
-import com.matrix.autoreply.model.logs.AppPackageDao_Impl.Companion.requiredConverters
-import com.matrix.autoreply.model.logs.MessageLogsDB
+import com.matrix.autoreply.logs.database.MessageLogsDB
 import kotlin.jvm.Volatile
-import com.matrix.autoreply.model.logs.MessageLogsDao
-import com.matrix.autoreply.model.logs.AppPackageDao
 import androidx.room.DatabaseConfiguration
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import android.annotation.SuppressLint
@@ -17,8 +13,6 @@ import androidx.room.RoomOpenHelper.ValidationResult
 import androidx.room.util.TableInfo.Column
 import androidx.room.util.TableInfo
 import androidx.room.InvalidationTracker
-import com.matrix.autoreply.model.logs.MessageLogsDao_Impl
-import com.matrix.autoreply.model.logs.AppPackageDao_Impl
 import java.util.*
 
 class MessageLogsDB_Impl : MessageLogsDB() {
@@ -125,7 +119,7 @@ class MessageLogsDB_Impl : MessageLogsDB() {
                     val _existingMessageLogs = TableInfo.read(_db, "message_logs")
                     if (_infoMessageLogs != _existingMessageLogs) {
                         return ValidationResult(
-                            false, """message_logs(com.matrix.autoreply.model.logs.MessageLog).
+                            false, """message_logs(com.matrix.autoreply.logs.data.MessageLog).
  Expected:
 $_infoMessageLogs
  Found:
@@ -147,7 +141,7 @@ $_existingMessageLogs"""
                     val _existingAppPackages = TableInfo.read(_db, "app_packages")
                     return if (_infoAppPackages != _existingAppPackages) {
                         ValidationResult(
-                            false, """app_packages(com.matrix.autoreply.model.logs.AppPackage).
+                            false, """app_packages(com.matrix.autoreply.logs.data.AppPackage).
  Expected:
 $_infoAppPackages
  Found:
