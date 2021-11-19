@@ -1,8 +1,7 @@
-package com.matrix.autoreply
+package com.matrix.autoreply.services
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import java.io.File
 import java.text.DateFormat
 import java.util.*

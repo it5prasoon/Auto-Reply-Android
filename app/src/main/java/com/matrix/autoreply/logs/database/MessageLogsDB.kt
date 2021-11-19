@@ -1,10 +1,14 @@
-package com.matrix.autoreply.model.logs
+package com.matrix.autoreply.logs.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import kotlin.jvm.Synchronized
 import androidx.room.Room
+import com.matrix.autoreply.logs.data.AppPackage
+import com.matrix.autoreply.logs.data.MessageLog
+import com.matrix.autoreply.logs.repository.AppPackageDao
+import com.matrix.autoreply.logs.repository.MessageLogsDao
 import com.matrix.autoreply.model.utils.Constants
 
 @Database(entities = [MessageLog::class, AppPackage::class], version = 2)

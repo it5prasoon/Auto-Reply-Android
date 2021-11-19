@@ -15,6 +15,7 @@ import com.matrix.autoreply.model.utils.NotificationHelper
 import com.matrix.autoreply.model.utils.NotificationUtils
 
 class ForegroundNotificationService : NotificationListenerService() {
+
     private val TAG = ForegroundNotificationService::class.java.simpleName
     var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
@@ -48,7 +49,7 @@ class ForegroundNotificationService : NotificationListenerService() {
         val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
         val localIntent = Intent()
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val localBundle = Bundle() //notificationWear.bundle;
+        val localBundle = Bundle()
         var i = 0
         for (remoteIn in remoteInputs1) {
             remoteInputs[i] = remoteIn
@@ -93,7 +94,7 @@ class ForegroundNotificationService : NotificationListenerService() {
         val DELAY_BETWEEN_REPLY_IN_MILLISEC = 10 * 1000
         val title = NotificationUtils.getTitle(sbn)
         val selfDisplayName = sbn.notification.extras.getString("android.selfDisplayName")
-        if (title != null && selfDisplayName != null && title.equals(selfDisplayName, ignoreCase = true)) { //to protect double reply in case where if notification is not dismissed and existing notification is updated with our reply
+        if (title != null && selfDisplayName != null && title.equals(selfDisplayName, ignoreCase = true)) {
             return false
         }
         if (dbUtils == null) {
