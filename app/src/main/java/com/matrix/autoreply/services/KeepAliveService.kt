@@ -14,7 +14,6 @@ class KeepAliveService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-//        super.onStartCommand(intent, flags, startId);
         Log.d("DEBUG", "KeepAliveService onStartCommand")
         startNotificationService()
         return START_STICKY

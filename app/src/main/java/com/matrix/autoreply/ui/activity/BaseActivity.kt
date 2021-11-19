@@ -1,24 +1,21 @@
-package com.matrix.autoreply.ui.activity;
+package com.matrix.autoreply.ui.activity
 
-import android.content.Context;
-import android.os.Build;
+import android.content.Context
+import com.matrix.autoreply.model.preferences.PreferencesManager.Companion.getPreferencesInstance
+import com.matrix.autoreply.model.utils.ContextWrapper.Companion.wrap
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 
-import androidx.appcompat.app.AppCompatActivity;
+open class BaseActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = getPreferencesInstance(newBase)
+        val contextWrapper = wrap(newBase, prefs!!.selectedLocale)
+        super.attachBaseContext(contextWrapper)
 
-import com.matrix.autoreply.model.preferences.PreferencesManager;
-import com.matrix.autoreply.model.utils.ContextWrapper;
 
-public class BaseActivity extends AppCompatActivity {
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        PreferencesManager prefs = PreferencesManager.getPreferencesInstance(newBase);
-        ContextWrapper contextWrapper = ContextWrapper.wrap(newBase, prefs.getSelectedLocale());
-        super.attachBaseContext(contextWrapper);
-
-        //Fix language changing bug on API L to N_MR1, caused by AndroidX
-        //REF: https://stackoverflow.com/a/61572489/5525931
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
-            applyOverrideConfiguration(contextWrapper.getResources().getConfiguration());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT
+            <= Build.VERSION_CODES.N_MR1) applyOverrideConfiguration(
+            contextWrapper.resources.configuration
+        )
     }
 }

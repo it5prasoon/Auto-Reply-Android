@@ -1,51 +1,52 @@
-package com.matrix.autoreply.model.utils;
+package com.matrix.autoreply.model.utils
 
-import android.content.Context;
-import android.service.notification.StatusBarNotification;
+import android.content.Context
+import com.matrix.autoreply.model.CustomRepliesData
+import com.matrix.autoreply.model.logs.MessageLogsDB
+import android.service.notification.StatusBarNotification
+import com.matrix.autoreply.model.logs.AppPackage
+import com.matrix.autoreply.model.logs.MessageLog
 
-import com.matrix.autoreply.model.CustomRepliesData;
-import com.matrix.autoreply.model.logs.AppPackage;
-import com.matrix.autoreply.model.logs.MessageLog;
-import com.matrix.autoreply.model.logs.MessageLogsDB;
-
-public class DbUtils {
-    private Context mContext;
-    private CustomRepliesData customRepliesData;
-
-    public DbUtils(Context context){
-        mContext = context;
-    }
-
-    public long getNunReplies(){
-        MessageLogsDB messageLogsDB = MessageLogsDB.getInstance(mContext.getApplicationContext());
-        return messageLogsDB.logsDao().getNumReplies();
-    }
-
-    public void purgeMessageLogs(){
-        MessageLogsDB messageLogsDB = MessageLogsDB.getInstance(mContext.getApplicationContext());
-        messageLogsDB.logsDao().purgeMessageLogs();
-    }
-
-    public void logReply(StatusBarNotification sbn, String title){
-        customRepliesData = CustomRepliesData.getInstance(mContext);
-        MessageLogsDB messageLogsDB = MessageLogsDB.getInstance(mContext.getApplicationContext());
-        int packageIndex = messageLogsDB.appPackageDao().getPackageIndex(sbn.getPackageName());
-        if(packageIndex <= 0){
-            AppPackage appPackage = new AppPackage(sbn.getPackageName());
-            messageLogsDB.appPackageDao().insertAppPackage(appPackage);
-            packageIndex = messageLogsDB.appPackageDao().getPackageIndex(sbn.getPackageName());
+class DbUtils(private val mContext: Context) {
+    private var customRepliesData: CustomRepliesData? = null
+    val nunReplies: Long
+        get() {
+            val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
+            return messageLogsDB!!.logsDao()!!.numReplies
         }
-        MessageLog logs = new MessageLog(packageIndex, title, sbn.getNotification().when, customRepliesData.getTextToSendOrElse(null), System.currentTimeMillis());
-        messageLogsDB.logsDao().logReply(logs);
+
+    fun purgeMessageLogs() {
+        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
+        messageLogsDB!!.logsDao()!!.purgeMessageLogs()
     }
 
-    public long getLastRepliedTime(String packageName, String title){
-        MessageLogsDB messageLogsDB = MessageLogsDB.getInstance(mContext.getApplicationContext());
-        return messageLogsDB.logsDao().getLastReplyTimeStamp(title, packageName);
+    fun logReply(sbn: StatusBarNotification, title: String?) {
+        customRepliesData = CustomRepliesData.getInstance(mContext)
+        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
+        var packageIndex = messageLogsDB!!.appPackageDao()!!.getPackageIndex(sbn.packageName)
+        if (packageIndex <= 0) {
+            val appPackage = AppPackage(sbn.packageName)
+            messageLogsDB.appPackageDao()!!.insertAppPackage(appPackage)
+            packageIndex = messageLogsDB.appPackageDao()!!.getPackageIndex(sbn.packageName)
+        }
+        val logs = MessageLog(
+            packageIndex,
+            title!!,
+            sbn.notification.`when`,
+            customRepliesData!!.getTextToSendOrElse(null),
+            System.currentTimeMillis()
+        )
+        messageLogsDB.logsDao()!!.logReply(logs)
     }
 
-    public long getFirstRepliedTime(){
-        MessageLogsDB messageLogsDB = MessageLogsDB.getInstance(mContext.getApplicationContext());
-        return messageLogsDB.logsDao().getFirstRepliedTime();
+    fun getLastRepliedTime(packageName: String?, title: String?): Long {
+        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
+        return messageLogsDB!!.logsDao()!!.getLastReplyTimeStamp(title, packageName)
     }
+
+    val firstRepliedTime: Long
+        get() {
+            val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
+            return messageLogsDB!!.logsDao()!!.firstRepliedTime
+        }
 }

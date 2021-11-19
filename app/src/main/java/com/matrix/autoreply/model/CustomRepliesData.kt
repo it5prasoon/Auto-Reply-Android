@@ -1,47 +1,29 @@
-package com.matrix.autoreply.model;
+package com.matrix.autoreply.model
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.Editable;
-import android.text.method.LinkMovementMethod;
-
-import com.matrix.autoreply.R;
-import com.matrix.autoreply.model.preferences.PreferencesManager;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.matrix.autoreply.model.preferences.PreferencesManager
+import com.matrix.autoreply.model.CustomRepliesData
+import android.app.Activity
+import android.content.Context
+import com.matrix.autoreply.R
+import org.json.JSONArray
+import android.content.SharedPreferences
+import android.text.Editable
+import org.json.JSONException
 
 /**
  * Manages user entered custom auto reply text data.
  */
-public class CustomRepliesData {
-    public static final String KEY_CUSTOM_REPLY_ALL = "user_custom_reply_all";
-    public static final int MAX_NUM_CUSTOM_REPLY = 10;
-    public static final int MAX_STR_LENGTH_CUSTOM_REPLY = 500;
-    public static final String RTL_ALIGN_INVISIBLE_CHAR = " \u200F\u200F\u200E "; // https://android.stackexchange.com/a/190024
-    private static final String APP_SHARED_PREFS = CustomRepliesData.class.getSimpleName();
-    private static SharedPreferences _sharedPrefs;
-    private static CustomRepliesData _INSTANCE;
-    private Context thisAppContext;
-    private PreferencesManager preferencesManager;
+class CustomRepliesData {
+    private var thisAppContext: Context? = null
+    private var preferencesManager: PreferencesManager? = null
 
-    private CustomRepliesData() {}
-
-    private CustomRepliesData (Context context) {
-        thisAppContext = context.getApplicationContext();
-        _sharedPrefs = context.getApplicationContext()
-                .getSharedPreferences(APP_SHARED_PREFS, Activity.MODE_PRIVATE);
-        preferencesManager = PreferencesManager.getPreferencesInstance(thisAppContext);
-        init();
-    }
-
-    public static CustomRepliesData getInstance (Context context) {
-        if (_INSTANCE == null) {
-            _INSTANCE = new CustomRepliesData(context);
-        }
-        return _INSTANCE;
+    private constructor() {}
+    private constructor(context: Context) {
+        thisAppContext = context.applicationContext
+        _sharedPrefs = context.applicationContext
+            .getSharedPreferences(APP_SHARED_PREFS, Activity.MODE_PRIVATE)
+        preferencesManager = PreferencesManager.getPreferencesInstance(thisAppContext!!)
+        init()
     }
 
     /**
@@ -49,10 +31,10 @@ public class CustomRepliesData {
      * when the instance is first created goes here. For example, set specific keys based on new install
      * or app upgrade, etc.
      */
-    private void init () {
+    private fun init() {
         // Set default auto reply message on first install
-        if (!_sharedPrefs.contains(KEY_CUSTOM_REPLY_ALL)) {
-            set(thisAppContext.getString(R.string.auto_reply_default_message));
+        if (!_sharedPrefs!!.contains(KEY_CUSTOM_REPLY_ALL)) {
+            set(thisAppContext!!.getString(R.string.auto_reply_default_message))
         }
     }
 
@@ -61,19 +43,19 @@ public class CustomRepliesData {
      * @param customReply String that needs to be set as current auto reply
      * @return String that is stored in the database as current custom reply
      */
-    public String set(String customReply) {
+    fun set(customReply: String?): String? {
         if (!isValidCustomReply(customReply)) {
-            return null;
+            return null
         }
-        JSONArray previousCustomReplies = getAll();
-        previousCustomReplies.put(customReply);
+        val previousCustomReplies = all
+        previousCustomReplies.put(customReply)
         if (previousCustomReplies.length() > MAX_NUM_CUSTOM_REPLY) {
-            previousCustomReplies.remove(0);
+            previousCustomReplies.remove(0)
         }
-        SharedPreferences.Editor editor = _sharedPrefs.edit();
-        editor.putString(KEY_CUSTOM_REPLY_ALL, previousCustomReplies.toString());
-        editor.apply();
-        return customReply;
+        val editor = _sharedPrefs!!.edit()
+        editor.putString(KEY_CUSTOM_REPLY_ALL, previousCustomReplies.toString())
+        editor.apply()
+        return customReply
     }
 
     /**
@@ -81,27 +63,23 @@ public class CustomRepliesData {
      * @param customReply Editable that needs to be set as current auto reply
      * @return String that is stored in the database as current custom reply
      */
-    public String set(Editable customReply) {
-        return (customReply != null)
-                ? set(customReply.toString())
-                : null;
+    fun set(customReply: Editable?): String? {
+        return if (customReply != null) set(customReply.toString()) else null
     }
 
     /**
      * Get last set auto reply text
-     * Prefer using {@link CustomRepliesData::getOrElse} to avoid {@code null}
-     * @return Auto reply text or {@code null} if not set
+     * Prefer using [::getOrElse][CustomRepliesData] to avoid `null`
+     * @return Auto reply text or `null` if not set
      */
-    public String get() {
-        JSONArray allCustomReplies = getAll();
+    fun get(): String? {
+        val allCustomReplies = all
         try {
-            return (allCustomReplies.length() > 0)
-                    ? (String) allCustomReplies.get(allCustomReplies.length() - 1)
-                    : null;
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return if (allCustomReplies.length() > 0) allCustomReplies[allCustomReplies.length() - 1] as String else null
+        } catch (e: JSONException) {
+            e.printStackTrace()
         }
-        return null;
+        return null
     }
 
     /**
@@ -109,41 +87,59 @@ public class CustomRepliesData {
      * @param defaultText default auto reply text
      * @return Return auto reply text if present or else return given {@param defaultText}
      */
-    public String getOrElse(String defaultText) {
-        String currentText = get();
-        return (currentText != null)
-                ? currentText
-                : defaultText;
+    fun getOrElse(defaultText: String?): String {
+        val currentText = get()
+        return currentText ?: defaultText!!
     }
 
-    public String getTextToSendOrElse (String defaultTextToSend) {
-        String currentText = get();
-        if (preferencesManager.isAppendAutoreplyAttributionEnabled()) {
-            currentText += "\n\n" + thisAppContext.getString(R.string.sent_using_autoreply);
+    fun getTextToSendOrElse(defaultTextToSend: String?): String {
+        var currentText = get()
+        if (preferencesManager!!.isAppendAutoreplyAttributionEnabled) {
+            currentText += """
+                
+                
+                ${thisAppContext!!.getString(R.string.sent_using_autoreply)}
+                """.trimIndent()
         }
-        return (currentText != null)
-                ? currentText
-                : defaultTextToSend;
+        return currentText ?: defaultTextToSend!!
     }
 
-    private JSONArray getAll() {
-        JSONArray allCustomReplies = new JSONArray();
-        try {
-            allCustomReplies = new JSONArray(_sharedPrefs.getString(KEY_CUSTOM_REPLY_ALL, "[]"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private val all: JSONArray
+        private get() {
+            var allCustomReplies = JSONArray()
+            try {
+                allCustomReplies = JSONArray(_sharedPrefs!!.getString(KEY_CUSTOM_REPLY_ALL, "[]"))
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            return allCustomReplies
         }
-        return allCustomReplies;
-    }
 
-    public static boolean isValidCustomReply (String userInput) {
-        return (userInput != null) &&
-                !userInput.isEmpty() &&
-                (userInput.length() <= MAX_STR_LENGTH_CUSTOM_REPLY);
-    }
+    companion object {
+        const val KEY_CUSTOM_REPLY_ALL = "user_custom_reply_all"
+        const val MAX_NUM_CUSTOM_REPLY = 10
+        const val MAX_STR_LENGTH_CUSTOM_REPLY = 500
+        const val RTL_ALIGN_INVISIBLE_CHAR = " \u200F\u200F\u200E " // https://android.stackexchange.com/a/190024
+        private val APP_SHARED_PREFS = CustomRepliesData::class.java.simpleName
+        private var _sharedPrefs: SharedPreferences? = null
+        private var _INSTANCE: CustomRepliesData? = null
+        @JvmStatic
+        fun getInstance(context: Context): CustomRepliesData? {
+            if (_INSTANCE == null) {
+                _INSTANCE = CustomRepliesData(context)
+            }
+            return _INSTANCE
+        }
 
-    public static boolean isValidCustomReply (Editable userInput) {
-        return (userInput != null) &&
-                isValidCustomReply(userInput.toString());
+        fun isValidCustomReply(userInput: String?): Boolean {
+            return userInput != null &&
+                    !userInput.isEmpty() &&
+                    userInput.length <= MAX_STR_LENGTH_CUSTOM_REPLY
+        }
+
+        fun isValidCustomReply(userInput: Editable?): Boolean {
+            return userInput != null &&
+                    isValidCustomReply(userInput.toString())
+        }
     }
 }

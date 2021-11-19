@@ -1,37 +1,30 @@
-package com.matrix.autoreply.model.utils;
+package com.matrix.autoreply.model.utils
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import android.os.LocaleList;
+import android.content.Context
+import android.os.Build
+import android.os.LocaleList
+import java.util.*
 
-import java.util.Locale;
-
-public class ContextWrapper extends android.content.ContextWrapper {
-
-    public ContextWrapper(Context base) {
-        super(base);
-    }
-
-    //REF: https://medium.com/swlh/android-app-specific-language-change-programmatically-using-kotlin-d650a5392220
-    public static ContextWrapper wrap(Context context, Locale locale){
-        Resources res = context.getResources();
-        Configuration configuration = res.getConfiguration();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-            configuration.setLocale(locale);
-
-            LocaleList localeList = new LocaleList(locale);
-            LocaleList.setDefault(localeList);
-            configuration.setLocales(localeList);
-
-            context = context.createConfigurationContext(configuration);
-            res.updateConfiguration(configuration, res.getDisplayMetrics());
-        }else {
-            configuration.locale = locale;
-            res.updateConfiguration(configuration, res.getDisplayMetrics());
+class ContextWrapper(base: Context?) : android.content.ContextWrapper(base) {
+    companion object {
+        //REF: https://medium.com/swlh/android-app-specific-language-change-programmatically-using-kotlin-d650a5392220
+        @JvmStatic
+        fun wrap(context: Context, locale: Locale?): ContextWrapper {
+            var context = context
+            val res = context.resources
+            val configuration = res.configuration
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                configuration.setLocale(locale)
+                val localeList = LocaleList(locale)
+                LocaleList.setDefault(localeList)
+                configuration.setLocales(localeList)
+                context = context.createConfigurationContext(configuration)
+                res.updateConfiguration(configuration, res.displayMetrics)
+            } else {
+                configuration.locale = locale
+                res.updateConfiguration(configuration, res.displayMetrics)
+            }
+            return ContextWrapper(context)
         }
-        return new ContextWrapper(context);
     }
 }

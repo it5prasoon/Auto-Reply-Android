@@ -1,29 +1,30 @@
-package com.matrix.autoreply.model.logs;
+package com.matrix.autoreply.model.logs
 
-import android.content.Context;
+import android.content.Context
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import kotlin.jvm.Synchronized
+import androidx.room.Room
+import com.matrix.autoreply.model.utils.Constants
 
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
+@Database(entities = [MessageLog::class, AppPackage::class], version = 2)
+abstract class MessageLogsDB : RoomDatabase() {
+    abstract fun logsDao(): MessageLogsDao?
+    abstract fun appPackageDao(): AppPackageDao?
 
-import com.matrix.autoreply.model.utils.Constants;
-
-@Database(entities = {MessageLog.class, AppPackage.class}, version = 2)
-public abstract class MessageLogsDB extends RoomDatabase {
-    private static final String DB_NAME = Constants.LOGS_DB_NAME;
-    private static MessageLogsDB _instance;
-
-    public static synchronized MessageLogsDB getInstance(Context context){
-        if(_instance == null){
-            _instance = Room.databaseBuilder(context.getApplicationContext(), MessageLogsDB.class, DB_NAME)
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build();
+    companion object {
+        private const val DB_NAME = Constants.LOGS_DB_NAME
+        private var _instance: MessageLogsDB? = null
+        @JvmStatic
+        @Synchronized
+        fun getInstance(context: Context): MessageLogsDB? {
+            if (_instance == null) {
+                _instance = Room.databaseBuilder(context.applicationContext, MessageLogsDB::class.java, DB_NAME)
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build()
+            }
+            return _instance
         }
-        return _instance;
     }
-
-    public abstract MessageLogsDao logsDao();
-
-    public abstract AppPackageDao appPackageDao();
 }

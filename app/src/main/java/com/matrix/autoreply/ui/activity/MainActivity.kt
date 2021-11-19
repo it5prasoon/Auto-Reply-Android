@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
     private var appUpdateManager: AppUpdateManager? = null
-    private var installStateUpdatedListener: InstallStateUpdatedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -194,11 +193,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-//    private fun setCurrentFragment(fragment: Fragment) =
-//            supportFragmentManager.beginTransaction().apply {
-//                replace(R.id.view_pager, fragment)
-//                commit()
-//            }
 
 }

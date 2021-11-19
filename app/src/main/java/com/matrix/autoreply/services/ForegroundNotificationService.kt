@@ -63,13 +63,14 @@ class ForegroundNotificationService : NotificationListenerService() {
                 }
                 dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
                 pendingIntent.send(this, 0, localIntent)
-                if (PreferencesManager.getPreferencesInstance(this).isShowNotificationEnabled) {
-                    NotificationHelper.getInstance(applicationContext).sendNotification(sbn.notification.extras.getString("android.title"), sbn.notification.extras.getString("android.text"), sbn.packageName)
+                if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
+                    sbn.notification?.extras?.getString("android.title")
+                        ?.let { NotificationHelper.getInstance(applicationContext)?.sendNotification(it, sbn.notification.extras.getString("android.text"), sbn.packageName) }
                 }
                 cancelNotification(sbn.key)
                 if (canPurgeMessages()) {
                     dbUtils!!.purgeMessageLogs()
-                    PreferencesManager.getPreferencesInstance(this).setPurgeMessageTime(System.currentTimeMillis())
+                    PreferencesManager.getPreferencesInstance(this)?.setPurgeMessageTime(System.currentTimeMillis())
                 }
             }
         } catch (e: CanceledException) {
@@ -79,11 +80,11 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private fun canPurgeMessages(): Boolean {
         val daysBeforePurgeInMS = 30 * 24 * 60 * 60 * 1000L
-        return System.currentTimeMillis() - PreferencesManager.getPreferencesInstance(this).lastPurgedTime > daysBeforePurgeInMS
+        return System.currentTimeMillis() - (PreferencesManager.getPreferencesInstance(this)?.lastPurgedTime!!) > daysBeforePurgeInMS
     }
 
     private fun isSupportedPackage(sbn: StatusBarNotification): Boolean {
-        return PreferencesManager.getPreferencesInstance(this)
+        return PreferencesManager.getPreferencesInstance(this)!!
                 .enabledApps
                 .contains(sbn.packageName)
     }
@@ -98,7 +99,7 @@ class ForegroundNotificationService : NotificationListenerService() {
         if (dbUtils == null) {
             dbUtils = DbUtils(applicationContext)
         }
-        val timeDelay = PreferencesManager.getPreferencesInstance(this).autoReplyDelay
+        val timeDelay = PreferencesManager.getPreferencesInstance(this)!!.autoReplyDelay
         return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(sbn.packageName, title) >= Math.max(timeDelay, DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong())
     }
 
@@ -110,10 +111,10 @@ class ForegroundNotificationService : NotificationListenerService() {
         return if (!sbn.notification.extras.getBoolean("android.isGroupConversation")) {
             !isPossiblyAnImageGrpMsg
         } else {
-            PreferencesManager.getPreferencesInstance(this).isGroupReplyEnabled
+            PreferencesManager.getPreferencesInstance(this)!!.isGroupReplyEnabled
         }
     }
 
     private val isServiceEnabled: Boolean
-        get() = PreferencesManager.getPreferencesInstance(this).isServiceEnabled
+        get() = PreferencesManager.getPreferencesInstance(this)!!.isServiceEnabled
 }

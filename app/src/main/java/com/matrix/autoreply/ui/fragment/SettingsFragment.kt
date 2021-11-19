@@ -1,46 +1,43 @@
-package com.matrix.autoreply.ui.fragment;
+package com.matrix.autoreply.ui.fragment
 
-import android.content.Intent;
-import android.os.Bundle;
+import com.matrix.autoreply.helpers.AutoStartHelper.Companion.instance
+import androidx.preference.PreferenceFragmentCompat
+import android.os.Bundle
+import com.matrix.autoreply.R
+import com.matrix.autoreply.helpers.AutoStartHelper
+import android.content.Intent
+import android.os.Build
+import androidx.preference.Preference
+import androidx.preference.SwitchPreference
+import com.matrix.autoreply.ui.activity.MainActivity
 
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+class SettingsFragment : PreferenceFragmentCompat() {
 
-import com.matrix.autoreply.helpers.AutoStartHelper;
-import com.matrix.autoreply.R;
-import com.matrix.autoreply.ui.activity.MainActivity;
+    private var showNotificationPref: SwitchPreference? = null
+    private var autoStartPref: Preference? = null
 
-public class SettingsFragment extends PreferenceFragmentCompat {
-    private SwitchPreference showNotificationPref;
-    private Preference autoStartPref;
-
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.fragment_settings, rootKey);
-
-
-        showNotificationPref = findPreference(getString(R.string.pref_show_notification_replied_msg));
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
-            showNotificationPref.setTitle(getString(R.string.show_notification_label) + "(Beta)");
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.fragment_settings, rootKey)
+        showNotificationPref = findPreference(getString(R.string.pref_show_notification_replied_msg))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            showNotificationPref!!.title = getString(R.string.show_notification_label) + "(Beta)"
         }
-
-        autoStartPref = findPreference(getString(R.string.pref_auto_start_permission));
-        autoStartPref.setOnPreferenceClickListener(preference -> {
-            checkAutoStartPermission();
-            return true;
-        });
-    }
-
-    private void checkAutoStartPermission() {
-        if(getActivity() != null) {
-            AutoStartHelper.getInstance().getAutoStartPermission(getActivity());
+        autoStartPref = findPreference(getString(R.string.pref_auto_start_permission))
+        autoStartPref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference: Preference? ->
+            checkAutoStartPermission()
+            true
         }
     }
 
-    private void restartApp() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        getActivity().startActivity(intent);
-        getActivity().finishAffinity();
+    private fun checkAutoStartPermission() {
+        if (activity != null) {
+            instance.getAutoStartPermission(requireActivity())
+        }
+    }
+
+    private fun restartApp() {
+        val intent = Intent(activity, MainActivity::class.java)
+        requireActivity().startActivity(intent)
+        requireActivity().finishAffinity()
     }
 }
