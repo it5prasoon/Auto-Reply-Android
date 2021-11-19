@@ -14,6 +14,7 @@ class MessageLogsDao_Impl(private val __db: RoomDatabase) : MessageLogsDao {
 
     private val __insertionAdapterOfMessageLog: EntityInsertionAdapter<MessageLog?>
     private val __preparedStmtOfPurgeMessageLogs: SharedSQLiteStatement
+
     @SuppressLint("RestrictedApi")
     override fun logReply(log: MessageLog?) {
         __db.assertNotSuspendingTransaction()
