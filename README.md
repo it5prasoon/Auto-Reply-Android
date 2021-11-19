@@ -23,7 +23,7 @@ It sends replies automatically to all the contacts who contacts you on the insta
 
 # ToDo
 <ul>
-<li> AI chat features</li>
+<li> UI changes</li>
 </ul>
 
 # Tools: <br>
