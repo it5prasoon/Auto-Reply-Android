@@ -91,15 +91,20 @@ class ForegroundNotificationService : NotificationListenerService() {
     }
 
     private fun canSendReplyNow(sbn: StatusBarNotification): Boolean {
+
+        // Time between consecutive replies is 10 secs
         val DELAY_BETWEEN_REPLY_IN_MILLISEC = 10 * 1000
         val title = NotificationUtils.getTitle(sbn)
         val selfDisplayName = sbn.notification.extras.getString("android.selfDisplayName")
+
         if (title != null && selfDisplayName != null && title.equals(selfDisplayName, ignoreCase = true)) {
             return false
         }
+
         if (dbUtils == null) {
             dbUtils = DbUtils(applicationContext)
         }
+
         val timeDelay = PreferencesManager.getPreferencesInstance(this)!!.autoReplyDelay
         return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(sbn.packageName, title) >= Math.max(timeDelay, DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong())
     }
