@@ -33,15 +33,10 @@ It sends replies automatically to all the contacts who contacts you on the insta
 <li>Firebase Crashlytics</li>
 <li>Firebase Analytics</li>
 <li>Notification listener service</li>
-<!-- <li>Python (For AI bot)</li> -->
-<!-- <li>Chaquopy SDK for python</li> -->
-<!-- <li>Python tools:</li>
-
-  
-``` text
-  
-``` -->
 </ul>
+
+# Point to be noted:
+When application sends a reply to any particular user then it will send next reply after 10 secs interval ( if reply frequency is not set to 1). This doesn't mean that application is not working everytime.
 
 For source code:<br>
 https://www.github.com/it5prasoon/Auto-Reply-Android<br>
