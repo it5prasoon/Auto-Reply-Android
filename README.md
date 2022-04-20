@@ -10,7 +10,18 @@ This applications replies instantly to messages of instant messengers like Whats
 
 It sends replies automatically to all the contacts who contacts you on the instant messengers. It can be used when you are out of station, sleeping etc. You can set custom reply and change the reply frequency for how many times a single user gets a certain message.<br>
 
-# Features: <br>
+## Screenshots
+
+<p align="center">
+<img src="screenshots/screenshots/screenshot_1.png" width="16%"/>
+<img src="screenshots/screenshots/screenshot_2.png" width="16%"/>
+<img src="screenshots/screenshots/screenshot_3.png" width="16%"/>
+<img src="screenshots/screenshots/screenshot_4.png" width="16%"/>
+<img src="screenshots/screenshots/screenshot_5.png" width="16%"/>
+</p>
+
+
+## Features <br>
 <ul>
   <li>Reply automation to simple message as well as group chats</li>
   <li>Respects your privacy by not taking any information</li>
@@ -22,23 +33,19 @@ It sends replies automatically to all the contacts who contacts you on the insta
   <li>Open source</li>
 </ul>
 
-# ToDo
-<ul>
-<li> UI changes</li>
-</ul>
+## ToDo
+- Adding contact selection
+- UI Changes
 
-# Tools: <br>
-<ul>
-  <li>Kotlin</li>
-  <li>Firebase Crashlytics</li>
-  <li>Firebase Analytics</li>
-  <li>Notification listener service</li>
-  <li>Retrofit Client</li>
-  <li>Coroutines</li>  
-  <li>Room database</li>
-</ul>
+## Tech stack & Open-source libraries
+- Kotlin
+- Firebase
+- Notification listener services
+- Retrofit client
+- Coroutines
+- RoomDb
 
-# Point to be noted:
+## Point to be noted
 When application sends a reply to any particular user then it will send next reply after 10 secs interval ( if reply frequency is not set to 1). This doesn't mean that application is not working everytime.
 
 For source code:<br>
