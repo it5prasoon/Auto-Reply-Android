@@ -9,51 +9,48 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.matrix.autoreply.R
+import com.matrix.autoreply.databinding.ActivityTabbedBinding
 import com.matrix.autoreply.helpers.AlertDialogHelper
-import com.matrix.autoreply.ui.activity.ui.main.SectionsPagerAdapter
+import com.matrix.autoreply.ui.activity.main.SectionsPagerAdapter
 import java.io.File
 
-
-private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
-private const val IMMEDIATE_APP_UPDATE_REQ_CODE = 124
-private const val TAG = "AppUpdate"
-
-class MainActivity : AppCompatActivity() {
+class TabbedActivity : AppCompatActivity() {
     private val msgLogFileName = "msgLog.txt"
     private val signalMsgLogFileName = "signalMsgLog.txt"
     private val w4bMsgLogFileName = "waBusMsgLog.txt"
     private var appUpdateManager: AppUpdateManager? = null
+    private lateinit var binding: ActivityTabbedBinding
 
+    companion object {
+        private const val TOOLBAR_TITLE_TEXT = "Auto Reply"
+        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
+        private const val IMMEDIATE_APP_UPDATE_REQ_CODE = 124
+        private const val TAG = "AppUpdate"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tabbed)
+        binding = ActivityTabbedBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.title = "Auto Reply"
-        setSupportActionBar(toolbar)
+        binding.toolbar.title = TOOLBAR_TITLE_TEXT
+        setSupportActionBar(binding.toolbar)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
+        binding.viewPager.adapter = sectionsPagerAdapter
+        binding.tabs.setupWithViewPager(binding.viewPager)
 
         // Request Storage Permission
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -64,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.i("MAIN ACTIVITY:: ", "OnResume")
         checkUpdate()
     }
 

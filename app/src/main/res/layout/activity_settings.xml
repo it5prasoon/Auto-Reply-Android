@@ -11,7 +11,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/setting_fragment_container"
-        android:name="com.matrix.autoreply.fragment.SettingsFragment"
+        android:name="com.matrix.autoreply.ui.fragment.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

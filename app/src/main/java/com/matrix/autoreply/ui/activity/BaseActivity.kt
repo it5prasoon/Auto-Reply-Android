@@ -13,8 +13,9 @@ open class BaseActivity : AppCompatActivity() {
         super.attachBaseContext(contextWrapper)
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT
-            <= Build.VERSION_CODES.N_MR1) applyOverrideConfiguration(
+        if (Build.VERSION.SDK_INT
+            <= Build.VERSION_CODES.N_MR1
+        ) applyOverrideConfiguration(
             contextWrapper.resources.configuration
         )
     }

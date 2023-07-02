@@ -1,5 +1,6 @@
 package com.matrix.autoreply.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,6 +15,7 @@ import com.matrix.autoreply.R
 /**
 Edited and written by Prasoon
  */
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     var context: Context? = null
 
@@ -24,16 +26,17 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         window.statusBarColor = resources.getColor(R.color.colorPrimary);
 
-        // Creates instance of the manager.
-
         Handler(Looper.getMainLooper()).postDelayed({
-            val i = Intent(this@SplashActivity, MainActivity::class.java)
-            startActivity(i)
-            finish()
+            try {
+                val intent = Intent(this@SplashActivity, TabbedActivity::class.java)
+                startActivity(intent)
+                finish()
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+            }
         }, SPLASH_TIME_OUT.toLong())
 
     }
-
 
     companion object {
         private const val SPLASH_TIME_OUT = 500

@@ -4,12 +4,11 @@ import com.matrix.autoreply.helpers.AutoStartHelper.Companion.instance
 import androidx.preference.PreferenceFragmentCompat
 import android.os.Bundle
 import com.matrix.autoreply.R
-import com.matrix.autoreply.helpers.AutoStartHelper
 import android.content.Intent
 import android.os.Build
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import com.matrix.autoreply.ui.activity.MainActivity
+import com.matrix.autoreply.ui.activity.TabbedActivity
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -36,7 +35,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun restartApp() {
-        val intent = Intent(activity, MainActivity::class.java)
+        val intent = Intent(activity, TabbedActivity::class.java)
         requireActivity().startActivity(intent)
         requireActivity().finishAffinity()
     }
