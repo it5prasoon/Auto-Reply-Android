@@ -1,4 +1,4 @@
-package com.matrix.autoreply.ui.activity.ui.main
+package com.matrix.autoreply.ui.activity.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ class PlaceholderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
     }
@@ -30,9 +30,9 @@ class PlaceholderFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_tabbed, container, false)
         val textView: TextView = root.findViewById(R.id.section_label)
-        pageViewModel.text.observe(viewLifecycleOwner, Observer<String> {
+        pageViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
-        })
+        }
         return root
     }
 

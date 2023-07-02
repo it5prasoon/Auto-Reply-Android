@@ -7,11 +7,11 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.room.RoomOpenHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.room.util.DBUtil
 import androidx.room.RoomOpenHelper.ValidationResult
 import androidx.room.util.TableInfo.Column
 import androidx.room.util.TableInfo
 import androidx.room.InvalidationTracker
+import androidx.room.util.DBUtil
 import com.matrix.autoreply.logs.repository.AppPackageDao
 import com.matrix.autoreply.logs.repository.AppPackageDao_Impl
 import com.matrix.autoreply.logs.repository.MessageLogsDao
@@ -74,12 +74,12 @@ class MessageLogsDB_Impl : MessageLogsDB() {
                     }
                 }
 
-                public override fun onPreMigrate(_db: SupportSQLiteDatabase) {
-                    DBUtil.dropFtsSyncTriggers(_db)
+                public override fun onPreMigrate(database: SupportSQLiteDatabase) {
+                    DBUtil.dropFtsSyncTriggers(database)
                 }
 
-                public override fun onPostMigrate(_db: SupportSQLiteDatabase) {}
-                override fun onValidateSchema(_db: SupportSQLiteDatabase): ValidationResult {
+                public override fun onPostMigrate(database: SupportSQLiteDatabase) {}
+                override fun onValidateSchema(db: SupportSQLiteDatabase): ValidationResult {
                     val _columnsMessageLogs =
                         HashMap<String, Column>(8)
                     _columnsMessageLogs["id"] = Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY)
@@ -119,7 +119,7 @@ class MessageLogsDB_Impl : MessageLogsDB() {
                     )
                     val _infoMessageLogs =
                         TableInfo("message_logs", _columnsMessageLogs, _foreignKeysMessageLogs, _indicesMessageLogs)
-                    val _existingMessageLogs = TableInfo.read(_db, "message_logs")
+                    val _existingMessageLogs = TableInfo.read(db, "message_logs")
                     if (_infoMessageLogs != _existingMessageLogs) {
                         return ValidationResult(
                             false, """message_logs(com.matrix.autoreply.logs.data.MessageLog).
@@ -141,7 +141,7 @@ $_existingMessageLogs"""
                         HashSet<TableInfo.Index>(0)
                     val _infoAppPackages =
                         TableInfo("app_packages", _columnsAppPackages, _foreignKeysAppPackages, _indicesAppPackages)
-                    val _existingAppPackages = TableInfo.read(_db, "app_packages")
+                    val _existingAppPackages = TableInfo.read(db, "app_packages")
                     return if (_infoAppPackages != _existingAppPackages) {
                         ValidationResult(
                             false, """app_packages(com.matrix.autoreply.logs.data.AppPackage).
@@ -196,6 +196,7 @@ $_existingAppPackages"""
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun getRequiredTypeConverters(): Map<Class<*>, List<Class<*>>> {
         val _typeConvertersMap = HashMap<Class<*>, List<Class<*>>>()
         _typeConvertersMap[MessageLogsDao::class.java] = MessageLogsDao_Impl.requiredConverters

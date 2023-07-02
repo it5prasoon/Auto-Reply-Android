@@ -1,4 +1,4 @@
-package com.matrix.autoreply.ui.activity.ui.main
+package com.matrix.autoreply.ui.activity.main
 
 import android.content.Context
 import androidx.fragment.app.Fragment

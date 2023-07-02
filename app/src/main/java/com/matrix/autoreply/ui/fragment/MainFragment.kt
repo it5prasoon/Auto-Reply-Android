@@ -17,11 +17,10 @@ import com.matrix.autoreply.model.App
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.matrix.autoreply.ui.activity.customreplyeditor.CustomReplyEditorActivity
+import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
 import com.matrix.autoreply.model.utils.CustomDialog
 import android.content.DialogInterface
 import android.os.Build
-import com.matrix.autoreply.ui.fragment.MainFragment
 import android.content.pm.PackageManager
 import android.provider.Settings
 import android.view.View

@@ -27,7 +27,7 @@
             android:theme="@style/Theme.WaReply">
 
         <activity
-                android:name="com.matrix.autoreply.ui.activity.MainActivity"
+                android:name="com.matrix.autoreply.ui.activity.TabbedActivity"
                 android:label="@string/title_activity_tabbed"
                 android:exported="true"
                 android:theme="@style/Theme.WaReply.NoActionBar"/>
@@ -42,10 +42,10 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.matrix.autoreply.ui.activity.customreplyeditor.CustomReplyEditorActivity"
+                android:name="com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity"
                 android:label="@string/mainAutoReplyLabel"
                 android:exported="true"
-                android:parentActivityName="com.matrix.autoreply.ui.activity.MainActivity">
+                android:parentActivityName="com.matrix.autoreply.ui.activity.TabbedActivity">
             <intent-filter android:label="global-auto-reply-message-intent">
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -61,7 +61,7 @@
                 android:name="com.matrix.autoreply.ui.activity.settings.SettingsActivity"
                 android:label="@string/settings"
                 android:exported="true"
-                android:parentActivityName="com.matrix.autoreply.ui.activity.MainActivity"/>
+                android:parentActivityName="com.matrix.autoreply.ui.activity.TabbedActivity"/>
         <activity
                 android:name="com.matrix.autoreply.ui.activity.notification.NotificationIntentActivity"
                 android:launchMode="singleTop"/>

@@ -26,18 +26,13 @@ import com.matrix.autoreply.ui.activity.MsgLogViewerActivity
 
 open class DeletedMessageFragment : Fragment() {
 
-    private val msgLogFileName = "msgLog.txt"
-    private val signalMsgLogFileName = "signalMsgLog.txt"
-    private val w4bMsgLogFileName = "waBusMsgLog.txt"
     private val REQ_NOTIFICATION_LISTENER = 1000
 
     private val checkEmoji = String(Character.toChars(0x2714))
-    private val crossEmoji = String(Character.toChars(0x274C))
     private var notificationListenerSwitch: SwitchMaterial? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    @Nullable
-    override fun onCreateView(inflater: LayoutInflater, @Nullable container: ViewGroup?, @Nullable savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_deleted_message, container, false)
 
         // Widgets
@@ -50,13 +45,7 @@ open class DeletedMessageFragment : Fragment() {
 
         msgLogStatus.text = getString(R.string.msg_log_status_str, checkEmoji)
 
-//        msgLogStatus.text = getString(R.string.msg_log_status_str,
-//                    if (File(requireActivity().filesDir, msgLogFileName).exists()
-//                            && File(requireActivity().filesDir, signalMsgLogFileName).exists()
-//                            && File(requireActivity().filesDir, w4bMsgLogFileName).exists()) checkEmoji else crossEmoji)
-
         // Button
-        // DRY
         viewWALogBtn.setOnClickListener {
             val intent = Intent(requireActivity(), MsgLogViewerActivity::class.java)
             intent.putExtra("app", "whatsapp")
