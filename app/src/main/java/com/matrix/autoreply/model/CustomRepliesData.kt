@@ -1,7 +1,6 @@
 package com.matrix.autoreply.model
 
-import com.matrix.autoreply.model.preferences.PreferencesManager
-import com.matrix.autoreply.model.CustomRepliesData
+import com.matrix.autoreply.preferences.PreferencesManager
 import android.app.Activity
 import android.content.Context
 import com.matrix.autoreply.R
@@ -132,8 +131,7 @@ class CustomRepliesData {
         }
 
         fun isValidCustomReply(userInput: String?): Boolean {
-            return userInput != null &&
-                    !userInput.isEmpty() &&
+            return !userInput.isNullOrEmpty() &&
                     userInput.length <= MAX_STR_LENGTH_CUSTOM_REPLY
         }
 

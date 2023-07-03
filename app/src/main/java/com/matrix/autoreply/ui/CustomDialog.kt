@@ -1,10 +1,11 @@
-package com.matrix.autoreply.model.utils
+package com.matrix.autoreply.ui
 
 import android.content.Context
 import android.os.Bundle
 import android.content.DialogInterface
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.matrix.autoreply.R
+import com.matrix.autoreply.constants.Constants
 
 class CustomDialog(private val mContext: Context) {
     fun showDialog(bundle: Bundle?, type: String?, onClickListener: DialogInterface.OnClickListener) {

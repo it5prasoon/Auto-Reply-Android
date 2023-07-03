@@ -1,6 +1,6 @@
 package com.matrix.autoreply.ui.activity.notification
 
-import com.matrix.autoreply.model.utils.NotificationHelper.Companion.getInstance
+import com.matrix.autoreply.helpers.NotificationHelper.Companion.getInstance
 import com.matrix.autoreply.ui.activity.BaseActivity
 import android.os.Bundle
 import com.matrix.autoreply.R

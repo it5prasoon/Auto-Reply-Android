@@ -4,14 +4,14 @@ import android.os.Build
 import android.widget.Toast
 import com.matrix.autoreply.R
 import android.content.DialogInterface
-import com.matrix.autoreply.model.utils.CustomDialog
+import com.matrix.autoreply.ui.CustomDialog
 import android.os.Bundle
 import kotlin.Throws
 import android.content.Intent
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ApplicationInfo
-import com.matrix.autoreply.model.utils.Constants
+import com.matrix.autoreply.constants.Constants
 import java.lang.Exception
 import java.util.*
 

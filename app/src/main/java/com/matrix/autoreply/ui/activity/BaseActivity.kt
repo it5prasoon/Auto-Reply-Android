@@ -1,8 +1,8 @@
 package com.matrix.autoreply.ui.activity
 
 import android.content.Context
-import com.matrix.autoreply.model.preferences.PreferencesManager.Companion.getPreferencesInstance
-import com.matrix.autoreply.model.utils.ContextWrapper.Companion.wrap
+import com.matrix.autoreply.preferences.PreferencesManager.Companion.getPreferencesInstance
+import com.matrix.autoreply.helpers.ContextWrapper.Companion.wrap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Build
 
