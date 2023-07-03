@@ -11,7 +11,7 @@ android {
     compileSdkVersion(Configuration.compileSdk)
 
     defaultConfig {
-        applicationId = "com.matrix.autoreply"
+        applicationId = Configuration.artifactGroup
         minSdkVersion(Configuration.minSdk)
         targetSdkVersion(Configuration.targetSdk)
         versionCode = Configuration.versionCode

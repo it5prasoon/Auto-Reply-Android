@@ -1,16 +1,17 @@
-package com.matrix.autoreply.logs.repository
+package com.matrix.autoreply.store.repository
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.matrix.autoreply.logs.data.MessageLog
+import com.matrix.autoreply.store.data.MessageLog
 
 @Dao
 interface MessageLogsDao {
     @Query(
         "SELECT message_logs.notif_reply_time FROM MESSAGE_LOGS " +
                 "INNER JOIN app_packages ON app_packages.`index` = message_logs.`index` " +
-                "WHERE app_packages.package_name=:packageName AND message_logs.notif_title=:title ORDER BY notif_reply_time DESC LIMIT 1"
+                "WHERE app_packages.package_name=:packageName AND message_logs.notif_title=:title " +
+                "ORDER BY notif_reply_time DESC LIMIT 1"
     )
     fun getLastReplyTimeStamp(title: String?, packageName: String?): Long
 

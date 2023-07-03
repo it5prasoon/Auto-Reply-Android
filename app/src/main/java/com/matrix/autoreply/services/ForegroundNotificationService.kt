@@ -17,7 +17,7 @@ import com.matrix.autoreply.model.utils.NotificationUtils
 class ForegroundNotificationService : NotificationListenerService() {
 
     private val TAG = ForegroundNotificationService::class.java.simpleName
-    var customRepliesData: CustomRepliesData? = null
+    private var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
@@ -45,17 +45,21 @@ class ForegroundNotificationService : NotificationListenerService() {
         if (remoteInputs1.isEmpty()) {
             return
         }
+
         customRepliesData = CustomRepliesData.getInstance(this)
         val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
         val localIntent = Intent()
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val localBundle = Bundle()
-        var i = 0
-        for (remoteIn in remoteInputs1) {
+
+        for ((i, remoteIn) in remoteInputs1.withIndex()) {
             remoteInputs[i] = remoteIn
-            localBundle.putCharSequence(remoteInputs[i]!!.resultKey, customRepliesData?.getTextToSendOrElse(null))
-            i++
+            localBundle.putCharSequence(
+                remoteInputs[i]!!.resultKey, customRepliesData
+                    ?.getTextToSendOrElse(null)
+            )
         }
+
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
         try {
             if (pendingIntent != null) {
@@ -66,12 +70,18 @@ class ForegroundNotificationService : NotificationListenerService() {
                 pendingIntent.send(this, 0, localIntent)
                 if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
                     sbn.notification?.extras?.getString("android.title")
-                        ?.let { NotificationHelper.getInstance(applicationContext)?.sendNotification(it, sbn.notification.extras.getString("android.text"), sbn.packageName) }
+                        ?.let {
+                            NotificationHelper.getInstance(applicationContext)?.sendNotification(
+                                it,
+                                sbn.notification.extras.getString("android.text"), sbn.packageName
+                            )
+                        }
                 }
                 cancelNotification(sbn.key)
                 if (canPurgeMessages()) {
                     dbUtils!!.purgeMessageLogs()
-                    PreferencesManager.getPreferencesInstance(this)?.setPurgeMessageTime(System.currentTimeMillis())
+                    PreferencesManager.getPreferencesInstance(this)
+                        ?.setPurgeMessageTime(System.currentTimeMillis())
                 }
             }
         } catch (e: CanceledException) {
@@ -81,13 +91,14 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private fun canPurgeMessages(): Boolean {
         val daysBeforePurgeInMS = 30 * 24 * 60 * 60 * 1000L
-        return System.currentTimeMillis() - (PreferencesManager.getPreferencesInstance(this)?.lastPurgedTime!!) > daysBeforePurgeInMS
+        return System.currentTimeMillis() -
+                (PreferencesManager.getPreferencesInstance(this)?.lastPurgedTime!!) > daysBeforePurgeInMS
     }
 
     private fun isSupportedPackage(sbn: StatusBarNotification): Boolean {
         return PreferencesManager.getPreferencesInstance(this)!!
-                .enabledApps
-                .contains(sbn.packageName)
+            .enabledApps
+            .contains(sbn.packageName)
     }
 
     private fun canSendReplyNow(sbn: StatusBarNotification): Boolean {
@@ -106,7 +117,10 @@ class ForegroundNotificationService : NotificationListenerService() {
         }
 
         val timeDelay = PreferencesManager.getPreferencesInstance(this)!!.autoReplyDelay
-        return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(sbn.packageName, title) >= Math.max(timeDelay, DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong())
+        return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(sbn.packageName, title) >= Math.max(
+            timeDelay,
+            DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong()
+        )
     }
 
     private fun isGroupMessageAndReplyAllowed(sbn: StatusBarNotification): Boolean {

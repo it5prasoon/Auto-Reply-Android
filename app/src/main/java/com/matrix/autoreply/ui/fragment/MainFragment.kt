@@ -33,17 +33,16 @@ import java.util.*
 
 class MainFragment : Fragment() {
 
-    private val MINUTE_FACTOR = 60
-    var autoReplyTextPreviewCard: CardView? = null
-    var timePickerCard: CardView? = null
-    var autoReplyTextPreview: TextView? = null
-    var timeSelectedTextPreview: TextView? = null
-    var timePickerSubTitleTextPreview: TextView? = null
-    var customRepliesData: CustomRepliesData? = null
-    var autoReplyTextPlaceholder: String? = null
-    var mainAutoReplySwitch: SwitchMaterial? = null
-    var groupReplySwitch: SwitchMaterial? = null
-    var supportedAppsCard: CardView? = null
+    private var autoReplyTextPreviewCard: CardView? = null
+    private var timePickerCard: CardView? = null
+    private var autoReplyTextPreview: TextView? = null
+    private var timeSelectedTextPreview: TextView? = null
+    private var timePickerSubTitleTextPreview: TextView? = null
+    private var customRepliesData: CustomRepliesData? = null
+    private var autoReplyTextPlaceholder: String? = null
+    private var mainAutoReplySwitch: SwitchMaterial? = null
+    private var groupReplySwitch: SwitchMaterial? = null
+    private var supportedAppsCard: CardView? = null
     private var preferencesManager: PreferencesManager? = null
     private var days = 0
     private var imgMinus: ImageView? = null
@@ -225,7 +224,7 @@ class MainFragment : Fragment() {
 
     //https://stackoverflow.com/questions/20141727/check-if-user-has-granted-notificationlistener-access-to-my-app/28160115
     //TODO: Use in UI to verify if it needs enabling or restarting
-    fun isListenerEnabled(context: Context?, notificationListenerCls: Class<*>?): Boolean {
+    private fun isListenerEnabled(context: Context?, notificationListenerCls: Class<*>?): Boolean {
         val cn = ComponentName(requireContext(), notificationListenerCls!!)
         val flat = Settings.Secure.getString(context?.contentResolver, "enabled_notification_listeners")
         return flat != null && flat.contains(cn.flattenToString())
@@ -258,7 +257,7 @@ class MainFragment : Fragment() {
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_TITLE, getString(R.string.permission_dialog_denied_title))
         bundle.putString(Constants.PERMISSION_DIALOG_DENIED_MSG, getString(R.string.permission_dialog_denied_msg))
         bundle.putBoolean(Constants.PERMISSION_DIALOG_DENIED, true)
-        customDialog.showDialog(bundle, null) { dialog: DialogInterface?, which: Int ->
+        customDialog.showDialog(bundle, null) { _: DialogInterface?, which: Int ->
             if (which == -2) {
                 //Decline
                 setSwitchState()
@@ -311,7 +310,7 @@ class MainFragment : Fragment() {
         fun isAppInstalledFromStore(context: Context): Boolean {
             // A list with valid installers package name
             val validInstallers: List<String> =
-                ArrayList(Arrays.asList("com.android.vending", "com.google.android.feedback"))
+                ArrayList(listOf("com.android.vending", "com.google.android.feedback"))
 
             // The package name of the app that has installed your app
             val installer = context.packageManager.getInstallerPackageName(context.packageName)

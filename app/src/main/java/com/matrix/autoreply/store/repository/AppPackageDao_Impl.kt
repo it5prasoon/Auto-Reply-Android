@@ -1,4 +1,4 @@
-package com.matrix.autoreply.logs.repository
+package com.matrix.autoreply.store.repository
 
 
 import androidx.room.RoomDatabase
@@ -7,7 +7,7 @@ import android.annotation.SuppressLint
 import androidx.room.RoomSQLiteQuery
 import androidx.room.util.DBUtil
 import androidx.sqlite.db.SupportSQLiteStatement
-import com.matrix.autoreply.logs.data.AppPackage
+import com.matrix.autoreply.store.data.AppPackage
 
 class AppPackageDao_Impl(private val __db: RoomDatabase) : AppPackageDao {
 

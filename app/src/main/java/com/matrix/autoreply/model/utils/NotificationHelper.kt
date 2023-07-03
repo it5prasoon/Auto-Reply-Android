@@ -44,7 +44,17 @@ class NotificationHelper private constructor(private val appContext: Context) {
         }
         val intent = Intent(appContext, NotificationIntentActivity::class.java)
         intent.putExtra("package", packageName)
-        val pIntent = PendingIntent.getActivity(appContext, 0, intent, 0)
+
+        // Add the required flags for Android 12 and above
+        val pIntent: PendingIntent? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val flags = PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.getActivity(
+                appContext, 0, intent, flags
+            )
+        } else {
+            PendingIntent.getActivity(appContext, 0, intent, 0)
+        }
+
         val notificationBuilder = NotificationCompat.Builder(
             appContext, Constants.NOTIFICATION_CHANNEL_ID
         )
