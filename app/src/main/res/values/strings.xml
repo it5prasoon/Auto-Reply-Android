@@ -20,7 +20,9 @@
     <string name="permission_dialog_title">Permission Required</string>
     <string name="permission_dialog_msg">This app requires Notification Access permissions to work.</string>
     <string name="permission_dialog_denied_title">Permission Denied</string>
-    <string name="permission_dialog_denied_msg">Without this permission app is unable to auto-reply to the notifications. Are you sure you want to deny the permission?</string>
+    <string name="permission_dialog_denied_msg">Without this permission app is unable to auto-reply to the
+        notifications. Are you sure you want to deny the permission?
+    </string>
 
     <!-- Select apps to auto reply -->
     <string name="enable_for_apps">Enable for apps</string>
@@ -41,22 +43,31 @@
 
     <!-- Custom message editor -->
     <string name="save">Save</string>
-    <string name="tip_view_messages_from_fellow_users">🦩 <u>View templates from community and share yours too ➚</u></string>
+    <string name="tip_view_messages_from_fellow_users">🦩
+        <u>View templates from community and share yours too ➚</u>
+    </string>
     <string name="append_autoreply_arribution_checkbox_label">Add autoreply attribute to the messege.</string>
     <string name="sent_using_autoreply">Sent using git.io/JZCn4</string>
 
     <string name="share">Share</string>
     <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>
-    <string name="autoreply_subreddit_label"><u>Let\'s discuss\nr/autoreply</u></string>
+    <string name="autoreply_subreddit_label">
+        <u>Let\'s discuss\nr/autoreply</u>
+    </string>
     <string name="autoreply_github_url" translatable="false">https://github.com/it5prasoon/Auto-Reply-Android</string>
-    <string name="autoreply_github_latest_release_url" translatable="false">https://github.com/it5prasoon/Auto-Reply-Android/releases/latest</string>
+    <string name="autoreply_github_latest_release_url" translatable="false">
+        https://github.com/it5prasoon/Auto-Reply-Android/releases/latest
+    </string>
 
     <!-- Share debug logs -->
     <string name="app_logs_file_name" translatable="false">AutoreplyLogs.txt</string>
-    <string name="share_email_body" translatable="false">Hi Team Autoreply,\nPlease find the attachment of the app logs.</string>
+    <string name="share_email_body" translatable="false">Hi Team Autoreply,\nPlease find the attachment of the app
+        logs.
+    </string>
     <string name="share_email_subject" translatable="false">Autoreply AppLogs</string>
     <string name="share_email_id" translatable="false">autoreply@deekshith.in</string>
-    <string name="share_email_err_msg" translatable="false">Couldnot find any application to process this request</string>
+    <string name="share_email_err_msg" translatable="false">Couldnot find any application to process this request
+    </string>
 
     <!-- keys and app internal strings -->
     <string name="key_pref_app_language" translatable="false">pref_app_language</string>
@@ -108,14 +119,20 @@
 
     <!-- App Rating Dialog -->
     <string name="app_rating_dialog_title">What do you think?</string>
-    <string name="app_rating_dialog_msg">We are interested in what you think of the app. Tap the stars above to rate it.</string>
+    <string name="app_rating_dialog_msg">We are interested in what you think of the app. Tap the stars above to rate
+        it.
+    </string>
     <string name="app_rating_dialog_rate_button_title">Rate it!</string>
     <string name="app_rating_dialog_rate_later_title">May be later</string>
     <string name="app_rating_goto_store_dialog_title">We\'re happy!</string>
     <string name="celebrate_emoji" translatable="false">😃🙌</string>
-    <string name="app_rating_goto_store_dialog_msg">Please share this rating of our app on the Google Play Store by tapping \"Continue\"\!</string>
-    <string name="app_rating_pitch">This app is free, no ads, no tracking, open source and is made by contributors like you and me.
-        Your feedback is our only encouragement.</string>
+    <string name="app_rating_goto_store_dialog_msg">Please share this rating of our app on the Google Play Store by
+        tapping \"Continue\"\!
+    </string>
+    <string name="app_rating_pitch">This app is free, no ads, no tracking, open source and is made by contributors like
+        you and me.
+        Your feedback is our only encouragement.
+    </string>
     <string name="app_rating_goto_store_dialog_button1_title">Not Interested</string>
     <string name="app_rating_goto_store_dialog_button2_title">Continue</string>
     <string name="app_rating_feedback_dialog_title">Contact us</string>
@@ -154,7 +171,9 @@
     <string name="create_msg_log_failed">Failed to create message log file</string>
 
     <string name="create_backup_dir">Creating backup directory</string>
-    <string name="allow_storage_permission_msg">Messages and media cannot be saved without storage permission. Restart the app and allow.</string>
+    <string name="allow_storage_permission_msg">Messages and media cannot be saved without storage permission. Restart
+        the app and allow.
+    </string>
 
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
@@ -167,21 +186,32 @@
     <string name="action_clear">Clear</string>
 
     <string name="auto_start_permission_dialog_title">AutoStart Permission</string>
-    <string name="auto_start_permission_dialog_message">Enable \"Auto Start\" permission in device settings to allow Auto Reply to start on device restart.</string>
+    <string name="auto_start_permission_dialog_message">Enable \"Auto Start\" permission in device settings to allow
+        Auto Reply to start on device restart.
+    </string>
     <string name="enable_auto_start_label">Enable Auto Start</string>
-    <string name="enable_auto_start_summary">Some devices might need you to manually enable Auto start for Auto Reply from device settings</string>
-    <string name="device_based_settings_message">Note: Settings may vary or may not be available based on your device</string>
-    <string name="setting_not_available_for_device">This setting is not available or may not be needed for your device.</string>
+    <string name="enable_auto_start_summary">Some devices might need you to manually enable Auto start for Auto Reply
+        from device settings
+    </string>
+    <string name="device_based_settings_message">Note: Settings may vary or may not be available based on your device
+    </string>
+    <string name="setting_not_available_for_device">This setting is not available or may not be needed for your
+        device.
+    </string>
     <string name="enable_auto_start_setting">Proceed</string>
     <string name="decline_auto_start_setting">Cancel</string>
     <string name="pref_auto_start_permission" translatable="false">pref_auto_start_permission</string>
 
     <!-- Strings related to the Alert Dialog -->
     <string name="notification_listener_service">"Notification Listener Service"</string>
-    <string name="notification_listener_service_explanation">"For the the app. to work you need to enable the Notification Listener Service. Enable it now?"</string>
+    <string name="notification_listener_service_explanation">"For the the app. to work you need to enable the
+        Notification Listener Service. Enable it now?"
+    </string>
     <string name="no">No</string>
     <string name="title_activity_bottom_navigation">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
