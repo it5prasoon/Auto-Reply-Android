@@ -9,10 +9,10 @@ import android.text.SpannableString
 import android.util.Log
 import androidx.core.app.RemoteInput
 import com.matrix.autoreply.model.CustomRepliesData
-import com.matrix.autoreply.model.preferences.PreferencesManager
-import com.matrix.autoreply.model.utils.DbUtils
-import com.matrix.autoreply.model.utils.NotificationHelper
-import com.matrix.autoreply.model.utils.NotificationUtils
+import com.matrix.autoreply.preferences.PreferencesManager
+import com.matrix.autoreply.utils.DbUtils
+import com.matrix.autoreply.helpers.NotificationHelper
+import com.matrix.autoreply.utils.NotificationUtils
 
 class ForegroundNotificationService : NotificationListenerService() {
 

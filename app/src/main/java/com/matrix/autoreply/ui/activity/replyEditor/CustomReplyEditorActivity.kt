@@ -15,7 +15,7 @@ import com.matrix.autoreply.R
 import com.matrix.autoreply.databinding.ActivityCustomReplyEditorBinding
 import com.matrix.autoreply.ui.activity.BaseActivity
 import com.matrix.autoreply.model.CustomRepliesData
-import com.matrix.autoreply.model.preferences.PreferencesManager
+import com.matrix.autoreply.preferences.PreferencesManager
 
 /**
  * Activity for editing custom auto-reply messages.

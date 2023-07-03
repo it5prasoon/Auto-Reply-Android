@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.utils
+package com.matrix.autoreply.utils
 
 import android.content.Context
 import com.matrix.autoreply.model.CustomRepliesData

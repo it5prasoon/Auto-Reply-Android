@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.preferences
+package com.matrix.autoreply.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
-import com.matrix.autoreply.model.utils.Constants
+import com.matrix.autoreply.constants.Constants
 import java.util.*
 
 class PreferencesManager private constructor(private val thisAppContext: Context) {

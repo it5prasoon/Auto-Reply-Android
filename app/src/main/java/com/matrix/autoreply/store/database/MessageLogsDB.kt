@@ -9,7 +9,7 @@ import com.matrix.autoreply.store.data.AppPackage
 import com.matrix.autoreply.store.data.MessageLog
 import com.matrix.autoreply.store.repository.AppPackageDao
 import com.matrix.autoreply.store.repository.MessageLogsDao
-import com.matrix.autoreply.model.utils.Constants
+import com.matrix.autoreply.constants.Constants
 
 @Database(entities = [MessageLog::class, AppPackage::class], version = 3)
 abstract class MessageLogsDB : RoomDatabase() {

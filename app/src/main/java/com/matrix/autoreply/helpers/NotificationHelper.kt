@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.utils
+package com.matrix.autoreply.helpers
 
 
 import android.app.NotificationManager
@@ -12,6 +12,7 @@ import android.content.Context
 import com.matrix.autoreply.R
 import androidx.core.app.NotificationCompat
 import com.matrix.autoreply.BuildConfig
+import com.matrix.autoreply.constants.Constants
 import org.json.JSONObject
 
 class NotificationHelper private constructor(private val appContext: Context) {

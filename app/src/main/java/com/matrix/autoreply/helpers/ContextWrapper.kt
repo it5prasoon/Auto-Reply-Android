@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.utils
+package com.matrix.autoreply.helpers
 
 import android.content.Context
 import android.os.Build

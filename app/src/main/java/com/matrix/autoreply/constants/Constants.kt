@@ -1,4 +1,4 @@
-package com.matrix.autoreply.model.utils
+package com.matrix.autoreply.constants
 
 import com.matrix.autoreply.model.App
 

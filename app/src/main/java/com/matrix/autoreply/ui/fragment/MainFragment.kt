@@ -1,11 +1,11 @@
 package com.matrix.autoreply.ui.fragment
 
 import com.matrix.autoreply.model.CustomRepliesData.Companion.getInstance
-import com.matrix.autoreply.model.preferences.PreferencesManager.Companion.getPreferencesInstance
+import com.matrix.autoreply.preferences.PreferencesManager.Companion.getPreferencesInstance
 import androidx.cardview.widget.CardView
 import com.matrix.autoreply.model.CustomRepliesData
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.matrix.autoreply.model.preferences.PreferencesManager
+import com.matrix.autoreply.preferences.PreferencesManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import android.app.Activity
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
-import com.matrix.autoreply.model.utils.CustomDialog
+import com.matrix.autoreply.ui.CustomDialog
 import android.content.DialogInterface
 import android.os.Build
 import android.content.pm.PackageManager
@@ -26,9 +26,9 @@ import android.provider.Settings
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.matrix.autoreply.model.utils.Constants
-import com.matrix.autoreply.model.utils.Constants.MAX_DAYS
-import com.matrix.autoreply.model.utils.Constants.MIN_DAYS
+import com.matrix.autoreply.constants.Constants
+import com.matrix.autoreply.constants.Constants.MAX_DAYS
+import com.matrix.autoreply.constants.Constants.MIN_DAYS
 import java.util.*
 
 class MainFragment : Fragment() {
