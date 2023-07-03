@@ -90,7 +90,7 @@ dependencies {
 
     // Room
     implementation(Dependencies.roomRuntime)
-    annotationProcessor(Dependencies.roomCompiler)
+    kapt(Dependencies.roomCompiler)
 
     // Coroutines
     implementation(Dependencies.kotlinxCoroutinesCore)

@@ -20,7 +20,7 @@ class DbUtils(private val mContext: Context) {
         messageLogsDB!!.logsDao()!!.purgeMessageLogs()
     }
 
-    fun logReply(sbn: StatusBarNotification, title: String?) {
+    fun logReply(sbn: StatusBarNotification, title: String?, message: String?) {
         customRepliesData = CustomRepliesData.getInstance(mContext)
         val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
         var packageIndex = messageLogsDB!!.appPackageDao()!!.getPackageIndex(sbn.packageName)
@@ -32,6 +32,7 @@ class DbUtils(private val mContext: Context) {
         val logs = MessageLog(
             packageIndex,
             title!!,
+            message,
             sbn.notification.`when`,
             customRepliesData!!.getTextToSendOrElse(null),
             System.currentTimeMillis()
