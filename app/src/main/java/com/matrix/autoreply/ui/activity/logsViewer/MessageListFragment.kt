@@ -44,17 +44,19 @@ class MessageListFragment : Fragment(), RefreshListener {
         // TODO: 1. To make all the calls using suspend function and coroutines to make database IO calls
         // TODO: 2. To use Dagger Dependency Injection to get singleton of DB
         val messageLogWithTitleList =
-            MessageLogsDB.getInstance(requireContext())!!.logsDao()!!.getMessageLogsWithTitle(contactName)
+            MessageLogsDB.getInstance(requireContext())!!.messageLogsDao()!!.getMessageLogsWithTitle(contactName)
 
-        return messageLogWithTitleList.map { messageLog ->
-            val message = messageLog.notifMessage
-            val timestamp = messageLog.notifArrivedTime
+        return messageLogWithTitleList
+            .filter { it.notifMessage != null }
+            .map { messageLog ->
+                val message = messageLog.notifMessage
+                val timestamp = messageLog.notifArrivedTime
 
-            // Return the extracted items as a pair or any other desired structure
-            Pair(message, timestamp)
-        }.reversed()
+                // Return the extracted items as a pair or any other desired structure
+                Pair(message, timestamp)
+            }.reversed()
     }
-    
+
     companion object {
         private const val ARG_SELECTED_TITLE = "selected_title"
 
