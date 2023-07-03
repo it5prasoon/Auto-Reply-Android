@@ -4,7 +4,9 @@ import android.service.notification.StatusBarNotification
 import android.os.Parcelable
 import com.matrix.autoreply.data.NotificationWear
 import android.app.PendingIntent
+import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.app.RemoteInput
 import java.util.*
 
