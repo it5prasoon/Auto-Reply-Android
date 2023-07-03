@@ -66,7 +66,7 @@ class ForegroundNotificationService : NotificationListenerService() {
                 if (dbUtils == null) {
                     dbUtils = DbUtils(applicationContext)
                 }
-                dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
+                dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn), NotificationUtils.getMessage(sbn))
                 pendingIntent.send(this, 0, localIntent)
                 if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
                     sbn.notification?.extras?.getString("android.title")

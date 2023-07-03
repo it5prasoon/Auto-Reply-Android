@@ -12,9 +12,10 @@ import androidx.room.*
     )],
     indices = [Index(value = arrayOf("index"))]
 )
-class MessageLog(
+data class MessageLog(
     var index: Int,
     @field:ColumnInfo(name = "notif_title") var notifTitle: String,
+    @field:ColumnInfo(name = "notif_message") var notifMessage: String?,
     @field:ColumnInfo(name = "notif_arrived_time") var notifArrivedTime: Long,
     @field:ColumnInfo(name = "notif_replied_msg") var notifRepliedMsg: String,
     @field:ColumnInfo(name = "notif_reply_time") var notifReplyTime: Long

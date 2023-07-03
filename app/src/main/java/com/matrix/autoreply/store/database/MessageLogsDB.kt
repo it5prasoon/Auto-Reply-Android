@@ -11,7 +11,7 @@ import com.matrix.autoreply.store.repository.AppPackageDao
 import com.matrix.autoreply.store.repository.MessageLogsDao
 import com.matrix.autoreply.model.utils.Constants
 
-@Database(entities = [MessageLog::class, AppPackage::class], version = 2)
+@Database(entities = [MessageLog::class, AppPackage::class], version = 3)
 abstract class MessageLogsDB : RoomDatabase() {
     abstract fun logsDao(): MessageLogsDao?
     abstract fun appPackageDao(): AppPackageDao?
