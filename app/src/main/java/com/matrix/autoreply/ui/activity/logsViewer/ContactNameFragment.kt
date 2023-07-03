@@ -59,7 +59,7 @@ class ContactNameFragment : Fragment(), RefreshListener {
     private fun updateUserNameList() {
         // TODO: 1. To make all the calls using suspend function and coroutines to make database IO calls
         // TODO: 2. To use Dagger Dependency Injection to get singleton of DB
-        contactNameList = MessageLogsDB.getInstance(requireContext())!!.logsDao()!!.getDistinctNotificationTitles()
+        contactNameList = MessageLogsDB.getInstance(requireContext())!!.messageLogsDao()!!.getDistinctNotificationTitles()
     }
 
     override fun onDestroyView() {

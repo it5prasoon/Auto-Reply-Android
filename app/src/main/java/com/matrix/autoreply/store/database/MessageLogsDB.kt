@@ -6,14 +6,18 @@ import androidx.room.RoomDatabase
 import kotlin.jvm.Synchronized
 import androidx.room.Room
 import com.matrix.autoreply.store.data.AppPackage
-import com.matrix.autoreply.store.data.MessageLog
+import com.matrix.autoreply.store.data.ReplyLogs
 import com.matrix.autoreply.store.repository.AppPackageDao
-import com.matrix.autoreply.store.repository.MessageLogsDao
+import com.matrix.autoreply.store.repository.ReplyLogsDao
 import com.matrix.autoreply.constants.Constants
+import com.matrix.autoreply.store.data.MessageLogs
+import com.matrix.autoreply.store.repository.MessageLogsDao
 
-@Database(entities = [MessageLog::class, AppPackage::class], version = 3)
+@Database(entities = [MessageLogs::class, ReplyLogs::class, AppPackage::class], version = 6)
 abstract class MessageLogsDB : RoomDatabase() {
-    abstract fun logsDao(): MessageLogsDao?
+
+    abstract fun messageLogsDao(): MessageLogsDao?
+    abstract fun replyLogsDao(): ReplyLogsDao?
     abstract fun appPackageDao(): AppPackageDao?
 
     companion object {

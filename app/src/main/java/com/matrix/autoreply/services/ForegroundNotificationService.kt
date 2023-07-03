@@ -1,5 +1,6 @@
 package com.matrix.autoreply.services
 
+import android.app.Notification
 import android.app.PendingIntent.CanceledException
 import android.content.Intent
 import android.os.Bundle
@@ -8,22 +9,40 @@ import android.service.notification.StatusBarNotification
 import android.text.SpannableString
 import android.util.Log
 import androidx.core.app.RemoteInput
+import com.matrix.autoreply.helpers.NotificationHelper
 import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.preferences.PreferencesManager
 import com.matrix.autoreply.utils.DbUtils
-import com.matrix.autoreply.helpers.NotificationHelper
 import com.matrix.autoreply.utils.NotificationUtils
+
 
 class ForegroundNotificationService : NotificationListenerService() {
 
     private val TAG = ForegroundNotificationService::class.java.simpleName
     private var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
+
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         if (canReply(sbn)) {
             sendReply(sbn)
         }
+
+        if ((sbn.notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0) {
+            //Ignore the notification
+            return
+        }
+
+        if (canSaveLogs(sbn)) {
+            saveLogs(sbn)
+        }
+    }
+
+    private fun canSaveLogs(sbn: StatusBarNotification): Boolean {
+        return isServiceEnabled &&
+                isSupportedPackage(sbn) &&
+                NotificationUtils.isNewNotification(sbn) &&
+                isGroupMessageAndReplyAllowed(sbn)
     }
 
     private fun canReply(sbn: StatusBarNotification): Boolean {
@@ -38,6 +57,10 @@ class ForegroundNotificationService : NotificationListenerService() {
         super.onStartCommand(intent, flags, startId)
         //START_STICKY  to order the system to restart your service as soon as possible when it was killed.
         return START_STICKY
+    }
+
+    private fun saveLogs(sbn: StatusBarNotification) {
+        dbUtils!!.saveLogs(sbn, NotificationUtils.getTitle(sbn), NotificationUtils.getMessage(sbn))
     }
 
     private fun sendReply(sbn: StatusBarNotification) {
@@ -66,7 +89,7 @@ class ForegroundNotificationService : NotificationListenerService() {
                 if (dbUtils == null) {
                     dbUtils = DbUtils(applicationContext)
                 }
-                dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn), NotificationUtils.getMessage(sbn))
+                dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
                 pendingIntent.send(this, 0, localIntent)
                 if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
                     sbn.notification?.extras?.getString("android.title")
@@ -117,8 +140,10 @@ class ForegroundNotificationService : NotificationListenerService() {
         }
 
         val timeDelay = PreferencesManager.getPreferencesInstance(this)!!.autoReplyDelay
-        return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(sbn.packageName, title) >= Math.max(
-            timeDelay,
+        return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(
+            sbn.packageName,
+            title
+        ) >= timeDelay.coerceAtLeast(
             DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong()
         )
     }

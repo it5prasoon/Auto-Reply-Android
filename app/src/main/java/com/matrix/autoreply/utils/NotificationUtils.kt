@@ -78,14 +78,16 @@ object NotificationUtils {
     }
 
     private fun isValidMessage(msg: String?): Boolean {
-        return msg != null && !msg.contains("This message was deleted") &&
-                !msg.contains("new messages") && msg != "\uD83D\uDCF7 Photo" &&
-                msg != "Calling…" && msg != "Ringing…" && msg != "Missed voice call" &&
-                msg != "Incoming voice call" && msg != "Ongoing video call" &&
-                !msg.contains("Sticker") && !msg.contains("missed calls") &&
-                msg != "\uD83D\uDCF9 Incoming video call" && msg.substring(2) != "GIF" &&
-                msg.substring(2) != "Video (" && !msg.contains("Sending video to") &&
-                !msg.contains("Sending file to") && !msg.contains("files to") &&
-                !msg.contains("videos to") && !msg.contains("Sending GIF to")
+        return if (msg != null && msg.length > 2) {
+            !msg.contains("This message was deleted") &&
+                    !msg.contains("new messages") && msg != "\uD83D\uDCF7 Photo" &&
+                    msg != "Calling…" && msg != "Ringing…" && msg != "Missed voice call" &&
+                    msg != "Incoming voice call" && msg != "Ongoing video call" &&
+                    !msg.contains("Sticker") && !msg.contains("missed calls") &&
+                    msg != "\uD83D\uDCF9 Incoming video call" && msg.substring(2) != "GIF" &&
+                    msg.substring(2) != "Video (" && !msg.contains("Sending video to") &&
+                    !msg.contains("Sending file to") && !msg.contains("files to") &&
+                    !msg.contains("videos to") && !msg.contains("Sending GIF to")
+        } else true
     }
 }
