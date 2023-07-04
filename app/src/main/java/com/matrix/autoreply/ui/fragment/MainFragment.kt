@@ -245,7 +245,7 @@ class MainFragment : Fragment() {
 
     private fun setSwitchState() {
         mainAutoReplySwitch!!.isChecked = preferencesManager!!.isAutoReplyEnabled
-        groupReplySwitch!!.isEnabled = preferencesManager!!.isServiceEnabled
+        groupReplySwitch!!.isEnabled = preferencesManager!!.isAutoReplyEnabled
         enableOrDisableEnabledAppsCheckboxes(mainAutoReplySwitch!!.isChecked)
     }
 
