@@ -14,14 +14,14 @@ import java.util.*
 class PreferencesManager private constructor(private val thisAppContext: Context) {
 
     private val KEY_SERVICE_ENABLED = "pref_service_enabled"
+    private val KEY_AUTO_REPLY_ENABLED = "pref_auto_reply_enabled"
+    private val KEY_MESSAGE_LOGS_ENABLED = "pref_message_logs_enabled"
     private val KEY_GROUP_REPLY_ENABLED = "pref_group_reply_enabled"
     private val KEY_AUTO_REPLY_THROTTLE_TIME_MS = "pref_auto_reply_throttle_time_ms"
     private val KEY_SELECTED_APPS_ARR = "pref_selected_apps_arr"
-    private val KEY_IS_APPEND_WATOMATIC_ATTRIBUTION = "pref_is_append_watomatic_attribution"
-    private val KEY_GITHUB_RELEASE_NOTES_ID = "pref_github_release_notes_id"
+    private val KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION = "pref_is_append_watomatic_attribution"
     private val KEY_PURGE_MESSAGE_LOGS_LAST_TIME = "pref_purge_message_logs_last_time"
     private val KEY_PLAY_STORE_RATING_STATUS = "pref_play_store_rating_status"
-    private val KEY_PLAY_STORE_RATING_LAST_TIME = "pref_play_store_rating_last_time"
     private var KEY_IS_SHOW_NOTIFICATIONS_ENABLED: String? = null
     private var KEY_SELECTED_APP_LANGUAGE: String? = null
     private val _sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(thisAppContext)
@@ -39,7 +39,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             setShowNotificationPref(true)
         }
         if (isFirstInstall(thisAppContext)) {
-            if (!_sharedPrefs.contains(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION)) {
+            if (!_sharedPrefs.contains(KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION)) {
                 setAppendAutoreplyAttribution(true)
             }
         } else {
@@ -53,6 +53,24 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     fun setServicePref(enabled: Boolean) {
         val editor = _sharedPrefs.edit()
         editor.putBoolean(KEY_SERVICE_ENABLED, enabled)
+        editor.apply()
+    }
+
+    val isAutoReplyEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_AUTO_REPLY_ENABLED, false)
+
+    fun setAutoReplyPref(enabled: Boolean) {
+        val editor = _sharedPrefs.edit()
+        editor.putBoolean(KEY_AUTO_REPLY_ENABLED, enabled)
+        editor.apply()
+    }
+
+    val isMessageLogsEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_MESSAGE_LOGS_ENABLED, false)
+
+    fun setMessageLogsPref(enabled: Boolean) {
+        val editor = _sharedPrefs.edit()
+        editor.putBoolean(KEY_MESSAGE_LOGS_ENABLED, enabled)
         editor.apply()
     }
 
@@ -119,12 +137,12 @@ class PreferencesManager private constructor(private val thisAppContext: Context
 
     fun setAppendAutoreplyAttribution(enabled: Boolean) {
         val editor = _sharedPrefs.edit()
-        editor.putBoolean(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION, enabled)
+        editor.putBoolean(KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION, enabled)
         editor.apply()
     }
 
     val isAppendAutoreplyAttributionEnabled: Boolean
-        get() = _sharedPrefs.getBoolean(KEY_IS_APPEND_WATOMATIC_ATTRIBUTION, false)
+        get() = _sharedPrefs.getBoolean(KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION, false)
 
     fun getSelectedLanguageStr(defaultLangStr: String?): String? {
         return _sharedPrefs.getString(KEY_SELECTED_APP_LANGUAGE, defaultLangStr)

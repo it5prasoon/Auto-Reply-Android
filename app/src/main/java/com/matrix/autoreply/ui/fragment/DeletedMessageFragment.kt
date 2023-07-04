@@ -1,20 +1,30 @@
 package com.matrix.autoreply.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.matrix.autoreply.R
+import com.matrix.autoreply.constants.Constants
+import com.matrix.autoreply.databinding.FragmentDeletedMessageBinding
+import com.matrix.autoreply.preferences.PreferencesManager
 import com.matrix.autoreply.ui.activity.logsViewer.MsgLogViewerActivity
+import com.matrix.autoreply.utils.NotificationListenerUtil
 
 
 open class DeletedMessageFragment : Fragment() {
 
+    private var _binding: FragmentDeletedMessageBinding? = null
+    private val binding get() = _binding!!
     private val checkEmoji = String(Character.toChars(0x2714))
+    private var preferencesManager: PreferencesManager? = null
+    private var mActivity: Activity? = null
+    private lateinit var notificationListenerUtil: NotificationListenerUtil
 
     companion object {
         private const val WHATSAPP = "whatsapp";
@@ -22,20 +32,58 @@ open class DeletedMessageFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view: View = inflater.inflate(R.layout.fragment_deleted_message, container, false)
+        _binding = FragmentDeletedMessageBinding.inflate(inflater, container, false)
+        mActivity = activity
+        return binding.root
+    }
 
-        // Widgets
-        val msgLogStatus = view.findViewById<TextView>(R.id.msg_log_status)
-        val viewWALogBtn = view.findViewById<Button>(R.id.view_wa_log_btn)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        preferencesManager = PreferencesManager.getPreferencesInstance(mActivity!!)
+        binding.msgLogStatus.text = getString(R.string.msg_log_status_str, checkEmoji)
 
-        msgLogStatus.text = getString(R.string.msg_log_status_str, checkEmoji)
+        notificationListenerUtil = NotificationListenerUtil(mActivity!!)
 
         // WhatsApp Message Logs viewer
-        viewWALogBtn.setOnClickListener {
+        binding.viewWaLogBtn.setOnClickListener {
             val intent = Intent(requireActivity(), MsgLogViewerActivity::class.java)
             intent.putExtra(APP, WHATSAPP)
             startActivity(intent)
         }
-        return view
+
+        handleEnableMessageLogsSwitch()
     }
+
+    override fun onResume() {
+        super.onResume()
+        //If user directly goes to Settings and removes notifications permission
+        //when app is launched check for permission and set appropriate app state
+        if (!notificationListenerUtil.isNotificationServiceEnabled()) {
+            preferencesManager!!.setMessageLogsPref(false)
+        }
+        setSwitchState()
+    }
+
+    private fun handleEnableMessageLogsSwitch() {
+        binding.enableMessageLogsSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+            if (isChecked && !notificationListenerUtil.isNotificationServiceEnabled()) {
+                Toast.makeText(mActivity, Constants.RESTART_SERVICE_TOAST, Toast.LENGTH_LONG).show()
+            } else {
+                preferencesManager!!.setMessageLogsPref(isChecked)
+                binding.enableMessageLogsSwitch.setText(
+                    if (isChecked) R.string.mainAutoReplySwitchOnLabel else R.string.mainAutoReplySwitchOffLabel
+                )
+                setSwitchState()
+            }
+        }
+    }
+
+    private fun setSwitchState() {
+        binding.enableMessageLogsSwitch.isChecked = preferencesManager!!.isMessageLogsEnabled
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

@@ -40,6 +40,7 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private fun canSaveLogs(sbn: StatusBarNotification): Boolean {
         return isServiceEnabled &&
+                isMessageLogsEnabled &&
                 isSupportedPackage(sbn) &&
                 NotificationUtils.isNewNotification(sbn) &&
                 isGroupMessageAndReplyAllowed(sbn)
@@ -47,6 +48,7 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private fun canReply(sbn: StatusBarNotification): Boolean {
         return isServiceEnabled &&
+                isAutoReplyEnabled &&
                 isSupportedPackage(sbn) &&
                 NotificationUtils.isNewNotification(sbn) &&
                 isGroupMessageAndReplyAllowed(sbn) &&
@@ -60,6 +62,9 @@ class ForegroundNotificationService : NotificationListenerService() {
     }
 
     private fun saveLogs(sbn: StatusBarNotification) {
+        if (dbUtils == null) {
+            dbUtils = DbUtils(applicationContext)
+        }
         dbUtils!!.saveLogs(sbn, NotificationUtils.getTitle(sbn), NotificationUtils.getMessage(sbn))
     }
 
@@ -162,4 +167,10 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private val isServiceEnabled: Boolean
         get() = PreferencesManager.getPreferencesInstance(this)!!.isServiceEnabled
+
+    private val isAutoReplyEnabled: Boolean
+        get() = PreferencesManager.getPreferencesInstance(this)!!.isAutoReplyEnabled
+
+    private val isMessageLogsEnabled: Boolean
+        get() = PreferencesManager.getPreferencesInstance(this)!!.isMessageLogsEnabled
 }
