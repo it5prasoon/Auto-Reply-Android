@@ -1,38 +1,38 @@
 package com.matrix.autoreply.ui.fragment
 
-import com.matrix.autoreply.model.CustomRepliesData.Companion.getInstance
-import com.matrix.autoreply.preferences.PreferencesManager.Companion.getPreferencesInstance
-import androidx.cardview.widget.CardView
-import com.matrix.autoreply.model.CustomRepliesData
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.matrix.autoreply.preferences.PreferencesManager
-import com.google.android.material.checkbox.MaterialCheckBox
 import android.app.Activity
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.os.Bundle
-import com.matrix.autoreply.R
-import com.matrix.autoreply.services.ForegroundNotificationService
-import com.matrix.autoreply.model.App
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
-import com.matrix.autoreply.ui.CustomDialog
 import android.content.DialogInterface
-import android.os.Build
-import android.content.pm.PackageManager
-import android.provider.Settings
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.matrix.autoreply.R
 import com.matrix.autoreply.constants.Constants
 import com.matrix.autoreply.constants.Constants.MAX_DAYS
 import com.matrix.autoreply.constants.Constants.MIN_DAYS
-import java.util.*
+import com.matrix.autoreply.databinding.FragmentDeletedMessageBinding
+import com.matrix.autoreply.databinding.FragmentMainBinding
+import com.matrix.autoreply.model.App
+import com.matrix.autoreply.model.CustomRepliesData
+import com.matrix.autoreply.model.CustomRepliesData.Companion.getInstance
+import com.matrix.autoreply.preferences.PreferencesManager
+import com.matrix.autoreply.preferences.PreferencesManager.Companion.getPreferencesInstance
+import com.matrix.autoreply.ui.CustomDialog
+import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
+import com.matrix.autoreply.utils.NotificationListenerUtil
 
 class MainFragment : Fragment() {
 
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
     private var autoReplyTextPreviewCard: CardView? = null
     private var timePickerCard: CardView? = null
     private var autoReplyTextPreview: TextView? = null
@@ -51,39 +51,69 @@ class MainFragment : Fragment() {
     private val supportedAppsCheckboxes: MutableList<MaterialCheckBox> = ArrayList()
     private val supportedAppsDummyViews: MutableList<View> = ArrayList()
     private var mActivity: Activity? = null
+    private lateinit var notificationListenerUtil: NotificationListenerUtil
+    private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
-        setHasOptionsMenu(true)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         mActivity = activity
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         customRepliesData = getInstance(mActivity!!)
         preferencesManager = getPreferencesInstance(mActivity!!)
+        notificationListenerUtil = NotificationListenerUtil(mActivity!!)
+
+        // Initialize the ActivityResultLauncher
+        notificationListenerPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                val granted = notificationListenerUtil.isNotificationServiceEnabled()
+                handleNotificationListenerPermissionResult(granted)
+            }
+
+        if (!notificationListenerUtil.isNotificationServiceEnabled()) showPermissionsDialog()
 
         // Assign Views
-        mainAutoReplySwitch = view.findViewById(R.id.mainAutoReplySwitch)
-        groupReplySwitch = view.findViewById(R.id.groupReplySwitch)
-        autoReplyTextPreviewCard = view.findViewById(R.id.mainAutoReplyTextCardView)
-        autoReplyTextPreview = view.findViewById(R.id.textView4)
-        supportedAppsLayout = view.findViewById(R.id.supportedPlatformsLayout)
-        supportedAppsCard = view.findViewById(R.id.supportedAppsSelectorCardView)
+        mainAutoReplySwitch = binding.mainAutoReplySwitch
+        groupReplySwitch = binding.groupReplySwitch
+        autoReplyTextPreviewCard = binding.mainAutoReplyTextCardView
+        autoReplyTextPreview = binding.textView4
+        supportedAppsLayout = binding.supportedPlatformsLayout
+        supportedAppsCard = binding.supportedAppsSelectorCardView
         autoReplyTextPlaceholder = resources.getString(R.string.mainAutoReplyTextPlaceholder)
-        timePickerCard = view.findViewById(R.id.replyFrequencyTimePickerCardView)
-        timePickerSubTitleTextPreview = view.findViewById(R.id.timePickerSubTitle)
-        timeSelectedTextPreview = view.findViewById(R.id.timeSelectedText)
-        imgMinus = view.findViewById(R.id.imgMinus)
-        imgPlus = view.findViewById(R.id.imgPlus)
-        autoReplyTextPreviewCard?.setOnClickListener({ v: View -> openCustomReplyEditorActivity(v) })
+        timePickerCard = binding.replyFrequencyTimePickerCardView
+        timePickerSubTitleTextPreview = binding.timePickerSubTitle
+        timeSelectedTextPreview = binding.timeSelectedText
+        imgMinus = binding.imgMinus
+        imgPlus = binding.imgPlus
+        handleAutoReplyPreviewCard()
 
         autoReplyTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
 
         groupReplySwitch?.isEnabled = mainAutoReplySwitch!!.isChecked
 
-        mainAutoReplySwitch?.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
-            if (isChecked && !isListenerEnabled(mActivity, ForegroundNotificationService::class.java)) {
-                showPermissionsDialog()
+
+        // Handling of components
+        handleMainAutoReplySwitch()
+        handleGroupReplySwitch()
+        handleReplyFrequency()
+
+        setNumDays()
+        createSupportedAppCheckboxes()
+    }
+
+    private fun handleAutoReplyPreviewCard() {
+        autoReplyTextPreviewCard?.setOnClickListener { v: View -> openCustomReplyEditorActivity(v) }
+    }
+
+    private fun handleMainAutoReplySwitch() {
+        mainAutoReplySwitch?.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            if (isChecked && !notificationListenerUtil.isNotificationServiceEnabled()) {
+                Toast.makeText(mActivity, Constants.RESTART_SERVICE_TOAST, Toast.LENGTH_LONG).show()
             } else {
-                preferencesManager!!.setServicePref(isChecked)
-                enableService(isChecked)
+                preferencesManager!!.setAutoReplyPref(isChecked)
                 mainAutoReplySwitch!!.setText(
                     if (isChecked) R.string.mainAutoReplySwitchOnLabel else R.string.mainAutoReplySwitchOffLabel
                 )
@@ -92,8 +122,10 @@ class MainFragment : Fragment() {
                 groupReplySwitch!!.isEnabled = isChecked
             }
         }
+    }
 
-        groupReplySwitch?.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+    private fun handleGroupReplySwitch() {
+        groupReplySwitch?.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
 
             if (preferencesManager!!.isGroupReplyEnabled == isChecked) {
                 return@setOnCheckedChangeListener
@@ -105,24 +137,22 @@ class MainFragment : Fragment() {
             }
             preferencesManager!!.setGroupReplyPref(isChecked)
         }
+    }
 
-        imgMinus?.setOnClickListener { v: View? ->
+    private fun handleReplyFrequency() {
+        imgMinus?.setOnClickListener {
             if (days > MIN_DAYS) {
                 days--
                 saveNumDays()
             }
         }
 
-        imgPlus?.setOnClickListener { v: View? ->
+        imgPlus?.setOnClickListener {
             if (days < MAX_DAYS) {
                 days++
                 saveNumDays()
             }
         }
-
-        setNumDays()
-        createSupportedAppCheckboxes()
-        return view
     }
 
     private fun enableOrDisableEnabledAppsCheckboxes(enabled: Boolean) {
@@ -201,11 +231,8 @@ class MainFragment : Fragment() {
         super.onResume()
         //If user directly goes to Settings and removes notifications permission
         //when app is launched check for permission and set appropriate app state
-        if (!isListenerEnabled(mActivity, ForegroundNotificationService::class.java)) {
-            preferencesManager!!.setServicePref(false)
-        }
-        if (!preferencesManager!!.isServiceEnabled) {
-            enableService(false)
+        if (!notificationListenerUtil.isNotificationServiceEnabled()) {
+            preferencesManager!!.setAutoReplyPref(false)
         }
         setSwitchState()
 
@@ -217,17 +244,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setSwitchState() {
-        mainAutoReplySwitch!!.isChecked = preferencesManager!!.isServiceEnabled
+        mainAutoReplySwitch!!.isChecked = preferencesManager!!.isAutoReplyEnabled
         groupReplySwitch!!.isEnabled = preferencesManager!!.isServiceEnabled
         enableOrDisableEnabledAppsCheckboxes(mainAutoReplySwitch!!.isChecked)
-    }
-
-    //https://stackoverflow.com/questions/20141727/check-if-user-has-granted-notificationlistener-access-to-my-app/28160115
-    //TODO: Use in UI to verify if it needs enabling or restarting
-    private fun isListenerEnabled(context: Context?, notificationListenerCls: Class<*>?): Boolean {
-        val cn = ComponentName(requireContext(), notificationListenerCls!!)
-        val flat = Settings.Secure.getString(context?.contentResolver, "enabled_notification_listeners")
-        return flat != null && flat.contains(cn.flattenToString())
     }
 
     private fun openCustomReplyEditorActivity(v: View) {
@@ -240,13 +259,13 @@ class MainFragment : Fragment() {
         val bundle = Bundle()
         bundle.putString(Constants.PERMISSION_DIALOG_TITLE, getString(R.string.permission_dialog_title))
         bundle.putString(Constants.PERMISSION_DIALOG_MSG, getString(R.string.permission_dialog_msg))
-        customDialog.showDialog(bundle, null) { dialog: DialogInterface?, which: Int ->
+        customDialog.showDialog(bundle, null) { _: DialogInterface?, which: Int ->
             if (which == -2) {
                 //Decline
                 showPermissionDeniedDialog()
             } else {
                 //Accept
-                launchNotificationAccessSettings()
+                requestNotificationListenerPermission()
             }
         }
     }
@@ -263,60 +282,23 @@ class MainFragment : Fragment() {
                 setSwitchState()
             } else {
                 //Accept
-                launchNotificationAccessSettings()
+                requestNotificationListenerPermission()
             }
         }
     }
 
-    private fun launchNotificationAccessSettings() {
-        enableService(true)
-        val NOTIFICATION_LISTENER_SETTINGS: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
+    private fun requestNotificationListenerPermission() {
+        notificationListenerUtil.requestNotificationListenerPermission(notificationListenerPermissionLauncher)
+    }
+
+    private fun handleNotificationListenerPermissionResult(granted: Boolean) {
+        if (granted) {
+            preferencesManager!!.setServicePref(true)
+            Toast.makeText(requireActivity(), Constants.PERMISSION_GRANTED, Toast.LENGTH_SHORT).show()
         } else {
-            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
-        }
-        val i = Intent(NOTIFICATION_LISTENER_SETTINGS)
-        startActivityForResult(i, REQ_NOTIFICATION_LISTENER)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_NOTIFICATION_LISTENER) {
-            if (isListenerEnabled(mActivity, ForegroundNotificationService::class.java)) {
-                Toast.makeText(mActivity, "Permission Granted", Toast.LENGTH_LONG).show()
-                preferencesManager!!.setServicePref(true)
-                setSwitchState()
-            } else {
-                Toast.makeText(mActivity, "Permission Denied", Toast.LENGTH_LONG).show()
-                preferencesManager!!.setServicePref(false)
-                setSwitchState()
-            }
+            preferencesManager!!.setServicePref(false)
+            Toast.makeText(requireActivity(), Constants.PERMISSION_DENIED, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun enableService(enable: Boolean) {
-        val packageManager = mActivity!!.packageManager
-        val componentName = ComponentName(mActivity!!, ForegroundNotificationService::class.java)
-        val settingCode =
-            if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-        // enable dummyActivity (as it is disabled in the manifest.xml)
-        packageManager.setComponentEnabledSetting(componentName, settingCode, PackageManager.DONT_KILL_APP)
-    }
-
-    companion object {
-        private const val REQ_NOTIFICATION_LISTENER = 100
-
-        //REF: https://stackoverflow.com/questions/37539949/detect-if-an-app-is-installed-from-play-store
-        fun isAppInstalledFromStore(context: Context): Boolean {
-            // A list with valid installers package name
-            val validInstallers: List<String> =
-                ArrayList(listOf("com.android.vending", "com.google.android.feedback"))
-
-            // The package name of the app that has installed your app
-            val installer = context.packageManager.getInstallerPackageName(context.packageName)
-
-            // true if your app has been downloaded from Play Store
-            return installer != null && validInstallers.contains(installer)
-        }
-    }
 }

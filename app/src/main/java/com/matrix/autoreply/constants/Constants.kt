@@ -21,4 +21,9 @@ object Constants {
 
     const val MIN_DAYS = 0
     const val MAX_DAYS = 7
+
+    // Notification Listener Service
+    const val PERMISSION_DENIED = "Permission Denied"
+    const val PERMISSION_GRANTED = "Permission Granted"
+    const val RESTART_SERVICE_TOAST = "Service not enabled! Please restart the service from setting."
 }

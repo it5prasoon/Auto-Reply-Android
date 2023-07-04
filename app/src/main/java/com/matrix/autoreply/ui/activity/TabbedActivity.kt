@@ -112,7 +112,7 @@ class TabbedActivity : AppCompatActivity() {
                 AlertDialogHelper.showDialog(
                         this,
                         "Help",
-                        "1. Give the required permissions one for auto reply and other for message logs.\n" +
+                        "1. Give the required permissions.\n" +
                                 "2. Set custom text for auto reply.\n" +
                                 "3. Select the applications for which you want auto reply.\n" +
                                 "4. If you want group chat reply then turn on that option.\n" +

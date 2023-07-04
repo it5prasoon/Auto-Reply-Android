@@ -193,6 +193,8 @@
     <string name="enable_auto_start_summary">Some devices might need you to manually enable Auto start for Auto Reply
         from device settings
     </string>
+    <string name="restart_service">Restart Service</string>
+    <string name="pref_notification_listener_permission" translatable="false">pref_notification_listener_permission</string>
     <string name="device_based_settings_message">Note: Settings may vary or may not be available based on your device
     </string>
     <string name="setting_not_available_for_device">This setting is not available or may not be needed for your
@@ -204,7 +206,7 @@
 
     <!-- Strings related to the Alert Dialog -->
     <string name="notification_listener_service">"Notification Listener Service"</string>
-    <string name="notification_listener_service_explanation">"For the the app. to work you need to enable the
+    <string name="notification_listener_service_explanation">"For the app. to work you need to enable the
         Notification Listener Service. Enable it now?"
     </string>
     <string name="no">No</string>
