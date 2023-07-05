@@ -50,6 +50,21 @@ Auto-Reply-Android is built using the following technologies and open-source lib
 - Coroutines for asynchronous programming
 - RoomDb for local data storage
 
+## To Start with building in Local
+
+- Add firebase ```google-services.json``` in src/main.
+- Add a file ```ad_mob_config.xml``` to configure AdMob.
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="admob_app_id">your_app_id</string>
+    <string name="msg_logs_banner">your_banner_id</string>
+    <string name="main_banner">your_banner_id</string>
+    <string name="save_custom_reply_interstitial">your_interstitial_id</string>
+</resources>
+
+```
+
 ## Important Note
 
 When the application sends a reply to a specific user, it waits for a 10-second interval before sending the next reply (unless the reply frequency is set to 1). Please note that this delay does not indicate any issues with the application's functionality.

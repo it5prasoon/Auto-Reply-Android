@@ -88,6 +88,12 @@ dependencies {
     implementation(Dependencies.firebaseAnalyticsKtx)
     implementation(Dependencies.firebaseCrashlytics)
 
+    // Ad
+    implementation(Dependencies.googleAds)
+
+    // WorkManager
+    implementation(Dependencies.workManager)
+
     // Room
     implementation(Dependencies.roomRuntime)
     kapt(Dependencies.roomCompiler)

@@ -5,17 +5,21 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.app.ActionBar
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.textfield.TextInputEditText
 import com.matrix.autoreply.R
 import com.matrix.autoreply.databinding.ActivityCustomReplyEditorBinding
-import com.matrix.autoreply.ui.activity.BaseActivity
 import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.preferences.PreferencesManager
+import com.matrix.autoreply.ui.activity.BaseActivity
+
 
 /**
  * Activity for editing custom auto-reply messages.
@@ -28,6 +32,8 @@ class CustomReplyEditorActivity : BaseActivity() {
     private var customRepliesData: CustomRepliesData? = null
     private var preferencesManager: PreferencesManager? = null
     private var appendAttribution: CheckBox? = null
+    private var mInterstitialAd: InterstitialAd? = null
+    private var TAG = "CustomReplyEditorActivity"
 
     companion object {
         private const val MESSAGE_STRING = "message"
@@ -35,6 +41,8 @@ class CustomReplyEditorActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initializeAd()
+
         binding = ActivityCustomReplyEditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -69,8 +77,12 @@ class CustomReplyEditorActivity : BaseActivity() {
             }
         })
 
+        handleSaveReply()
+    }
+
+    private fun handleSaveReply() {
         // Save button click listener
-        saveAutoReplyTextBtn?.setOnClickListener { view: View? ->
+        saveAutoReplyTextBtn?.setOnClickListener {
             val setString = customRepliesData?.set(autoReplyText?.text)
             if (setString != null) {
                 onNavigateUp()
@@ -85,4 +97,66 @@ class CustomReplyEditorActivity : BaseActivity() {
             )
         }
     }
+
+    private fun showFullAd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+        } else {
+            Log.d("TAG", "The interstitial ad wasn't ready yet.")
+        }
+    }
+
+    private fun initializeAd() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        val adUnitId = getString(R.string.save_custom_reply_interstitial)
+
+        InterstitialAd.load(this, adUnitId, adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError.message.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Interstitial Ad Loaded")
+                    mInterstitialAd = interstitialAd
+                    showFullAd()
+                    showFullscreenAdCallback()
+                }
+            })
+    }
+
+    private fun showFullscreenAdCallback() {
+        mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+            fun onAdClicked() {
+                // Called when a click is recorded for an ad.
+                Log.d(TAG, "Ad was clicked.")
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null, so you don't show the ad a second time.
+                Log.d(TAG, "Ad dismissed fullscreen content.")
+                mInterstitialAd = null
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                // Called when ad fails to show.
+                Log.e(TAG, "Ad failed to show fullscreen content.")
+                mInterstitialAd = null
+            }
+
+            override fun onAdImpression() {
+                // Called when an impression is recorded for an ad.
+                Log.d(TAG, "Ad recorded an impression.")
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Log.d(TAG, "Ad showed fullscreen content.")
+            }
+        }
+    }
+
 }
