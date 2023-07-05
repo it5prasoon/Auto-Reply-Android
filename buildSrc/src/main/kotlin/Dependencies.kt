@@ -28,6 +28,12 @@ object Dependencies {
     const val firebaseAnalyticsKtx = "com.google.firebase:firebase-analytics-ktx:${Versions.firebaseAnalytics}"
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:${Versions.firebaseCrashlyticsVersion}"
 
+    // Ads
+    const val googleAds = "com.google.android.gms:play-services-ads:${Versions.adsVersion}"
+
+    // WorkManager
+    const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
+
     // Room
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"

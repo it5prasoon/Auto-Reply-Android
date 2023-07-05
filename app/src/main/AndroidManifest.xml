@@ -92,6 +92,10 @@
         </receiver>
 
         <activity android:name="com.matrix.autoreply.ui.activity.logsViewer.MsgLogViewerActivity"/>
+
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="@string/admob_app_id" />
     </application>
 
 </manifest>

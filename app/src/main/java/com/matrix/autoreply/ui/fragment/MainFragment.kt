@@ -1,6 +1,7 @@
 package com.matrix.autoreply.ui.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +13,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.matrix.autoreply.R
@@ -53,11 +57,13 @@ class MainFragment : Fragment() {
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
+    private lateinit var adView: AdView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         mActivity = activity
         setHasOptionsMenu(true)
+        initializeAdView(requireContext())
         return binding.root
     }
 
@@ -102,6 +108,16 @@ class MainFragment : Fragment() {
 
         setNumDays()
         createSupportedAppCheckboxes()
+    }
+
+    private fun initializeAdView(context: Context) {
+        // Initialize the MobileAds SDK
+        MobileAds.initialize(context)
+        adView = binding.adView
+
+        // Load the ad
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
     private fun handleAutoReplyPreviewCard() {

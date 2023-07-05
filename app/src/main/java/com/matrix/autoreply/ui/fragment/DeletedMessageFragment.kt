@@ -1,6 +1,7 @@
 package com.matrix.autoreply.ui.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.matrix.autoreply.R
 import com.matrix.autoreply.constants.Constants
 import com.matrix.autoreply.databinding.FragmentDeletedMessageBinding
@@ -25,6 +29,7 @@ open class DeletedMessageFragment : Fragment() {
     private var preferencesManager: PreferencesManager? = null
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
+    private lateinit var adView: AdView
 
     companion object {
         private const val WHATSAPP = "whatsapp";
@@ -34,6 +39,7 @@ open class DeletedMessageFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDeletedMessageBinding.inflate(inflater, container, false)
         mActivity = activity
+        initializeAdView(requireContext())
         return binding.root
     }
 
@@ -61,6 +67,17 @@ open class DeletedMessageFragment : Fragment() {
             preferencesManager!!.setMessageLogsPref(false)
         }
         setSwitchState()
+    }
+
+    private fun initializeAdView(context: Context) {
+        // Initialize the MobileAds SDK
+        MobileAds.initialize(context)
+        adView = binding.adView
+
+        // Load the ad
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
     }
 
     private fun handleEnableMessageLogsSwitch() {

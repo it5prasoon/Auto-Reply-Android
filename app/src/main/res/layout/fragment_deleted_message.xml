@@ -1,87 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:padding="10sp"
->
+<layout xmlns:tools="http://schemas.android.com/tools" xmlns:ads="http://schemas.android.com/apk/res-auto">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:padding="10sp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/msg_log_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="See all message logs here whether it is \n deleted or not deleted. Currently we only support WhatsApp Logs."
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:layout_weight="1" />
-
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/switchLinearLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingTop="12sp"-->
-<!--            android:paddingBottom="12sp">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_marginLeft="10dp"-->
-<!--                android:text="Status:"-->
-<!--                android:textSize="18sp" />-->
-
-<!--            <com.google.android.material.switchmaterial.SwitchMaterial-->
-<!--                android:id="@+id/enable_message_logs"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content" />-->
-
-<!--        </LinearLayout>-->
-
-        <!-- Main Auto Reply enable switch -->
-        <com.google.android.material.card.MaterialCardView
-                android:id="@+id/enableMessageLogsSwitchCardView"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                tools:layout_editor_absoluteX="154dp">
+                android:orientation="vertical">
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/enableMessageLogsSwitch"
+            <TextView
+                    android:id="@+id/msg_log_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hello World!"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"
+            />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See all message logs here whether it is \n deleted or not deleted. Currently we only support WhatsApp Logs."
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_marginTop="30dp"
+            />
+
+
+            <!-- Main Auto Reply enable switch -->
+            <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/enableMessageLogsSwitchCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/mainAutoReplySwitchOffLabel" />
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_margin="10dp"
+                    tools:layout_editor_absoluteX="154dp">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/enableMessageLogsSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:text="@string/mainAutoReplySwitchOffLabel"/>
+            </com.google.android.material.card.MaterialCardView>
 
 
-        <Button
-            android:id="@+id/view_wa_log_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="WhatsApp" />
+            <Button
+                    android:id="@+id/view_wa_log_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:text="WhatsApp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+            <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    ads:adSize="MEDIUM_RECTANGLE"
+                    ads:adUnitId="@string/msg_logs_banner"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 </layout>

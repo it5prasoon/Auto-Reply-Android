@@ -28,4 +28,6 @@ object Versions {
     const val kotlinxCoroutines = "1.6.4"
     const val firebaseAnalytics = "21.3.0"
     const val firebaseCrashlyticsVersion = "18.3.7"
+    const val adsVersion = "20.3.0"
+    const val workManager = "2.7.0"
 }
