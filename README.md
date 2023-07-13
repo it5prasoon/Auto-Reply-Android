@@ -1,6 +1,6 @@
-# Auto-Reply-Android: An Automatic Messaging App
+# AutoReply: An Automatic Messaging App
 
-Auto-Reply-Android is an application designed to provide an automatic reply service for instant messaging platforms. With this app, you can save time and effort by setting up automated responses for messages received on platforms like WhatsApp and Facebook Messenger. 
+AutoReply is an application designed to provide an automatic reply service for instant messaging platforms. With this app, you can save time and effort by setting up automated responses for messages received on platforms like WhatsApp and Facebook Messenger. 
 
 You can download the app from the Play Store by clicking the following link:
 
@@ -21,7 +21,7 @@ Here are some screenshots of the app's interface:
 
 ## Features
 
-Auto-Reply-Android offers the following features:
+AutoReply offers the following features:
 
 - Automated replies for both individual and group chats
 - Respect for your privacy by not collecting any personal information
@@ -36,12 +36,13 @@ Auto-Reply-Android offers the following features:
 
 Here are the tasks in progress and planned for future development:
 
-- Adding contact selection feature
+- Implement Dependency Injection using Dagger
 - UI improvements
+- Refactor code according to MVVM
 
 ## Tech Stack & Open-source Libraries
 
-Auto-Reply-Android is built using the following technologies and open-source libraries:
+AutoReply is built using the following technologies and open-source libraries:
 
 - Kotlin programming language
 - Firebase for backend functionality
@@ -65,11 +66,16 @@ Auto-Reply-Android is built using the following technologies and open-source lib
 
 ```
 
+## Contribution Guidelines
+
+- Fork the repository, do code changes and then do a pull request.
+- If your PR is approved then you are good to go.
+
 ## Important Note
 
 When the application sends a reply to a specific user, it waits for a 10-second interval before sending the next reply (unless the reply frequency is set to 1). Please note that this delay does not indicate any issues with the application's functionality.
 
-For the source code and contributions, please visit the [Auto-Reply-Android GitHub repository](https://www.github.com/it5prasoon/Auto-Reply-Android).
+For the source code and contributions, please visit the [AutoReply GitHub repository](https://www.github.com/it5prasoon/Auto-Reply-Android).
 
 The application is currently in the development phase, and your code contributions are greatly appreciated. Feel free to fork the repository and make pull requests. We look forward to your collaboration.
 
