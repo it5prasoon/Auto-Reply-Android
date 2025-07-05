@@ -53,7 +53,7 @@ class NotificationHelper private constructor(private val appContext: Context) {
                 appContext, 0, intent, flags
             )
         } else {
-            PendingIntent.getActivity(appContext, 0, intent, 0)
+            PendingIntent.getActivity(appContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
 
         val notificationBuilder = NotificationCompat.Builder(

@@ -9,7 +9,7 @@ import com.matrix.autoreply.store.data.MessageLogs
 interface MessageLogsDao {
 
     @Insert
-    fun logMessage(log: MessageLogs?)
+    fun logMessage(log: MessageLogs)
 
     // retrieve the distinct notif_title values from the message_logs
     @Query("SELECT DISTINCT notif_title FROM message_logs")

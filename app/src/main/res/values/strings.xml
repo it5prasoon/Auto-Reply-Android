@@ -12,7 +12,7 @@
     <string name="mainAutoReplySwitchOffLabel">Status: OFF</string>
     <string name="mainAutoReplySwitchOnLabel">Status: ON</string>
     <string name="mainAutoReplyEditBtnTooltip">Click to edit auto reply text</string>
-    <string name="to_help_you_leave_whatsapp">Leave messages without touching phone</string>
+    <string name="to_help_you_leave_whatsapp">Reply to messages automatically</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
     <string name="sure">I\'m Sure</string>
@@ -46,7 +46,7 @@
     <string name="tip_view_messages_from_fellow_users">🦩
         <u>View templates from community and share yours too ➚</u>
     </string>
-    <string name="append_autoreply_arribution_checkbox_label">Add autoreply attribute to the messege.</string>
+    <string name="append_autoreply_arribution_checkbox_label">Add Auto Reply download link to the messege.</string>
     <string name="sent_using_autoreply">Sent using git.io/JZCn4</string>
 
     <string name="share">Share</string>

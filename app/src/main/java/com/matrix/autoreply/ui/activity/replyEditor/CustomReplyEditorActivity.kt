@@ -129,7 +129,7 @@ class CustomReplyEditorActivity : BaseActivity() {
 
     private fun showFullscreenAdCallback() {
         mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
-            fun onAdClicked() {
+            override fun onAdClicked() {
                 // Called when a click is recorded for an ad.
                 Log.d(TAG, "Ad was clicked.")
             }

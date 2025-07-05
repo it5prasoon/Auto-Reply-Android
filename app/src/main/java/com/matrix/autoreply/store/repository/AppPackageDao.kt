@@ -12,5 +12,5 @@ interface AppPackageDao {
     fun getPackageIndex(packageName: String?): Int
 
     @Insert
-    fun insertAppPackage(appPackage: AppPackage?)
+    fun insertAppPackage(appPackage: AppPackage)
 }

@@ -21,7 +21,8 @@ object Dependencies {
     const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
 
     // In-App Update
-    const val playCore = "com.google.android.play:core:${Versions.playCore}"
+    const val playAppUpdate = "com.google.android.play:app-update:${Versions.playAppUpdate}"
+    const val playAppUpdateKtx = "com.google.android.play:app-update-ktx:${Versions.playAppUpdate}"
 
     // Firebase
     const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"

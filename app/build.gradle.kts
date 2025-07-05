@@ -1,27 +1,26 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("com.google.firebase.crashlytics")
     kotlin("android")
 }
 
 
 android {
-    compileSdkVersion(Configuration.compileSdk)
+    namespace = Configuration.artifactGroup
+    compileSdk = Configuration.compileSdk
 
     defaultConfig {
         applicationId = Configuration.artifactGroup
-        minSdkVersion(Configuration.minSdk)
-        targetSdkVersion(Configuration.targetSdk)
+        minSdk = Configuration.minSdk
+        targetSdk = Configuration.targetSdk
         versionCode = Configuration.versionCode
         versionName = Configuration.versionName
         multiDexEnabled = true // important
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,17 +44,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -81,7 +81,8 @@ dependencies {
     implementation(Dependencies.okhttpLoggingInterceptor)
 
     // In app update feature
-    implementation(Dependencies.playCore)
+    implementation(Dependencies.playAppUpdate)
+    implementation(Dependencies.playAppUpdateKtx)
 
     // Firebase
     implementation(platform(Dependencies.firebaseBom))
@@ -96,7 +97,7 @@ dependencies {
 
     // Room
     implementation(Dependencies.roomRuntime)
-    kapt(Dependencies.roomCompiler)
+    ksp(Dependencies.roomCompiler)
 
     // Coroutines
     implementation(Dependencies.kotlinxCoroutinesCore)

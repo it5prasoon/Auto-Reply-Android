@@ -10,10 +10,12 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
+import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.matrix.autoreply.R
 import com.matrix.autoreply.databinding.ActivityTabbedBinding
@@ -42,13 +44,21 @@ class TabbedActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
-
-        window.statusBarColor = resources.getColor(R.color.colorPrimary)
+        
+        // Handle window insets for edge-to-edge display
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Only apply left, right, and bottom padding to avoid pushing content under status bar
+            view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     override fun onResume() {
         super.onResume()
         Log.i("MAIN ACTIVITY:: ", "OnResume")
+        // Set status bar color on every resume to maintain it after theme changes
+        window.statusBarColor = resources.getColor(R.color.colorPrimary)
         checkUpdate()
     }
 
@@ -57,7 +67,7 @@ class TabbedActivity : AppCompatActivity() {
         Log.d(TAG, "Checking for updates")
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)) {
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 startUpdateFlow(appUpdateInfo)
                 Log.d(TAG, "Update available")
             } else {
@@ -68,7 +78,7 @@ class TabbedActivity : AppCompatActivity() {
 
     private fun startUpdateFlow(appUpdateInfo: AppUpdateInfo) {
         try {
-            appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, IMMEDIATE, this, IMMEDIATE_APP_UPDATE_REQ_CODE)
+            appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, IMMEDIATE_APP_UPDATE_REQ_CODE)
         } catch (e: SendIntentException) {
             e.printStackTrace()
         }
@@ -105,6 +115,7 @@ class TabbedActivity : AppCompatActivity() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
                 }
+
                 return true
             }
 

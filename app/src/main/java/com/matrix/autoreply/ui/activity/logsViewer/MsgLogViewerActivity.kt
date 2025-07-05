@@ -36,8 +36,10 @@ class MsgLogViewerActivity : BaseActivity() {
         val colorDrawable = ColorDrawable(Color.parseColor("#171D3B"))
         actionBar!!.setBackgroundDrawable(colorDrawable)
 
-        // Set the action bar title
+        // Set the action bar title and enable back button
         actionBar.title = MESSAGE_LOGS_ACTION_BAR_TITLE
+        actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar.setDisplayShowHomeEnabled(true)
 
         // Set up initial fragment
         if (savedInstanceState == null) {
@@ -79,6 +81,12 @@ class MsgLogViewerActivity : BaseActivity() {
                 true
             }
 
+            android.R.id.home -> {
+                // Handle the back button press
+                onBackPressed()
+                true
+            }
+            
             else -> super.onOptionsItemSelected(item)
         }
     }

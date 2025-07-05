@@ -16,7 +16,7 @@ interface ReplyLogsDao {
     fun getLastReplyTimeStamp(title: String?, packageName: String?): Long
 
     @Insert
-    fun logReply(log: ReplyLogs?)
+    fun logReply(log: ReplyLogs)
 
     @get:Query("SELECT COUNT(id) FROM MESSAGE_LOGS")
     val numReplies: Long
