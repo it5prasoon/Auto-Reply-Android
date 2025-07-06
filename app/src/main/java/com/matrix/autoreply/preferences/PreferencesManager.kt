@@ -204,6 +204,83 @@ class PreferencesManager private constructor(private val thisAppContext: Context
         editor.apply()
     }
 
+    // AI Integration preferences
+    private val KEY_AI_ENABLED = "pref_ai_enabled"
+    private val KEY_AI_PROVIDER = "pref_ai_provider"
+    private val KEY_AI_API_KEY = "pref_ai_api_key"
+    private val KEY_AI_SELECTED_MODEL = "pref_ai_selected_model"
+    private val KEY_AI_LAST_ERROR_MESSAGE = "pref_ai_last_error_message"
+    private val KEY_AI_LAST_ERROR_TIMESTAMP = "pref_ai_last_error_timestamp"
+    private val KEY_AI_SYSTEM_MESSAGE = "pref_ai_system_message"
+    
+    var isAiEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_AI_ENABLED, false)
+        set(enabled) {
+            val editor = _sharedPrefs.edit()
+            editor.putBoolean(KEY_AI_ENABLED, enabled)
+            editor.apply()
+        }
+    
+    var aiApiKey: String?
+        get() = _sharedPrefs.getString(KEY_AI_API_KEY, null)
+        set(apiKey) {
+            val editor = _sharedPrefs.edit()
+            editor.putString(KEY_AI_API_KEY, apiKey)
+            editor.apply()
+        }
+    
+    var aiProvider: String
+        get() = _sharedPrefs.getString(KEY_AI_PROVIDER, "groq") ?: "groq"
+        set(provider) {
+            val editor = _sharedPrefs.edit()
+            editor.putString(KEY_AI_PROVIDER, provider)
+            editor.apply()
+        }
+    
+    var aiSelectedModel: String
+        get() = _sharedPrefs.getString(KEY_AI_SELECTED_MODEL, getDefaultModel()) ?: getDefaultModel()
+        set(model) {
+            val editor = _sharedPrefs.edit()
+            editor.putString(KEY_AI_SELECTED_MODEL, model)
+            editor.apply()
+        }
+    
+    private fun getDefaultModel(): String {
+        return when (aiProvider) {
+            "groq" -> "llama-3.1-70b-versatile"
+            "openai" -> "gpt-3.5-turbo"
+            else -> "llama-3.1-70b-versatile"
+        }
+    }
+    
+    fun saveAiLastError(message: String, timestamp: Long) {
+        val editor = _sharedPrefs.edit()
+        editor.putString(KEY_AI_LAST_ERROR_MESSAGE, message)
+        editor.putLong(KEY_AI_LAST_ERROR_TIMESTAMP, timestamp)
+        editor.apply()
+    }
+    
+    val aiLastErrorMessage: String?
+        get() = _sharedPrefs.getString(KEY_AI_LAST_ERROR_MESSAGE, null)
+    
+    val aiLastErrorTimestamp: Long
+        get() = _sharedPrefs.getLong(KEY_AI_LAST_ERROR_TIMESTAMP, 0L)
+    
+    fun clearAiLastError() {
+        val editor = _sharedPrefs.edit()
+        editor.remove(KEY_AI_LAST_ERROR_MESSAGE)
+        editor.remove(KEY_AI_LAST_ERROR_TIMESTAMP)
+        editor.apply()
+    }
+    
+    var aiSystemMessage: String
+        get() = _sharedPrefs.getString(KEY_AI_SYSTEM_MESSAGE, "You are a helpful assistant. Keep your replies concise and friendly.") ?: "You are a helpful assistant. Keep your replies concise and friendly."
+        set(message) {
+            val editor = _sharedPrefs.edit()
+            editor.putString(KEY_AI_SYSTEM_MESSAGE, message)
+            editor.apply()
+        }
+
     companion object {
         private var _instance: PreferencesManager? = null
         @JvmStatic

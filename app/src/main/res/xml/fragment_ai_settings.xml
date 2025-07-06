@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="pref_category_ai_status"
+        android:title="@string/pref_ai_status_title"
+        app:iconSpaceReserved="false">
+        
+        <Preference
+            android:key="pref_ai_status_display"
+            android:title="@string/pref_ai_status_title"
+            android:summary="@string/pref_ai_status_ok"
+            app:iconSpaceReserved="true"
+            android:selectable="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory 
+        android:title="AI Configuration"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="pref_ai_enabled"
+            android:title="@string/pref_ai_enabled_title"
+            android:summary="@string/pref_ai_enabled_summary"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:key="pref_ai_provider"
+            android:title="@string/pref_ai_provider_title"
+            android:summary="@string/pref_ai_provider_summary"
+            android:entries="@array/ai_provider_entries"
+            android:entryValues="@array/ai_provider_values"
+            android:defaultValue="groq"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+        <EditTextPreference
+            android:key="pref_ai_api_key"
+            android:title="@string/pref_ai_api_key_title"
+            android:summary="@string/pref_ai_api_key_summary_not_set"
+            android:dialogTitle="@string/pref_ai_api_key_dialog_title"
+            android:inputType="textPassword"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+        <ListPreference
+            android:key="pref_ai_model"
+            android:title="@string/pref_ai_model_title"
+            android:summary="@string/pref_ai_model_summary_default"
+            android:dialogTitle="@string/pref_ai_model_dialog_title"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+        <EditTextPreference
+            android:key="pref_ai_system_message"
+            android:title="@string/pref_ai_system_message_title"
+            android:summary="@string/pref_ai_system_message_summary"
+            android:dialogTitle="@string/pref_ai_system_message_dialog_title"
+            android:inputType="textMultiLine"
+            android:defaultValue="You are a helpful assistant. Keep your replies concise and friendly."
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+        <Preference
+            android:key="pref_ai_get_api_key"
+            android:title="@string/pref_ai_get_api_key_title"
+            android:summary="@string/pref_ai_get_api_key_summary"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

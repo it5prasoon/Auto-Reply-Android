@@ -92,6 +92,11 @@
         </receiver>
 
         <activity android:name="com.matrix.autoreply.ui.activity.logsViewer.MsgLogViewerActivity"/>
+        <activity
+                android:name="com.matrix.autoreply.ui.activity.AiSettingsActivity"
+                android:label="AI Settings"
+                android:exported="false"
+                android:parentActivityName="com.matrix.autoreply.ui.activity.TabbedActivity"/>
 
         <meta-data
                 android:name="com.google.android.gms.ads.APPLICATION_ID"

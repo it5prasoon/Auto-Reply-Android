@@ -22,6 +22,7 @@ object Versions {
     const val espressoCore = "3.6.1"
     const val gson = "2.11.0"
     const val retrofit = "2.11.0"
+    const val retrofitGsonConverter = "2.11.0"
     const val okhttp = "4.12.0"
     const val playAppUpdate = "2.1.0"
     const val firebase = "33.7.0"

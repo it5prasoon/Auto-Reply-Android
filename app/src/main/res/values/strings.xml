@@ -7,7 +7,7 @@
     <string name="privacy_policy_label">Privacy Policy</string>
     <string name="service_name">Auto Reply</string>
     <string name="mainAutoReplyTextPlaceholder">(Custom Reply)</string>
-    <string name="auto_reply_default_message">⚠ User is not available.</string>
+    <string name="auto_reply_default_message">I am not available.</string>
     <string name="mainAutoReplyLabel">Set custom text to reply</string>
     <string name="mainAutoReplySwitchOffLabel">Status: OFF</string>
     <string name="mainAutoReplySwitchOnLabel">Status: ON</string>
@@ -25,16 +25,16 @@
     </string>
 
     <!-- Select apps to auto reply -->
-    <string name="enable_for_apps">Enable for apps</string>
+    <string name="enable_for_apps">Enable For Apps</string>
     <string name="enable_auto_reply_switch_msg">Enable Auto Reply Switch First.</string>
     <string name="error_atleast_single_app_must_be_selected">Error: Select at-least a single app</string>
 
     <!-- Group chats -->
-    <string name="groupReplySwitchLabel">Auto reply group chats</string>
+    <string name="groupReplySwitchLabel">Auto Reply Group Chats</string>
     <string name="group_reply_on_info_message">Enabled auto reply for group chats</string>
     <string name="group_reply_off_info_message">Disabled auto reply for group chats</string>
 
-    <string name="time_picker_title">Reply frequency</string>
+    <string name="time_picker_title">Reply Frequency</string>
     <string name="time_picker_sub_title_default">Respond to all messages without control</string>
     <string name="time_picker_sub_title">Respond only once every %1$d day\/s for each person\/group</string>
     <string name="time_format_placeholder">00:00</string>
@@ -216,4 +216,34 @@
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <!-- AI Integration -->
+    <string name="pref_ai_enabled_title">Enable AI Replies</string>
+    <string name="pref_ai_enabled_summary">Use AI to generate smart automatic replies</string>
+    <string name="pref_ai_api_key_title">AI API Key</string>
+    <string name="pref_ai_api_key_summary_not_set">API Key not set</string>
+    <string name="pref_ai_api_key_summary_set">API Key is configured</string>
+    <string name="pref_ai_api_key_dialog_title">Enter OpenAI API Key</string>
+    <string name="pref_ai_model_title">AI Model</string>
+    <string name="pref_ai_model_summary_default">Select AI model for replies</string>
+    <string name="pref_ai_model_dialog_title">Choose AI Model</string>
+    <string name="pref_ai_model_loading">Loading models...</string>
+    <string name="pref_ai_model_error">Could not load models. Check API Key.</string>
+    <string name="pref_ai_provider_title">AI Provider</string>
+    <string name="pref_ai_provider_summary">Choose AI service provider</string>
+    <string name="pref_ai_get_api_key_title">Get API Key</string>
+    <string name="pref_ai_get_api_key_summary">Click for step-by-step guide to create API key</string>
+    <string name="pref_ai_system_message_title">System Message</string>
+    <string name="pref_ai_system_message_summary">Customize AI behavior and response style</string>
+    <string name="pref_ai_system_message_dialog_title">Enter System Message</string>
+    <string name="pref_ai_status_title">AI Service Status</string>
+    <string name="pref_ai_status_ok">No recent issues detected</string>
+    <string name="pref_ai_error_dismiss">Error dismissed</string>
+    <string name="custom_text">Custom Text</string>
+    <string name="edit_custom_text">Edit custom text</string>
+    <string name="or">OR</string>
+    <string name="choose_reply_method">Choose Reply Method</string>
+    <string name="smart_replies">Smart Replies</string>
+    <string name="configure_smart_replies">Configure Smart Replies</string>
+    <string name="ai_powered_replies">AI-powered replies</string>
 </resources>

@@ -9,6 +9,11 @@
             app:icon="@drawable/ic_baseline_notifications_24"
             />
 
+        <Preference android:title="AI Settings"
+            android:summary="Configure AI-powered automatic replies"
+            android:icon="@drawable/ic_baseline_smart_toy_24"
+            android:key="pref_ai_settings" />
+
         <Preference android:title="Want to contribute?"
             android:icon="@drawable/ic_github" >
             <intent android:action="android.intent.action.VIEW"

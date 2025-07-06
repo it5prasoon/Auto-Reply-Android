@@ -1,253 +1,363 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:ads="http://schemas.android.com/apk/res-auto">
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.MainFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/to_help_you_leave_whatsapp"
-        android:textAlignment="center"
-        android:paddingBottom="15dp"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Main Auto Reply enable switch -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/mainAutoReplySwitchCardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toTopOf="@id/mainAutoReplyTextCardView"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        tools:layout_editor_absoluteX="154dp">
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.MainFragment">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/mainAutoReplySwitch"
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:text="@string/to_help_you_leave_whatsapp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            ads:layout_constraintEnd_toEndOf="parent"
+            ads:layout_constraintStart_toStartOf="parent"
+            ads:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Main Auto Reply enable switch -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mainAutoReplySwitchCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text="@string/mainAutoReplySwitchOffLabel" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_margin="10dp"
+            ads:layout_constraintBottom_toTopOf="@id/replyOptionsCardView"
+            ads:layout_constraintTop_toBottomOf="@+id/textView5"
+            tools:layout_editor_absoluteX="154dp">
 
-    <!-- Custom auto reply text card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/mainAutoReplyTextCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/mainAutoReplySwitchCardView"
-        tools:layout_editor_absoluteX="134dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="10dp"
-                android:text="@string/mainAutoReplyLabel"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/mainAutoReplyTextPlaceholder"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                />
-
-            <ImageView
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@string/mainAutoReplyEditBtnTooltip"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_edit" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Supported app selector checklist empty card.
-        Actual checklist will be generated at runtime -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/supportedAppsSelectorCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/mainAutoReplyTextCardView"
-        tools:layout_editor_absoluteX="134dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/selectAppsLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/enable_for_apps"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="10dp"
-                />
-
-            <LinearLayout
-                android:id="@+id/supportedPlatformsLayout"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/mainAutoReplySwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/selectAppsLabel">
+                android:padding="20dp"
+                android:text="@string/mainAutoReplySwitchOffLabel" />
+        </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Group reply switch card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/groupReplySwitchCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/supportedAppsSelectorCardView"
-        tools:layout_editor_absoluteX="154dp">
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/groupReplySwitch"
+        <!-- Reply Options Card (Custom Text OR Smart Replies) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/replyOptionsCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text="@string/groupReplySwitchLabel" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Reply frequency Time picker -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/replyFrequencyTimePickerCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/groupReplySwitchCardView"
-        tools:layout_editor_absoluteX="134dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/timePickerTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="10dp"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                android:text="@string/time_picker_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/timePickerSubTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:paddingStart="20dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="10dp"
-                android:maxWidth="250dp"
-                android:textSize="12sp"
-                android:text="@string/time_picker_sub_title_default"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/timePickerTitle"/>
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/mainAutoReplySwitchCardView"
+            tools:layout_editor_absoluteX="134dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/frequencySetterWidget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <ImageView
-                    android:id="@+id/imgMinus"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/minus"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/timeSelectedText"
-                    android:layout_width="30dp"
+                    android:id="@+id/replyOptionsTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="20sp"
-                    android:gravity="center_horizontal"
-                    android:inputType="number"
+                    android:text="@string/choose_reply_method"
                     android:textColor="?attr/colorOnSurface"
-                    app:layout_constraintTop_toTopOf="@+id/imgMinus"
-                    app:layout_constraintBottom_toBottomOf="@id/imgMinus"
-                    app:layout_constraintStart_toEndOf="@+id/imgMinus"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imgPlus"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/plus"
-                    app:layout_constraintStart_toEndOf="@+id/timeSelectedText"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!-- Custom Text Option -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/customTextOptionCard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    ads:cardElevation="2dp"
+                    ads:layout_constraintEnd_toStartOf="@+id/orDivider"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toBottomOf="@+id/replyOptionsTitle">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/customTextTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/custom_text"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            ads:layout_constraintEnd_toStartOf="@+id/customTextEditIcon"
+                            ads:layout_constraintStart_toStartOf="parent"
+                            ads:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/customTextEditIcon"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/edit_custom_text"
+                            ads:layout_constraintBottom_toBottomOf="@+id/customTextTitle"
+                            ads:layout_constraintEnd_toEndOf="parent"
+                            ads:layout_constraintTop_toTopOf="parent"
+                            ads:srcCompat="@drawable/ic_edit" />
+
+                        <TextView
+                            android:id="@+id/customTextPreview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/mainAutoReplyTextPlaceholder"
+                            android:textSize="12sp"
+                            ads:layout_constraintBottom_toBottomOf="parent"
+                            ads:layout_constraintEnd_toEndOf="parent"
+                            ads:layout_constraintStart_toStartOf="parent"
+                            ads:layout_constraintTop_toBottomOf="@+id/customTextTitle" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- OR Divider -->
+                <TextView
+                    android:id="@+id/orDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle_background"
+                    android:padding="8dp"
+                    android:text="@string/or"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    ads:layout_constraintBottom_toBottomOf="@+id/customTextOptionCard"
+                    ads:layout_constraintEnd_toEndOf="parent"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="@+id/customTextOptionCard" />
+
+                <!-- Smart Replies Option -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/smartRepliesOptionCard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    ads:cardElevation="2dp"
+                    ads:layout_constraintEnd_toEndOf="parent"
+                    ads:layout_constraintStart_toEndOf="@+id/orDivider"
+                    ads:layout_constraintTop_toBottomOf="@+id/replyOptionsTitle">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/smartRepliesIcon"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_baseline_smart_toy_24"
+                            ads:layout_constraintStart_toStartOf="parent"
+                            ads:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/smartRepliesTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/smart_replies"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            ads:layout_constraintEnd_toStartOf="@+id/smartRepliesArrow"
+                            ads:layout_constraintStart_toEndOf="@+id/smartRepliesIcon"
+                            ads:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/smartRepliesArrow"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:contentDescription="@string/configure_smart_replies"
+                            ads:layout_constraintBottom_toBottomOf="@+id/smartRepliesTitle"
+                            ads:layout_constraintEnd_toEndOf="parent"
+                            ads:layout_constraintTop_toTopOf="parent"
+                            ads:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+                        <TextView
+                            android:id="@+id/smartRepliesSubtitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/ai_powered_replies"
+                            android:textSize="12sp"
+                            ads:layout_constraintEnd_toEndOf="parent"
+                            ads:layout_constraintStart_toStartOf="parent"
+                            ads:layout_constraintTop_toBottomOf="@+id/smartRepliesTitle" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-    </com.google.android.material.card.MaterialCardView>
+        <!-- Supported app selector checklist empty card.
+            Actual checklist will be generated at runtime -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/supportedAppsSelectorCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/replyOptionsCardView"
+            tools:layout_editor_absoluteX="134dp">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-    <com.google.android.gms.ads.AdView
+                <TextView
+                    android:id="@+id/selectAppsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/enable_for_apps"
+                    android:textSize="14sp"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/supportedPlatformsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="4dp"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toBottomOf="@id/selectAppsLabel">
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Group reply switch card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/groupReplySwitchCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/supportedAppsSelectorCardView"
+            tools:layout_editor_absoluteX="154dp">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/groupReplySwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:text="@string/groupReplySwitchLabel" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Reply frequency Time picker -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/replyFrequencyTimePickerCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/groupReplySwitchCardView"
+            tools:layout_editor_absoluteX="134dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/timePickerTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/time_picker_title"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="16sp"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/timePickerSubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxWidth="250dp"
+                    android:maxLines="3"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/time_picker_sub_title_default"
+                    android:textSize="12sp"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toBottomOf="@+id/timePickerTitle" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/frequencySetterWidget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintEnd_toEndOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imgMinus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/minus"
+                        ads:layout_constraintStart_toStartOf="parent"
+                        ads:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/timeSelectedText"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:inputType="number"
+                        android:text="0"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="20sp"
+                        ads:layout_constraintBottom_toBottomOf="@id/imgMinus"
+                        ads:layout_constraintStart_toEndOf="@+id/imgMinus"
+                        ads:layout_constraintTop_toTopOf="@+id/imgMinus" />
+
+                    <ImageView
+                        android:id="@+id/imgPlus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/plus"
+                        ads:layout_constraintStart_toEndOf="@+id/timeSelectedText"
+                        ads:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             ads:adSize="BANNER"
             ads:adUnitId="@string/main_banner"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-    />
+            ads:layout_constraintBottom_toBottomOf="parent"
+            ads:layout_constraintEnd_toEndOf="parent"
+            ads:layout_constraintHorizontal_bias="0.0"
+            ads:layout_constraintStart_toStartOf="parent"
+            ads:layout_constraintTop_toBottomOf="@+id/replyFrequencyTimePickerCardView"
+            ads:layout_constraintVertical_bias="0.969" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
