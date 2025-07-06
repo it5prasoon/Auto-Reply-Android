@@ -37,9 +37,11 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private var autoReplyTextPreviewCard: CardView? = null
+    private var replyOptionsCard: CardView? = null
+    private var customTextOptionCard: CardView? = null
+    private var smartRepliesOptionCard: CardView? = null
     private var timePickerCard: CardView? = null
-    private var autoReplyTextPreview: TextView? = null
+    private var customTextPreview: TextView? = null
     private var timeSelectedTextPreview: TextView? = null
     private var timePickerSubTitleTextPreview: TextView? = null
     private var customRepliesData: CustomRepliesData? = null
@@ -52,6 +54,7 @@ class MainFragment : Fragment() {
     private var imgMinus: ImageView? = null
     private var imgPlus: ImageView? = null
     private var supportedAppsLayout: LinearLayout? = null
+    private var selectAppsLabel: TextView? = null
     private val supportedAppsCheckboxes: MutableList<MaterialCheckBox> = ArrayList()
     private val supportedAppsDummyViews: MutableList<View> = ArrayList()
     private var mActivity: Activity? = null
@@ -84,19 +87,22 @@ class MainFragment : Fragment() {
         // Assign Views
         mainAutoReplySwitch = binding.mainAutoReplySwitch
         groupReplySwitch = binding.groupReplySwitch
-        autoReplyTextPreviewCard = binding.mainAutoReplyTextCardView
-        autoReplyTextPreview = binding.textView4
+        replyOptionsCard = binding.replyOptionsCardView
+        customTextOptionCard = binding.customTextOptionCard
+        smartRepliesOptionCard = binding.smartRepliesOptionCard
+        customTextPreview = binding.customTextPreview
         supportedAppsLayout = binding.supportedPlatformsLayout
         supportedAppsCard = binding.supportedAppsSelectorCardView
+        selectAppsLabel = binding.selectAppsLabel
         autoReplyTextPlaceholder = resources.getString(R.string.mainAutoReplyTextPlaceholder)
         timePickerCard = binding.replyFrequencyTimePickerCardView
         timePickerSubTitleTextPreview = binding.timePickerSubTitle
         timeSelectedTextPreview = binding.timeSelectedText
         imgMinus = binding.imgMinus
         imgPlus = binding.imgPlus
-        handleAutoReplyPreviewCard()
+        handleReplyOptionsCard()
 
-        autoReplyTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
+        customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
 
         groupReplySwitch?.isEnabled = mainAutoReplySwitch!!.isChecked
 
@@ -120,8 +126,12 @@ class MainFragment : Fragment() {
         adView.loadAd(adRequest)
     }
 
-    private fun handleAutoReplyPreviewCard() {
-        autoReplyTextPreviewCard?.setOnClickListener { v: View -> openCustomReplyEditorActivity(v) }
+    private fun handleReplyOptionsCard() {
+        customTextOptionCard?.setOnClickListener { v: View -> openCustomReplyEditorActivity(v) }
+        smartRepliesOptionCard?.setOnClickListener {
+            val intent = Intent(requireContext(), com.matrix.autoreply.ui.activity.AiSettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun handleMainAutoReplySwitch() {
@@ -172,6 +182,7 @@ class MainFragment : Fragment() {
     }
 
     private fun enableOrDisableEnabledAppsCheckboxes(enabled: Boolean) {
+        selectAppsLabel?.alpha = if (enabled) 1.0f else 0.5f
         for (checkbox in supportedAppsCheckboxes) {
             checkbox.isEnabled = enabled
         }
@@ -256,7 +267,7 @@ class MainFragment : Fragment() {
         groupReplySwitch!!.isChecked = preferencesManager!!.isGroupReplyEnabled
 
         // Set user auto reply text
-        autoReplyTextPreview!!.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
+        customTextPreview!!.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
     }
 
     private fun setSwitchState() {

@@ -78,6 +78,7 @@ dependencies {
     // Retrofit client
     implementation(Dependencies.gson)
     implementation(Dependencies.retrofit)
+    implementation(Dependencies.retrofitGsonConverter)
     implementation(Dependencies.okhttpLoggingInterceptor)
 
     // In app update feature

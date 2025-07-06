@@ -1,6 +1,7 @@
 package com.matrix.autoreply.services
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.app.PendingIntent.CanceledException
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.preferences.PreferencesManager
 import com.matrix.autoreply.utils.DbUtils
 import com.matrix.autoreply.utils.NotificationUtils
+import com.matrix.autoreply.utils.AiReplyHandler
 
 
 class ForegroundNotificationService : NotificationListenerService() {
@@ -74,7 +76,41 @@ class ForegroundNotificationService : NotificationListenerService() {
             return
         }
 
+        val preferencesManager = PreferencesManager.getPreferencesInstance(this)!!
+        val incomingMessage = NotificationUtils.getMessage(sbn) ?: ""
+        
+        // Check if AI is enabled and try AI reply first
+        if (preferencesManager.isAiEnabled && preferencesManager.aiApiKey?.isNotEmpty() == true) {
+            AiReplyHandler.generateReply(this, incomingMessage, object : AiReplyHandler.AiReplyCallback {
+                override fun onReplyGenerated(reply: String) {
+                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply)
+                }
+                
+                override fun onError(errorMessage: String) {
+                    Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
+                    // Fallback to custom reply
+                    val customReply = getCustomReply()
+                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply)
+                }
+            })
+        } else {
+            // Use custom reply directly
+            val customReply = getCustomReply()
+            sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply)
+        }
+    }
+    
+    private fun getCustomReply(): String {
         customRepliesData = CustomRepliesData.getInstance(this)
+        return customRepliesData?.getTextToSendOrElse(null) ?: "Thanks for your message!"
+    }
+    
+    private fun sendActualReply(
+        sbn: StatusBarNotification, 
+        pendingIntent: PendingIntent?, 
+        remoteInputs1: Array<RemoteInput>, 
+        replyText: String
+    ) {
         val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
         val localIntent = Intent()
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -82,10 +118,7 @@ class ForegroundNotificationService : NotificationListenerService() {
 
         for ((i, remoteIn) in remoteInputs1.withIndex()) {
             remoteInputs[i] = remoteIn
-            localBundle.putCharSequence(
-                remoteInputs[i]!!.resultKey, customRepliesData
-                    ?.getTextToSendOrElse(null)
-            )
+            localBundle.putCharSequence(remoteInputs[i]!!.resultKey, replyText)
         }
 
         RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
@@ -101,7 +134,7 @@ class ForegroundNotificationService : NotificationListenerService() {
                         ?.let {
                             NotificationHelper.getInstance(applicationContext)?.sendNotification(
                                 it,
-                                sbn.notification.extras.getString("android.text"), sbn.packageName
+                                replyText, sbn.packageName
                             )
                         }
                 }

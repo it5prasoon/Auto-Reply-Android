@@ -50,6 +50,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
             checkAutoStartPermission()
             true
         }
+        
+        // Handle AI Settings navigation
+        val aiSettingsPref = findPreference<Preference>("pref_ai_settings")
+        aiSettingsPref?.setOnPreferenceClickListener {
+            val intent = Intent(requireContext(), com.matrix.autoreply.ui.activity.AiSettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
 
         // Initialize the ActivityResultLauncher
         notificationListenerPermissionLauncher =

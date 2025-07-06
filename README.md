@@ -62,32 +62,32 @@ AutoReply is a powerful Android application that automatically responds to messa
   <table>
     <tr>
       <td align="center">
-        <h3>💬 Auto Responses</h3>
-        <p>Automated replies for individual and group chats</p>
+        <h3>🤖 Smart AI Replies</h3>
+        <p>AI-powered responses with Groq & OpenAI support</p>
       </td>
+      <td align="center">
+        <h3>💬 Custom Responses</h3>
+        <p>Set your own automated reply messages</p>
+      </td>
+    </tr>
+    <tr>
       <td align="center">
         <h3>🔒 Privacy First</h3>
         <p>No data collection or tracking of your activities</p>
       </td>
-    </tr>
-    <tr>
       <td align="center">
         <h3>⏱️ Smart Timing</h3>
         <p>Control reply frequency to avoid spam</p>
       </td>
+    </tr>
+    <tr>
       <td align="center">
         <h3>📁 Message Logs</h3>
         <p>Keep records even if messages are deleted</p>
       </td>
-    </tr>
-    <tr>
       <td align="center">
         <h3>🆓 Completely Free</h3>
         <p>No ads, no premium features, open source</p>
-      </td>
-      <td align="center">
-        <h3>🔄 Auto Updates</h3>
-        <p>In-app updates keep you current</p>
       </td>
     </tr>
   </table>
@@ -124,6 +124,7 @@ AutoReply is a powerful Android application that automatically responds to messa
 
 ### 📚 Libraries & Components
 - **Kotlin** - Modern programming language
+- **AI Integration** - Groq & OpenAI API support
 - **Firebase** - Backend services and analytics
 - **Room Database** - Local data storage
 - **Retrofit** - Network communication
@@ -132,6 +133,9 @@ AutoReply is a powerful Android application that automatically responds to messa
 
 ## 📋 Roadmap
 
+- [x] **AI-Powered Smart Replies** - Groq & OpenAI integration
+- [x] **Dual Provider Support** - Free (Groq) and Premium (OpenAI) options
+- [x] **Custom System Messages** - Personalize AI behavior
 - [ ] Implement Dependency Injection (Dagger/Hilt)
 - [ ] UI/UX improvements and Material Design 3
 - [ ] MVVM architecture refactoring
@@ -169,7 +173,13 @@ AutoReply is a powerful Android application that automatically responds to messa
    </resources>
    ```
 
-4. **Build and Run**
+4. **Configure AI Settings (Optional)**
+   - Enable Smart Replies in the app
+   - Choose between Groq (Free) or OpenAI (Paid)
+   - Get API key from provider console
+   - Customize system message for AI behavior
+
+5. **Build and Run**
    ```bash
    ./gradlew assembleDebug
    ```
