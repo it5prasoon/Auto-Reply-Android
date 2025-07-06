@@ -170,6 +170,8 @@ AutoReply is a powerful Android application that automatically responds to messa
        <string name="msg_logs_banner">your_banner_id</string>
        <string name="main_banner">your_banner_id</string>
        <string name="save_custom_reply_interstitial">your_interstitial_id</string>
+       <string name="ai_enable_interstitial">your_ai_interstitial_id</string>
+       <string name="ai_settings_banner">your_ai_banner_id</string>
    </resources>
    ```
 

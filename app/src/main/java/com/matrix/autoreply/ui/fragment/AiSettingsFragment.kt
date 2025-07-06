@@ -11,6 +11,10 @@ import com.matrix.autoreply.R
 import com.matrix.autoreply.network.model.ai.AiModel
 import com.matrix.autoreply.preferences.PreferencesManager
 import com.matrix.autoreply.utils.AiHelper
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.AdView
 
 class AiSettingsFragment : PreferenceFragmentCompat() {
 
@@ -18,6 +22,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
     private var aiProviderPreference: ListPreference? = null
     private var aiStatusPreference: Preference? = null
     private var preferencesManager: PreferencesManager? = null
+    private var mInterstitialAd: InterstitialAd? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.fragment_ai_settings, rootKey)
@@ -30,6 +35,8 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupModelPreference()
         setupGetApiKeyPreference()
         setupStatusPreference()
+        loadInterstitialAd()
+        setupBannerAd()
     }
     
     private fun setupAiEnabledPreference() {
@@ -41,6 +48,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 preferencesManager?.isAiEnabled = enabled
                 if (enabled) {
                     loadAiModels()
+                    showInterstitialAd()
                 }
                 updateStatusDisplay()
                 true
@@ -271,5 +279,33 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         activity?.title = "AI Settings"
         loadAiModels()
         updateStatusDisplay()
+    }
+    
+    private fun loadInterstitialAd() {
+        val adRequest = AdRequest.Builder().build()
+        val adUnitId = getString(R.string.ai_enable_interstitial)
+        
+        InterstitialAd.load(requireContext(), adUnitId, adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                }
+                
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+            })
+    }
+    
+    private fun showInterstitialAd() {
+        mInterstitialAd?.show(requireActivity())
+    }
+    
+    private fun setupBannerAd() {
+        val adView = view?.findViewById<AdView>(R.id.ai_settings_ad_view)
+        adView?.let {
+            val adRequest = AdRequest.Builder().build()
+            it.loadAd(adRequest)
+        }
     }
 }
