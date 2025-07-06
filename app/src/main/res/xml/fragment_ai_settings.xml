@@ -74,4 +74,10 @@
 
     </PreferenceCategory>
 
+    <!-- Banner Ad -->
+    <Preference
+        android:layout="@layout/ai_settings_banner_ad"
+        android:selectable="false"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>
