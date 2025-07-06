@@ -85,6 +85,8 @@ class CustomReplyEditorActivity : BaseActivity() {
         saveAutoReplyTextBtn?.setOnClickListener {
             val setString = customRepliesData?.set(autoReplyText?.text)
             if (setString != null) {
+                // Show ad only after user successfully saves (user-initiated action)
+                showFullAd()
                 onNavigateUp()
             }
         }
@@ -121,7 +123,6 @@ class CustomReplyEditorActivity : BaseActivity() {
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d(TAG, "Interstitial Ad Loaded")
                     mInterstitialAd = interstitialAd
-                    showFullAd()
                     showFullscreenAdCallback()
                 }
             })
