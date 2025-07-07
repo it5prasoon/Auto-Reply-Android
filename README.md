@@ -268,16 +268,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ---
 
 <div align="center">
-  <p><strong>Made with ❤️ by the AutoReply Community</strong></p>
+  <p><strong>Made with ❤️ by it5prasoon</strong></p>
   <p>If this project helped you, please consider giving it a ⭐️</p>
 </div>
-OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-```
 
----
-
-<div align="center">
-  <p><strong>Made with ❤️ by the AutoReply Community</strong></p>
-  <p>If this project helped you, please consider giving it a ⭐️</p>
-</div>
