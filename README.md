@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>🤖 AutoReply</h1>
-  <p><strong>Smart Automatic Messaging for Android</strong></p>
+  <h1>🤖 AutoReply - WhatsApp Auto Reply Android App</h1>
+  <p><strong>Best Free WhatsApp Auto Reply App for Android | Automatic Message Responder | AI-Powered Smart Replies</strong></p>
   
   <p>
     <a href="https://play.google.com/store/apps/details?id=com.matrix.autoreply">
@@ -18,7 +18,14 @@
 
 ## ✨ Overview
 
-AutoReply is a powerful Android application that automatically responds to messages on WhatsApp and Facebook Messenger. Stay connected with your contacts even when you're busy, sleeping, or away from your phone.
+**AutoReply** is the #1 free WhatsApp auto reply app for Android that automatically sends messages on WhatsApp, Facebook Messenger, and other messaging apps. Perfect for busy professionals, students, and anyone who wants to stay connected 24/7 with automatic message responses.
+
+### 🔥 **Why Choose AutoReply for WhatsApp?**
+- **100% Free** WhatsApp auto reply solution
+- **AI-Powered Smart Replies** with ChatGPT-like responses
+- **No Root Required** - works on all Android devices
+- **Privacy First** - your messages stay on your device
+- **Works Offline** - no internet required for custom replies
 
 ### 🎯 Key Benefits
 - **Never miss a message** - Automatic responses keep conversations flowing
@@ -32,16 +39,31 @@ AutoReply is a powerful Android application that automatically responds to messa
 <div align="center">
   <table>
     <tr>
-      <td><img src="screenshots/screenshots/screenshot_1.png" width="200"/></td>
-      <td><img src="screenshots/screenshots/screenshot_2.png" width="200"/></td>
-      <td><img src="screenshots/screenshots/screenshot_3.png" width="200"/></td>
-      <td><img src="screenshots/screenshots/screenshot_4.png" width="200"/></td>
+      <td><img src="screenshots/main-page.png" width="200"/></td>
+      <td><img src="screenshots/custom-reply.png" width="200"/></td>
+      <td><img src="screenshots/message-logs.png" width="200"/></td>
+      <td><img src="screenshots/settings.png" width="200"/></td>
     </tr>
     <tr>
-      <td align="center"><strong>Main Interface</strong></td>
-      <td align="center"><strong>Custom Replies</strong></td>
-      <td align="center"><strong>Message Logs</strong></td>
-      <td align="center"><strong>Settings</strong></td>
+      <td align="center"><strong>Main Dashboard</strong><br/>Service toggle and quick access to key features</td>
+      <td align="center"><strong>Custom Replies</strong><br/>Create and manage personalized auto-reply messages</td>
+      <td align="center"><strong>Message Logs</strong><br/>View conversation history and track messages</td>
+      <td align="center"><strong>Settings</strong><br/>Configure app preferences and timing controls</td>
+    </tr>
+  </table>
+  
+  <table>
+    <tr>
+      <td><img src="screenshots/ai-settings.png" width="200"/></td>
+      <td><img src="screenshots/ai-provider.png" width="200"/></td>
+      <td><img src="screenshots/customize-model.png" width="200"/></td>
+      <td><img src="screenshots/customize-your-prompt.png" width="200"/></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>AI Settings</strong><br/>Enable AI-powered smart replies with provider options</td>
+      <td align="center"><strong>AI Provider</strong><br/>Choose between Groq (free) and OpenAI providers</td>
+      <td align="center"><strong>Model Selection</strong><br/>Select and configure AI models for responses</td>
+      <td align="center"><strong>Custom Prompts</strong><br/>Personalize AI behavior with system instructions</td>
     </tr>
   </table>
 </div>
@@ -240,6 +262,16 @@ copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
+
+---
+
+<div align="center">
+  <p><strong>Made with ❤️ by the AutoReply Community</strong></p>
+  <p>If this project helped you, please consider giving it a ⭐️</p>
+</div>
+OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 ```
 
