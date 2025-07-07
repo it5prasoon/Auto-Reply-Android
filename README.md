@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🤖 AutoReply - Custom or AI Smart Messenger Android App</h1>
+  <h1>🤖 AutoReply - Custom or AI Smart Messenger</h1>
   <p><strong>Best Free WhatsApp Auto Reply App for Android | Automatic Message Responder | AI-Powered Smart Replies</strong></p>
   
   <p>
