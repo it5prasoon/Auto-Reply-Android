@@ -10,8 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowCompat
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -34,6 +33,10 @@ class TabbedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Fix window insets to prevent excessive spacing
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        
         binding = ActivityTabbedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -44,21 +47,11 @@ class TabbedActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
-        
-        // Handle window insets for edge-to-edge display
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Only apply left, right, and bottom padding to avoid pushing content under status bar
-            view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
-            insets
-        }
     }
 
     override fun onResume() {
         super.onResume()
         Log.i("MAIN ACTIVITY:: ", "OnResume")
-        // Set status bar color on every resume to maintain it after theme changes
-        window.statusBarColor = resources.getColor(R.color.colorPrimary)
         checkUpdate()
     }
 

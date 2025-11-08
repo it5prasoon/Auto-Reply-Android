@@ -1,12 +1,12 @@
 package com.matrix.autoreply.ui.activity.logsViewer
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
 import com.matrix.autoreply.R
 import com.matrix.autoreply.databinding.ActivityMsgLogViewerBinding
 import com.matrix.autoreply.ui.activity.BaseActivity
@@ -30,10 +30,8 @@ class MsgLogViewerActivity : BaseActivity() {
         binding = ActivityMsgLogViewerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = resources.getColor(R.color.colorPrimary)
-
         val actionBar: ActionBar? = supportActionBar
-        val colorDrawable = ColorDrawable(Color.parseColor("#171D3B"))
+        val colorDrawable = "#171D3B".toColorInt().toDrawable()
         actionBar!!.setBackgroundDrawable(colorDrawable)
 
         // Set the action bar title and enable back button
@@ -83,10 +81,10 @@ class MsgLogViewerActivity : BaseActivity() {
 
             android.R.id.home -> {
                 // Handle the back button press
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
-            
+
             else -> super.onOptionsItemSelected(item)
         }
     }

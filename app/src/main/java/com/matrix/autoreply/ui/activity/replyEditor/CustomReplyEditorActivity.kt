@@ -1,7 +1,5 @@
 package com.matrix.autoreply.ui.activity.replyEditor
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +8,13 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.app.ActionBar
-import com.google.android.gms.ads.*
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.toColorInt
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.textfield.TextInputEditText
@@ -46,11 +50,9 @@ class CustomReplyEditorActivity : BaseActivity() {
         binding = ActivityCustomReplyEditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = resources.getColor(R.color.colorPrimary)
-
         // Customize action bar
         val actionBar: ActionBar? = supportActionBar
-        val colorDrawable = ColorDrawable(Color.parseColor("#171D3B"))
+        val colorDrawable = "#171D3B".toColorInt().toDrawable()
         actionBar!!.setBackgroundDrawable(colorDrawable)
 
         // Initialize data and views
