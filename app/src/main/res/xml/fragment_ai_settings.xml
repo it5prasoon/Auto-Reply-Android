@@ -57,9 +57,9 @@
 
         <EditTextPreference
             android:key="pref_ai_system_message"
-            android:title="@string/pref_ai_system_message_title"
+            android:title="System Prompt"
             android:summary="@string/pref_ai_system_message_summary"
-            android:dialogTitle="@string/pref_ai_system_message_dialog_title"
+            android:dialogTitle="Customize System Prompt"
             android:inputType="textMultiLine"
             android:defaultValue="You are a helpful assistant. Keep your replies concise and friendly."
             app:iconSpaceReserved="false"

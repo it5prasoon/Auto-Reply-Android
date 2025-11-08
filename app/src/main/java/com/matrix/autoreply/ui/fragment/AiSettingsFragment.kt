@@ -15,6 +15,8 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.AdView
+import com.matrix.autoreply.ui.ApiKeyGuideDialog
+
 
 class AiSettingsFragment : PreferenceFragmentCompat() {
 
@@ -34,6 +36,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupApiKeyPreference()
         setupModelPreference()
         setupGetApiKeyPreference()
+
         setupStatusPreference()
         loadInterstitialAd()
         setupBannerAd()
@@ -131,24 +134,10 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
             true
         }
     }
-    
+
     private fun showApiKeyGuide(provider: String) {
-        val url = when (provider) {
-            "groq" -> "https://console.groq.com/keys"
-            "openai" -> "https://platform.openai.com/api-keys"
-            else -> "https://console.groq.com/keys"
-        }
-        
-        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
-        startActivity(intent)
-        
-        val message = when (provider) {
-            "groq" -> "Opening Groq Console. Steps:\n1. Sign up/Login\n2. Go to API Keys\n3. Create New Key\n4. Copy and paste in app"
-            "openai" -> "Opening OpenAI Platform. Steps:\n1. Sign up/Login\n2. Go to API Keys\n3. Create New Secret Key\n4. Copy and paste in app"
-            else -> "Follow the website instructions to create your API key"
-        }
-        
-        android.widget.Toast.makeText(requireContext(), message, android.widget.Toast.LENGTH_LONG).show()
+        val dialog = ApiKeyGuideDialog.newInstance(provider)
+        dialog.show(parentFragmentManager, "ApiKeyGuideDialog")
     }
     
     private fun setupStatusPreference() {

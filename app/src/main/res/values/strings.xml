@@ -231,8 +231,8 @@
     <string name="pref_ai_model_error">Could not load models. Check API Key.</string>
     <string name="pref_ai_provider_title">AI Provider</string>
     <string name="pref_ai_provider_summary">Choose AI service provider</string>
-    <string name="pref_ai_get_api_key_title">Get API Key</string>
-    <string name="pref_ai_get_api_key_summary">Click for step-by-step guide to create API key</string>
+    <string name="pref_ai_get_api_key_title">📖 Easy Setup Guide</string>
+    <string name="pref_ai_get_api_key_summary">Simple step-by-step guide to get your free API key</string>
     <string name="pref_ai_system_message_title">System Message</string>
     <string name="pref_ai_system_message_summary">Customize AI behavior and response style</string>
     <string name="pref_ai_system_message_dialog_title">Enter System Message</string>

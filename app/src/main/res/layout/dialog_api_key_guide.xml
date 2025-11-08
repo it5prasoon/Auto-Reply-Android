@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:minWidth="320dp"
+    android:background="@android:color/white">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="API Key Setup Guide"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✕"
+            android:textSize="18sp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:minWidth="48dp"
+            android:minHeight="48dp" />
+
+    </LinearLayout>
+
+    <!-- Step Indicator -->
+    <TextView
+        android:id="@+id/stepIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Step 1 of 4"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Step Image -->
+    <ImageView
+        android:id="@+id/stepImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:src="@android:drawable/ic_dialog_info"
+        app:tint="@android:color/holo_blue_bright" />
+
+    <!-- Step Title -->
+    <TextView
+        android:id="@+id/stepTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Step Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Step Description -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200dp"
+        android:layout_marginBottom="24dp">
+        
+        <TextView
+            android:id="@+id/stepDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step description goes here"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:lineSpacingExtra="4dp"
+            android:padding="8dp" />
+            
+    </ScrollView>
+
+    <!-- Open Website Button -->
+    <Button
+        android:id="@+id/btnOpenWebsite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Website"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_bright"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:visibility="gone" />
+
+    <!-- Navigation Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Previous"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@android:color/holo_blue_bright"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_bright"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
