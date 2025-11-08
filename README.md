@@ -39,10 +39,10 @@
 <div align="center">
   <table>
     <tr>
-      <td><img src="screenshots/main-page.png" width="200"/></td>
-      <td><img src="screenshots/custom-reply.png" width="200"/></td>
-      <td><img src="screenshots/message-logs.png" width="200"/></td>
-      <td><img src="screenshots/settings.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/1-main-dashboard.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/2-custom-reply.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/7-message-logs.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/8-settings.png" width="200"/></td>
     </tr>
     <tr>
       <td align="center"><strong>Main Dashboard</strong><br/>Service toggle and quick access to key features</td>
@@ -54,10 +54,10 @@
   
   <table>
     <tr>
-      <td><img src="screenshots/ai-settings.png" width="200"/></td>
-      <td><img src="screenshots/ai-provider.png" width="200"/></td>
-      <td><img src="screenshots/customize-model.png" width="200"/></td>
-      <td><img src="screenshots/customize-your-prompt.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/3-ai-settings.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/4-ai-provider.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/5-model-selection.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/6-custom-prompts.png" width="200"/></td>
     </tr>
     <tr>
       <td align="center"><strong>AI Settings</strong><br/>Enable AI-powered smart replies with provider options</td>
