@@ -19,6 +19,13 @@
         android:title="AI Configuration"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:key="pref_ai_tutorial"
+            android:title="AI Settings Tutorial"
+            android:summary="Watch video guide for AI configuration"
+            android:icon="@drawable/ic_youtube"
+            app:iconSpaceReserved="true" />
+
         <SwitchPreferenceCompat
             android:key="pref_ai_enabled"
             android:title="@string/pref_ai_enabled_title"

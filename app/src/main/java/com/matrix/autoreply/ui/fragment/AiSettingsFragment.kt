@@ -1,5 +1,7 @@
 package com.matrix.autoreply.ui.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.EditTextPreference
@@ -16,6 +18,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.AdView
 import com.matrix.autoreply.ui.ApiKeyGuideDialog
+import com.matrix.autoreply.network.FirebaseConfigService
 
 
 class AiSettingsFragment : PreferenceFragmentCompat() {
@@ -31,6 +34,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         
         preferencesManager = PreferencesManager.getPreferencesInstance(requireActivity())
         
+        setupTutorialPreference()
         setupAiEnabledPreference()
         setupProviderPreference()
         setupApiKeyPreference()
@@ -40,6 +44,21 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupStatusPreference()
         loadInterstitialAd()
         setupBannerAd()
+    }
+    
+    private fun setupTutorialPreference() {
+        val tutorialPref = findPreference<Preference>("pref_ai_tutorial")
+        tutorialPref?.setOnPreferenceClickListener {
+            FirebaseConfigService.getTutorialUrl { url ->
+                if (url != null) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "Tutorial not available", Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
+        }
     }
     
     private fun setupAiEnabledPreference() {

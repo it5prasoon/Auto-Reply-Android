@@ -89,6 +89,7 @@ dependencies {
     implementation(platform(Dependencies.firebaseBom))
     implementation(Dependencies.firebaseAnalyticsKtx)
     implementation(Dependencies.firebaseCrashlytics)
+    implementation(Dependencies.firebaseDatabase)
 
     // Ad
     implementation(Dependencies.googleAds)

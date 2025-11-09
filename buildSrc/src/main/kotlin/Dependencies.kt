@@ -29,6 +29,7 @@ object Dependencies {
     const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
     const val firebaseAnalyticsKtx = "com.google.firebase:firebase-analytics-ktx:${Versions.firebaseAnalytics}"
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:${Versions.firebaseCrashlyticsVersion}"
+    const val firebaseDatabase = "com.google.firebase:firebase-database-ktx"
 
     // Ads
     const val googleAds = "com.google.android.gms:play-services-ads:${Versions.adsVersion}"
