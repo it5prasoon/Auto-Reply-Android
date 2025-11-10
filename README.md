@@ -235,7 +235,7 @@ We welcome contributions! Here's how you can help:
 <div align="center">
   <p>Need help or have questions?</p>
   
-  <a href="mailto:prasoonk187@gmail.com">
+  <a href="mailto:prasoonkumar008@gmail.com">
     <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
   </a>
   <a href="https://github.com/it5prasoon/Auto-Reply-Android/issues">
