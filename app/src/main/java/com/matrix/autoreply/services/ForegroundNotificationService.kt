@@ -55,7 +55,12 @@ class ForegroundNotificationService : NotificationListenerService() {
                 isSupportedPackage(sbn) &&
                 NotificationUtils.isNewNotification(sbn) &&
                 isGroupMessageAndReplyAllowed(sbn) &&
-                canSendReplyNow(sbn)
+                canSendReplyNow(sbn) &&
+                isWithinScheduledTime()
+    }
+    
+    private fun isWithinScheduledTime(): Boolean {
+        return PreferencesManager.getPreferencesInstance(this)?.isWithinScheduledTime() ?: true
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

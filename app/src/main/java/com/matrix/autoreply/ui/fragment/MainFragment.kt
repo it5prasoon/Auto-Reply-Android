@@ -60,6 +60,10 @@ class MainFragment : Fragment() {
     private var dailyRepliesText: TextView? = null
     private var totalRepliesText: TextView? = null
     private var aiVsCustomText: TextView? = null
+    private var scheduleEnabledSwitch: SwitchMaterial? = null
+    private var startTimeButton: com.google.android.material.button.MaterialButton? = null
+    private var endTimeButton: com.google.android.material.button.MaterialButton? = null
+    private var scheduleTimesLayout: LinearLayout? = null
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
@@ -106,6 +110,10 @@ class MainFragment : Fragment() {
         dailyRepliesText = binding.dailyRepliesCount
         totalRepliesText = binding.totalRepliesCount
         aiVsCustomText = binding.aiVsCustomCount
+        scheduleEnabledSwitch = binding.scheduleEnabledSwitch
+        startTimeButton = binding.startTimeButton
+        endTimeButton = binding.endTimeButton
+        scheduleTimesLayout = binding.scheduleTimesLayout
         handleReplyOptionsCard()
 
         customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
@@ -117,9 +125,11 @@ class MainFragment : Fragment() {
         handleMainAutoReplySwitch()
         handleGroupReplySwitch()
         handleReplyFrequency()
+        handleSchedule()
 
         setNumDays()
         createSupportedAppCheckboxes()
+        updateScheduleDisplay()
     }
 
     private fun initializeAdView(context: Context) {
@@ -277,6 +287,9 @@ class MainFragment : Fragment() {
         
         // Update analytics
         updateAnalytics()
+        
+        // Update schedule display
+        updateScheduleDisplay()
     }
     
     private fun updateAnalytics() {
@@ -343,6 +356,71 @@ class MainFragment : Fragment() {
             preferencesManager!!.setServicePref(false)
             Toast.makeText(requireActivity(), Constants.PERMISSION_DENIED, Toast.LENGTH_SHORT).show()
         }
+    }
+    
+    private fun handleSchedule() {
+        scheduleEnabledSwitch?.setOnCheckedChangeListener { _, isChecked ->
+            preferencesManager?.isScheduleEnabled = isChecked
+            scheduleTimesLayout?.visibility = if (isChecked) View.VISIBLE else View.GONE
+            
+            if (isChecked) {
+                Toast.makeText(mActivity, "Auto-reply will only work during scheduled hours", Toast.LENGTH_SHORT).show()
+            }
+        }
+        
+        startTimeButton?.setOnClickListener {
+            showTimePicker(true)
+        }
+        
+        endTimeButton?.setOnClickListener {
+            showTimePicker(false)
+        }
+    }
+    
+    private fun showTimePicker(isStartTime: Boolean) {
+        val hour = if (isStartTime) preferencesManager?.scheduleStartHour ?: 22 else preferencesManager?.scheduleEndHour ?: 8
+        val minute = if (isStartTime) preferencesManager?.scheduleStartMinute ?: 0 else preferencesManager?.scheduleEndMinute ?: 0
+        
+        val timePicker = android.app.TimePickerDialog(
+            mActivity,
+            { _, selectedHour, selectedMinute ->
+                if (isStartTime) {
+                    preferencesManager?.scheduleStartHour = selectedHour
+                    preferencesManager?.scheduleStartMinute = selectedMinute
+                } else {
+                    preferencesManager?.scheduleEndHour = selectedHour
+                    preferencesManager?.scheduleEndMinute = selectedMinute
+                }
+                updateScheduleDisplay()
+            },
+            hour,
+            minute,
+            false // 12-hour format
+        )
+        timePicker.show()
+    }
+    
+    private fun updateScheduleDisplay() {
+        scheduleEnabledSwitch?.isChecked = preferencesManager?.isScheduleEnabled ?: false
+        scheduleTimesLayout?.visibility = if (preferencesManager?.isScheduleEnabled == true) View.VISIBLE else View.GONE
+        
+        val startHour = preferencesManager?.scheduleStartHour ?: 22
+        val startMinute = preferencesManager?.scheduleStartMinute ?: 0
+        val endHour = preferencesManager?.scheduleEndHour ?: 8
+        val endMinute = preferencesManager?.scheduleEndMinute ?: 0
+        
+        startTimeButton?.text = formatTime(startHour, startMinute)
+        endTimeButton?.text = formatTime(endHour, endMinute)
+    }
+    
+    private fun formatTime(hour: Int, minute: Int): String {
+        val period = if (hour < 12) "AM" else "PM"
+        val displayHour = when {
+            hour == 0 -> 12
+            hour > 12 -> hour - 12
+            else -> hour
+        }
+        return String.format("%d:%02d %s", displayHour, minute, period)
     }
 
 }

@@ -301,6 +301,63 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     private val KEY_MESSENGER_COUNT = "analytics_messenger_count"
     private val KEY_INSTAGRAM_COUNT = "analytics_instagram_count"
     
+    // Schedule preferences
+    private val KEY_SCHEDULE_ENABLED = "schedule_enabled"
+    private val KEY_SCHEDULE_START_HOUR = "schedule_start_hour"
+    private val KEY_SCHEDULE_START_MINUTE = "schedule_start_minute"
+    private val KEY_SCHEDULE_END_HOUR = "schedule_end_hour"
+    private val KEY_SCHEDULE_END_MINUTE = "schedule_end_minute"
+    
+    var isScheduleEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
+        set(enabled) {
+            _sharedPrefs.edit().putBoolean(KEY_SCHEDULE_ENABLED, enabled).apply()
+        }
+    
+    var scheduleStartHour: Int
+        get() = _sharedPrefs.getInt(KEY_SCHEDULE_START_HOUR, 22) // Default 10 PM
+        set(hour) {
+            _sharedPrefs.edit().putInt(KEY_SCHEDULE_START_HOUR, hour).apply()
+        }
+    
+    var scheduleStartMinute: Int
+        get() = _sharedPrefs.getInt(KEY_SCHEDULE_START_MINUTE, 0)
+        set(minute) {
+            _sharedPrefs.edit().putInt(KEY_SCHEDULE_START_MINUTE, minute).apply()
+        }
+    
+    var scheduleEndHour: Int
+        get() = _sharedPrefs.getInt(KEY_SCHEDULE_END_HOUR, 8) // Default 8 AM
+        set(hour) {
+            _sharedPrefs.edit().putInt(KEY_SCHEDULE_END_HOUR, hour).apply()
+        }
+    
+    var scheduleEndMinute: Int
+        get() = _sharedPrefs.getInt(KEY_SCHEDULE_END_MINUTE, 0)
+        set(minute) {
+            _sharedPrefs.edit().putInt(KEY_SCHEDULE_END_MINUTE, minute).apply()
+        }
+    
+    fun isWithinScheduledTime(): Boolean {
+        if (!isScheduleEnabled) return true // Always allow if schedule disabled
+        
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+        val currentTotalMinutes = currentHour * 60 + currentMinute
+        
+        val startTotalMinutes = scheduleStartHour * 60 + scheduleStartMinute
+        val endTotalMinutes = scheduleEndHour * 60 + scheduleEndMinute
+        
+        return if (startTotalMinutes < endTotalMinutes) {
+            // Same day range (e.g., 9 AM to 5 PM)
+            currentTotalMinutes in startTotalMinutes until endTotalMinutes
+        } else {
+            // Crosses midnight (e.g., 10 PM to 8 AM)
+            currentTotalMinutes >= startTotalMinutes || currentTotalMinutes < endTotalMinutes
+        }
+    }
+    
     fun incrementDailyReplyCount() {
         val today = getCurrentDateString()
         val savedDate = _sharedPrefs.getString(KEY_DAILY_DATE, "")
