@@ -43,30 +43,30 @@
   <table>
     <tr>
       <td><img src="screenshots/playstore-screenshots/1-main-dashboard.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/2-custom-reply.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/7-message-logs.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/8-settings.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/2-ai-settings.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/3-ai-provider.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/4-model-selection.png" width="200"/></td>
     </tr>
     <tr>
       <td align="center"><strong>Main Dashboard</strong><br/>Service toggle and quick access to key features</td>
-      <td align="center"><strong>Custom Replies</strong><br/>Create and manage personalized auto-reply messages</td>
-      <td align="center"><strong>Message Logs</strong><br/>View conversation history and track messages</td>
-      <td align="center"><strong>Settings</strong><br/>Configure app preferences and timing controls</td>
+      <td align="center"><strong>AI Settings</strong><br/>Enable AI-powered smart replies with provider options</td>
+      <td align="center"><strong>AI Provider</strong><br/>Choose between Groq (free) and OpenAI providers</td>
+      <td align="center"><strong>Model Selection</strong><br/>Select and configure AI models for responses</td>
     </tr>
   </table>
   
   <table>
     <tr>
-      <td><img src="screenshots/playstore-screenshots/3-ai-settings.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/4-ai-provider.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/5-model-selection.png" width="200"/></td>
-      <td><img src="screenshots/playstore-screenshots/6-custom-prompts.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/5-custom-prompts.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/6-custom-replies.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/7-msg-logs.png" width="200"/></td>
+      <td><img src="screenshots/playstore-screenshots/8-settings.png" width="200"/></td>
     </tr>
     <tr>
-      <td align="center"><strong>AI Settings</strong><br/>Enable AI-powered smart replies with provider options</td>
-      <td align="center"><strong>AI Provider</strong><br/>Choose between Groq (free) and OpenAI providers</td>
-      <td align="center"><strong>Model Selection</strong><br/>Select and configure AI models for responses</td>
       <td align="center"><strong>Custom Prompts</strong><br/>Personalize AI behavior with system instructions</td>
+      <td align="center"><strong>Custom Replies</strong><br/>Create and manage personalized auto-reply messages</td>
+      <td align="center"><strong>Message Logs</strong><br/>View conversation history and track messages</td>
+      <td align="center"><strong>Settings</strong><br/>Configure app preferences and timing controls</td>
     </tr>
   </table>
 </div>
