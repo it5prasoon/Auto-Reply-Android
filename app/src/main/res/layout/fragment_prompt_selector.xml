@@ -44,13 +44,32 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edit Prompt"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Edit Prompt"
+                    android:textStyle="bold"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/generate_with_ai_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✨ AI Generate"
+                    android:textSize="12sp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:icon="@drawable/ic_baseline_smart_toy_24"
+                    app:iconSize="16dp" />
+
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

@@ -17,6 +17,19 @@ import com.matrix.autoreply.R
 import com.matrix.autoreply.constants.PromptTemplate
 import com.matrix.autoreply.constants.PromptTemplates
 import com.matrix.autoreply.preferences.PreferencesManager
+import com.matrix.autoreply.network.AiService
+import com.matrix.autoreply.network.model.ai.AiMessage
+import com.matrix.autoreply.network.model.ai.AiRequest
+import com.matrix.autoreply.network.model.ai.AiResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import android.app.ProgressDialog
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.textfield.TextInputEditText as MaterialTextInputEditText
 
 class PromptSelectorFragment : Fragment() {
 
@@ -25,6 +38,7 @@ class PromptSelectorFragment : Fragment() {
     private lateinit var customPromptCard: MaterialCardView
     private lateinit var customPromptInput: TextInputEditText
     private lateinit var saveButton: MaterialButton
+    private lateinit var generateWithAiButton: MaterialButton
     private lateinit var preferencesManager: PreferencesManager
     
     private var selectedTemplateId: String = "friendly"
@@ -46,9 +60,11 @@ class PromptSelectorFragment : Fragment() {
         customPromptCard = view.findViewById(R.id.custom_prompt_card)
         customPromptInput = view.findViewById(R.id.custom_prompt_input)
         saveButton = view.findViewById(R.id.save_button)
+        generateWithAiButton = view.findViewById(R.id.generate_with_ai_button)
         
         setupRecyclerView()
         setupSaveButton()
+        setupAiGenerateButton()
         loadCurrentSelection()
     }
 
@@ -67,6 +83,119 @@ class PromptSelectorFragment : Fragment() {
         saveButton.setOnClickListener {
             saveSelectedPrompt()
         }
+    }
+    
+    private fun setupAiGenerateButton() {
+        generateWithAiButton.setOnClickListener {
+            showAiGenerateDialog()
+        }
+    }
+    
+    private fun showAiGenerateDialog() {
+        // Check if AI is configured
+        if (!preferencesManager.isAiEnabled || preferencesManager.aiApiKey.isNullOrEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Please configure AI in settings first (API Key required)",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+        
+        // Create EditText programmatically
+        val input = android.widget.EditText(requireContext()).apply {
+            hint = "e.g., Make it more professional, Add humor, Make it shorter"
+            setPadding(50, 40, 50, 40)
+        }
+        
+        AlertDialog.Builder(requireContext())
+            .setTitle("Modify Prompt with AI")
+            .setMessage("Describe how you want to modify the current prompt:")
+            .setView(input)
+            .setPositiveButton("Generate") { _, _ ->
+                val userRequest = input.text?.toString()?.trim() ?: ""
+                if (userRequest.isNotEmpty()) {
+                    generatePromptWithAi(userRequest)
+                } else {
+                    Toast.makeText(requireContext(), "Please enter a modification request", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    private fun generatePromptWithAi(userRequest: String) {
+        val currentPrompt = customPromptInput.text.toString().trim()
+        
+        val progressDialog = ProgressDialog(requireContext()).apply {
+            setMessage("AI is generating your prompt...")
+            setCancelable(false)
+            show()
+        }
+        
+        val systemPrompt = """You are a prompt engineering assistant. Generate a system prompt for an AI auto-reply assistant based on the user's request.
+Current prompt: "$currentPrompt"
+User wants: $userRequest
+
+Generate an improved system prompt that incorporates the user's request. Return ONLY the new system prompt, nothing else. Keep it concise (1-3 sentences)."""
+        
+        val messages = listOf(
+            AiMessage("user", systemPrompt)
+        )
+        
+        val request = AiRequest(
+            model = preferencesManager.aiSelectedModel,
+            messages = messages,
+            maxTokens = 200,
+            temperature = 0.8
+        )
+        
+        val provider = preferencesManager.aiProvider
+        val baseUrl = when (provider) {
+            "groq" -> "https://api.groq.com/openai/"
+            "openai" -> "https://api.openai.com/"
+            else -> "https://api.groq.com/openai/"
+        }
+        
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        
+        val service = retrofit.create(AiService::class.java)
+        val call = service.getChatCompletion("Bearer ${preferencesManager.aiApiKey}", request)
+        
+        call.enqueue(object : Callback<AiResponse> {
+            override fun onResponse(call: Call<AiResponse>, response: Response<AiResponse>) {
+                progressDialog.dismiss()
+                
+                if (response.isSuccessful && response.body() != null) {
+                    val aiResponse = response.body()!!
+                    if (aiResponse.choices.isNotEmpty()) {
+                        val generatedPrompt = aiResponse.choices[0].message.content.trim()
+                        customPromptInput.setText(generatedPrompt)
+                        Toast.makeText(requireContext(), "Prompt generated successfully!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to generate prompt", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "AI generation failed. Please check your API key.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            
+            override fun onFailure(call: Call<AiResponse>, t: Throwable) {
+                progressDialog.dismiss()
+                Toast.makeText(
+                    requireContext(),
+                    "Network error: ${t.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     private fun loadCurrentSelection() {
