@@ -118,18 +118,30 @@
         <h3>💬 Custom Responses</h3>
         <p>Set your own automated reply messages</p>
       </td>
+      <td align="center">
+        <h3>✨ AI Prompt Templates</h3>
+        <p>10 pre-made personality styles or create your own</p>
+      </td>
     </tr>
     <tr>
+      <td align="center">
+        <h3>🎨 AI Prompt Generator</h3>
+        <p>Use AI to refine and customize your prompts</p>
+      </td>
+      <td align="center">
+        <h3>📊 Analytics Dashboard</h3>
+        <p>Track daily replies, totals, and AI vs Custom usage</p>
+      </td>
       <td align="center">
         <h3>🔒 Privacy First</h3>
         <p>No data collection or tracking of your activities</p>
       </td>
+    </tr>
+    <tr>
       <td align="center">
         <h3>⏱️ Smart Timing</h3>
         <p>Control reply frequency to avoid spam</p>
       </td>
-    </tr>
-    <tr>
       <td align="center">
         <h3>📁 Message Logs</h3>
         <p>Keep records even if messages are deleted</p>
@@ -180,18 +192,60 @@
 - **Coroutines** - Asynchronous programming
 - **Notification Listener** - Core messaging functionality
 
+## 🆕 What's New
+
+### AI Prompt Templates System
+Choose from 10 pre-made personality styles or create your own:
+- ✏️ **Custom Prompt** - Blank slate for complete customization
+- 😊 **Friendly & Casual** - Warm, approachable responses
+- 💼 **Professional** - Formal, business-appropriate tone
+- ⏰ **Busy Person** - Quick acknowledgments
+- 😄 **Humorous & Fun** - Light-hearted, witty responses
+- 💙 **Supportive & Caring** - Empathetic, understanding
+- ✓ **Minimal Responder** - Short, to-the-point (1-3 words)
+- 🎉 **Enthusiastic** - Energetic, positive vibes
+- 📚 **Academic/Student** - Scholarly, study-focused
+- 🚀 **Entrepreneur/Hustler** - Business-focused, goal-oriented
+
+**All templates are fully editable** - Select any template and customize it to match your exact needs!
+
+### AI Prompt Generator
+Use AI to refine your prompts with natural language:
+- Click "✨ AI Generate" button in prompt editor
+- Describe how you want to modify the prompt
+  - "Make it more professional"
+  - "Add humor and warmth"
+  - "Keep responses under 15 words"
+  - "Sound like a busy entrepreneur"
+- AI generates an improved version instantly
+- Uses your existing API key - no additional setup!
+
+### Analytics Dashboard
+Track your auto-reply activity directly on the main screen:
+- 📊 **Today's Replies** - See how many replies sent today
+- 📈 **Total Replies** - All-time counter since installation
+- 🤖 **AI vs Custom** - Breakdown of reply types used
+- 📱 **Per-App Tracking** - WhatsApp, Instagram, Messenger stats
+- 🔥 **Firebase Analytics** - Detailed insights and usage patterns
+
 ## 📋 Roadmap
 
 - [x] **AI-Powered Smart Replies** - Groq & OpenAI integration
 - [x] **Dual Provider Support** - Free (Groq) and Premium (OpenAI) options
 - [x] **Custom System Messages** - Personalize AI behavior
 - [x] **Instagram Support** - Auto-reply for Instagram Direct Messages
+- [x] **AI Prompt Templates** - 10 pre-made personality styles (Friendly, Professional, Humorous, etc.)
+- [x] **AI Prompt Generator** - Use AI to refine and customize prompts
+- [x] **Analytics Dashboard** - Track daily/total replies and usage metrics
+- [x] **Firebase Analytics** - Detailed event tracking for insights
 - [ ] Implement Dependency Injection (Dagger/Hilt)
 - [ ] UI/UX improvements and Material Design 3
 - [ ] MVVM architecture refactoring
 - [ ] Multi-language support expansion
 - [ ] Advanced scheduling features
-- [ ] Support for additional messaging platforms
+- [ ] Support for additional messaging platforms (Telegram, Slack, Discord)
+- [ ] Contact-specific rules and VIP contacts
+- [ ] Time-based auto-reply scheduling
 
 ## 🚀 Getting Started
 
