@@ -15,8 +15,9 @@ class ContactNameFragment : Fragment(), RefreshListener {
 
     private var _binding: FragmentContactNameBinding? = null
     private val binding get() = _binding!!
+    private lateinit var messageLogsDB: MessageLogsDB
     private val adapter: ContactNameAdapter by lazy {
-        ContactNameAdapter { contactName ->
+        ContactNameAdapter(messageLogsDB) { contactName ->
             // Handle the click event here
             // Create and show the MessageListFragment with the selected contact name
             val fragment = MessageListFragment.newInstance(contactName)
@@ -40,6 +41,9 @@ class ContactNameFragment : Fragment(), RefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize database
+        messageLogsDB = MessageLogsDB.getInstance(requireContext())!!
+        
         // Getting all notification titles i.e. WhatsApp user-name from room DB
         updateUserNameList()
 
