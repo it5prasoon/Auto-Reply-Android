@@ -44,11 +44,13 @@ object NotificationUtils {
     }
 
     fun extractWearNotification(statusBarNotification: StatusBarNotification): NotificationWear {
-        val wearableExtender = NotificationCompat.WearableExtender(statusBarNotification.notification)
-        val actions = wearableExtender.actions
-        val remoteInputs: MutableList<RemoteInput> = ArrayList(actions.size)
+        val remoteInputs: MutableList<RemoteInput> = ArrayList()
         var pendingIntent: PendingIntent? = null
-        for (act in actions) {
+        
+        // First try to get actions from WearableExtender (for WhatsApp, Messenger)
+        val wearableExtender = NotificationCompat.WearableExtender(statusBarNotification.notification)
+        val wearableActions = wearableExtender.actions
+        for (act in wearableActions) {
             if (act != null && act.remoteInputs != null) {
                 for (x in act.remoteInputs!!.indices) {
                     val remoteInput = act.remoteInputs!![x]
@@ -57,6 +59,28 @@ object NotificationUtils {
                 }
             }
         }
+        
+        // If no actions found in WearableExtender, check standard notification actions (for Instagram)
+        if (remoteInputs.isEmpty()) {
+            val standardActions = statusBarNotification.notification.actions
+            if (standardActions != null) {
+                for (action in standardActions) {
+                    if (action?.remoteInputs != null) {
+                        for (androidRemoteInput in action.remoteInputs!!) {
+                            // Convert android.app.RemoteInput to androidx.core.app.RemoteInput
+                            val remoteInput = RemoteInput.Builder(androidRemoteInput.resultKey)
+                                .setLabel(androidRemoteInput.label)
+                                .setChoices(androidRemoteInput.choices)
+                                .setAllowFreeFormInput(androidRemoteInput.allowFreeFormInput)
+                                .build()
+                            remoteInputs.add(remoteInput)
+                            pendingIntent = action.actionIntent
+                        }
+                    }
+                }
+            }
+        }
+        
         return NotificationWear(
             statusBarNotification.packageName,
             pendingIntent,

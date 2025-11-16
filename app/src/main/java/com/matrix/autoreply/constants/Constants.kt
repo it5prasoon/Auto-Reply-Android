@@ -16,7 +16,8 @@ object Constants {
 
     val SUPPORTED_APPS: List<App> = mutableListOf(
             App("WhatsApp", "com.whatsapp"),
-            App("Facebook Messenger", "com.facebook.orca")
+            App("Facebook Messenger", "com.facebook.orca"),
+            App("Instagram", "com.instagram.android")
     )
 
     const val MIN_DAYS = 0

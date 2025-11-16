@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🤖 AutoReply - Custom or AI Smart Messenger</h1>
-  <p><strong>Best Free WhatsApp Auto Reply App for Android | Automatic Message Responder | AI-Powered Smart Replies</strong></p>
+  <p><strong>Best Free Auto Reply App for WhatsApp, Instagram & Messenger | Automatic Message Responder | AI-Powered Smart Replies</strong></p>
   
   <p>
     <a href="https://play.google.com/store/apps/details?id=com.matrix.autoreply">
@@ -18,13 +18,14 @@
 
 ## ✨ Overview
 
-**AutoReply** is the #1 free WhatsApp auto reply app for Android that automatically sends messages on WhatsApp, Facebook Messenger, and other messaging apps. Perfect for busy professionals, students, and anyone who wants to stay connected 24/7 with automatic message responses.
+**AutoReply** is the #1 free WhatsApp auto reply app for Android that automatically sends messages on WhatsApp, Facebook Messenger, Instagram, and other messaging apps. Perfect for busy professionals, students, and anyone who wants to stay connected 24/7 with automatic message responses.
 
 **Youtube Link:** https://youtube.com/shorts/_Dk9octBRbk?si=5lFMLGUn3D-O7VPB
 
-### 🔥 **Why Choose AutoReply for WhatsApp?**
-- **100% Free** WhatsApp auto reply solution
+### 🔥 **Why Choose AutoReply?**
+- **100% Free** auto reply for WhatsApp, Instagram & Messenger
 - **AI-Powered Smart Replies** with ChatGPT-like responses
+- **Multi-Platform Support** - WhatsApp, Instagram DMs, Facebook Messenger
 - **No Root Required** - works on all Android devices
 - **Privacy First** - your messages stay on your device
 - **Works Offline** - no internet required for custom replies
@@ -79,6 +80,30 @@
 </div>
 
 
+
+## 📱 Supported Platforms
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="33%">
+        <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp">
+        <br><strong>WhatsApp</strong>
+        <br>Full auto-reply support for individual and group chats
+      </td>
+      <td align="center" width="33%">
+        <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram">
+        <br><strong>Instagram</strong>
+        <br>Auto-reply for Instagram Direct Messages
+      </td>
+      <td align="center" width="33%">
+        <img src="https://img.shields.io/badge/Messenger-00B2FF?style=for-the-badge&logo=messenger&logoColor=white" alt="Messenger">
+        <br><strong>Facebook Messenger</strong>
+        <br>Automatic responses for Messenger conversations
+      </td>
+    </tr>
+  </table>
+</div>
 
 ## 🎆 Features
 
@@ -160,11 +185,13 @@
 - [x] **AI-Powered Smart Replies** - Groq & OpenAI integration
 - [x] **Dual Provider Support** - Free (Groq) and Premium (OpenAI) options
 - [x] **Custom System Messages** - Personalize AI behavior
+- [x] **Instagram Support** - Auto-reply for Instagram Direct Messages
 - [ ] Implement Dependency Injection (Dagger/Hilt)
 - [ ] UI/UX improvements and Material Design 3
 - [ ] MVVM architecture refactoring
 - [ ] Multi-language support expansion
 - [ ] Advanced scheduling features
+- [ ] Support for additional messaging platforms
 
 ## 🚀 Getting Started
 
@@ -273,4 +300,3 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
   <p><strong>Made with ❤️ by it5prasoon</strong></p>
   <p>If this project helped you, please consider giving it a ⭐️</p>
 </div>
-
