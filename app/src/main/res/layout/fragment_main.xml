@@ -9,20 +9,6 @@
         tools:context=".ui.fragment.MainFragment">
 
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:paddingBottom="15dp"
-            android:text="@string/to_help_you_leave_whatsapp"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toTopOf="parent" />
-
         <!-- Main Auto Reply enable switch -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mainAutoReplySwitchCardView"
@@ -30,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             ads:layout_constraintBottom_toTopOf="@id/replyOptionsCardView"
-            ads:layout_constraintTop_toBottomOf="@+id/textView5"
+            ads:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="154dp">
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -345,6 +331,114 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Analytics/Metrics Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/analyticsCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/replyFrequencyTimePickerCardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/analyticsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Reply Statistics"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
+                    ads:layout_constraintTop_toBottomOf="@+id/analyticsTitle">
+
+                    <!-- Daily Replies -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Today's Replies"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/dailyRepliesCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Total Replies -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Total Replies"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/totalRepliesCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- AI vs Custom -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="AI Replies / Custom"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/aiVsCustomCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 / 0"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
@@ -356,7 +450,7 @@
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintHorizontal_bias="0.0"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/replyFrequencyTimePickerCardView"
+            ads:layout_constraintTop_toBottomOf="@+id/analyticsCardView"
             ads:layout_constraintVertical_bias="0.969" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

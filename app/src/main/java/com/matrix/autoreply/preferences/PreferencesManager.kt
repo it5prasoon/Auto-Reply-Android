@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import com.matrix.autoreply.constants.Constants
+import java.text.SimpleDateFormat
 import java.util.*
 
 class PreferencesManager private constructor(private val thisAppContext: Context) {
@@ -289,6 +290,86 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             editor.putString(KEY_AI_PROMPT_TEMPLATE_ID, templateId)
             editor.apply()
         }
+    
+    // Analytics preferences
+    private val KEY_TOTAL_REPLIES = "analytics_total_replies"
+    private val KEY_DAILY_REPLIES = "analytics_daily_replies"
+    private val KEY_DAILY_DATE = "analytics_daily_date"
+    private val KEY_AI_REPLIES = "analytics_ai_replies"
+    private val KEY_CUSTOM_REPLIES = "analytics_custom_replies"
+    private val KEY_WHATSAPP_COUNT = "analytics_whatsapp_count"
+    private val KEY_MESSENGER_COUNT = "analytics_messenger_count"
+    private val KEY_INSTAGRAM_COUNT = "analytics_instagram_count"
+    
+    fun incrementDailyReplyCount() {
+        val today = getCurrentDateString()
+        val savedDate = _sharedPrefs.getString(KEY_DAILY_DATE, "")
+        
+        if (today != savedDate) {
+            // New day, reset daily counter
+            _sharedPrefs.edit().putInt(KEY_DAILY_REPLIES, 1).putString(KEY_DAILY_DATE, today).apply()
+        } else {
+            val current = _sharedPrefs.getInt(KEY_DAILY_REPLIES, 0)
+            _sharedPrefs.edit().putInt(KEY_DAILY_REPLIES, current + 1).apply()
+        }
+    }
+    
+    fun getDailyReplyCount(): Int {
+        val today = getCurrentDateString()
+        val savedDate = _sharedPrefs.getString(KEY_DAILY_DATE, "")
+        return if (today == savedDate) {
+            _sharedPrefs.getInt(KEY_DAILY_REPLIES, 0)
+        } else {
+            0
+        }
+    }
+    
+    fun incrementTotalReplyCount() {
+        val current = _sharedPrefs.getInt(KEY_TOTAL_REPLIES, 0)
+        _sharedPrefs.edit().putInt(KEY_TOTAL_REPLIES, current + 1).apply()
+    }
+    
+    fun getTotalReplyCount(): Int {
+        return _sharedPrefs.getInt(KEY_TOTAL_REPLIES, 0)
+    }
+    
+    fun incrementAiReplyCount() {
+        val current = _sharedPrefs.getInt(KEY_AI_REPLIES, 0)
+        _sharedPrefs.edit().putInt(KEY_AI_REPLIES, current + 1).apply()
+    }
+    
+    fun getAiReplyCount(): Int {
+        return _sharedPrefs.getInt(KEY_AI_REPLIES, 0)
+    }
+    
+    fun incrementCustomReplyCount() {
+        val current = _sharedPrefs.getInt(KEY_CUSTOM_REPLIES, 0)
+        _sharedPrefs.edit().putInt(KEY_CUSTOM_REPLIES, current + 1).apply()
+    }
+    
+    fun getCustomReplyCount(): Int {
+        return _sharedPrefs.getInt(KEY_CUSTOM_REPLIES, 0)
+    }
+    
+    fun incrementAppSpecificCount(packageName: String) {
+        val key = when (packageName) {
+            "com.whatsapp" -> KEY_WHATSAPP_COUNT
+            "com.facebook.orca" -> KEY_MESSENGER_COUNT
+            "com.instagram.android" -> KEY_INSTAGRAM_COUNT
+            else -> return
+        }
+        val current = _sharedPrefs.getInt(key, 0)
+        _sharedPrefs.edit().putInt(key, current + 1).apply()
+    }
+    
+    fun getWhatsAppCount(): Int = _sharedPrefs.getInt(KEY_WHATSAPP_COUNT, 0)
+    fun getMessengerCount(): Int = _sharedPrefs.getInt(KEY_MESSENGER_COUNT, 0)
+    fun getInstagramCount(): Int = _sharedPrefs.getInt(KEY_INSTAGRAM_COUNT, 0)
+    
+    private fun getCurrentDateString(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
 
     companion object {
         private var _instance: PreferencesManager? = null

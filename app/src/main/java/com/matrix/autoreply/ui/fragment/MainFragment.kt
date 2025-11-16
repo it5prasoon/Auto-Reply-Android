@@ -57,6 +57,9 @@ class MainFragment : Fragment() {
     private var selectAppsLabel: TextView? = null
     private val supportedAppsCheckboxes: MutableList<MaterialCheckBox> = ArrayList()
     private val supportedAppsDummyViews: MutableList<View> = ArrayList()
+    private var dailyRepliesText: TextView? = null
+    private var totalRepliesText: TextView? = null
+    private var aiVsCustomText: TextView? = null
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
@@ -100,6 +103,9 @@ class MainFragment : Fragment() {
         timeSelectedTextPreview = binding.timeSelectedText
         imgMinus = binding.imgMinus
         imgPlus = binding.imgPlus
+        dailyRepliesText = binding.dailyRepliesCount
+        totalRepliesText = binding.totalRepliesCount
+        aiVsCustomText = binding.aiVsCustomCount
         handleReplyOptionsCard()
 
         customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
@@ -268,6 +274,17 @@ class MainFragment : Fragment() {
 
         // Set user auto reply text
         customTextPreview!!.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
+        
+        // Update analytics
+        updateAnalytics()
+    }
+    
+    private fun updateAnalytics() {
+        dailyRepliesText?.text = preferencesManager?.getDailyReplyCount().toString()
+        totalRepliesText?.text = preferencesManager?.getTotalReplyCount().toString()
+        val aiCount = preferencesManager?.getAiReplyCount() ?: 0
+        val customCount = preferencesManager?.getCustomReplyCount() ?: 0
+        aiVsCustomText?.text = "$aiCount / $customCount"
     }
 
     private fun setSwitchState() {

@@ -16,6 +16,7 @@ import com.matrix.autoreply.preferences.PreferencesManager
 import com.matrix.autoreply.utils.DbUtils
 import com.matrix.autoreply.utils.NotificationUtils
 import com.matrix.autoreply.utils.AiReplyHandler
+import com.matrix.autoreply.utils.AnalyticsTracker
 
 
 class ForegroundNotificationService : NotificationListenerService() {
@@ -83,20 +84,20 @@ class ForegroundNotificationService : NotificationListenerService() {
         if (preferencesManager.isAiEnabled && preferencesManager.aiApiKey?.isNotEmpty() == true) {
             AiReplyHandler.generateReply(this, incomingMessage, object : AiReplyHandler.AiReplyCallback {
                 override fun onReplyGenerated(reply: String) {
-                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply)
+                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply, isAiReply = true)
                 }
                 
                 override fun onError(errorMessage: String) {
                     Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
                     // Fallback to custom reply
                     val customReply = getCustomReply()
-                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply)
+                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
                 }
             })
         } else {
             // Use custom reply directly
             val customReply = getCustomReply()
-            sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply)
+            sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
         }
     }
     
@@ -109,7 +110,8 @@ class ForegroundNotificationService : NotificationListenerService() {
         sbn: StatusBarNotification, 
         pendingIntent: PendingIntent?, 
         remoteInputs1: Array<RemoteInput>, 
-        replyText: String
+        replyText: String,
+        isAiReply: Boolean = false
     ) {
         val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
         val localIntent = Intent()
@@ -129,6 +131,16 @@ class ForegroundNotificationService : NotificationListenerService() {
                 }
                 dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
                 pendingIntent.send(this, 0, localIntent)
+                
+                // Track analytics
+                val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
+                AnalyticsTracker.trackReplySent(
+                    applicationContext,
+                    sbn.packageName,
+                    isAiReply,
+                    isGroupMsg
+                )
+                
                 if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
                     sbn.notification?.extras?.getString("android.title")
                         ?.let {

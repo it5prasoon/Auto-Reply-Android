@@ -17,6 +17,7 @@ import com.matrix.autoreply.R
 import com.matrix.autoreply.constants.PromptTemplate
 import com.matrix.autoreply.constants.PromptTemplates
 import com.matrix.autoreply.preferences.PreferencesManager
+import com.matrix.autoreply.utils.AnalyticsTracker
 import com.matrix.autoreply.network.AiService
 import com.matrix.autoreply.network.model.ai.AiMessage
 import com.matrix.autoreply.network.model.ai.AiRequest
@@ -174,11 +175,19 @@ Generate an improved system prompt that incorporates the user's request. Return 
                     if (aiResponse.choices.isNotEmpty()) {
                         val generatedPrompt = aiResponse.choices[0].message.content.trim()
                         customPromptInput.setText(generatedPrompt)
+                        
+                        // Track success
+                        AnalyticsTracker.trackAiPromptGenerated(requireContext(), true)
+                        
                         Toast.makeText(requireContext(), "Prompt generated successfully!", Toast.LENGTH_SHORT).show()
                     } else {
+                        // Track failure
+                        AnalyticsTracker.trackAiPromptGenerated(requireContext(), false)
                         Toast.makeText(requireContext(), "Failed to generate prompt", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    // Track failure
+                    AnalyticsTracker.trackAiPromptGenerated(requireContext(), false)
                     Toast.makeText(
                         requireContext(),
                         "AI generation failed. Please check your API key.",
@@ -258,6 +267,9 @@ Generate an improved system prompt that incorporates the user's request. Return 
         // Save to preferences
         preferencesManager.aiPromptTemplateId = selectedTemplateId
         preferencesManager.aiSystemMessage = promptToSave
+        
+        // Track analytics
+        AnalyticsTracker.trackPromptTemplateSelected(requireContext(), selectedTemplateId)
         
         Toast.makeText(
             requireContext(),
