@@ -39,6 +39,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupProviderPreference()
         setupApiKeyPreference()
         setupModelPreference()
+        setupSystemMessagePreference()
         setupGetApiKeyPreference()
 
         setupStatusPreference()
@@ -142,6 +143,18 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 true
             }
             loadAiModels()
+        }
+    }
+    
+    private fun setupSystemMessagePreference() {
+        val systemMessagePref = findPreference<Preference>("pref_ai_system_message")
+        systemMessagePref?.setOnPreferenceClickListener {
+            // Navigate to PromptSelectorFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PromptSelectorFragment())
+                .addToBackStack(null)
+                .commit()
+            true
         }
     }
     

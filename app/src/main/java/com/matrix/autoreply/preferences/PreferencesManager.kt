@@ -212,6 +212,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     private val KEY_AI_LAST_ERROR_MESSAGE = "pref_ai_last_error_message"
     private val KEY_AI_LAST_ERROR_TIMESTAMP = "pref_ai_last_error_timestamp"
     private val KEY_AI_SYSTEM_MESSAGE = "pref_ai_system_message"
+    private val KEY_AI_PROMPT_TEMPLATE_ID = "pref_ai_prompt_template_id"
     
     var isAiEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_AI_ENABLED, false)
@@ -278,6 +279,14 @@ class PreferencesManager private constructor(private val thisAppContext: Context
         set(message) {
             val editor = _sharedPrefs.edit()
             editor.putString(KEY_AI_SYSTEM_MESSAGE, message)
+            editor.apply()
+        }
+    
+    var aiPromptTemplateId: String?
+        get() = _sharedPrefs.getString(KEY_AI_PROMPT_TEMPLATE_ID, "friendly")
+        set(templateId) {
+            val editor = _sharedPrefs.edit()
+            editor.putString(KEY_AI_PROMPT_TEMPLATE_ID, templateId)
             editor.apply()
         }
 

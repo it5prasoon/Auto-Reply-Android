@@ -62,13 +62,10 @@
             app:iconSpaceReserved="false"
             android:dependency="pref_ai_enabled" />
 
-        <EditTextPreference
+        <Preference
             android:key="pref_ai_system_message"
-            android:title="System Prompt"
-            android:summary="@string/pref_ai_system_message_summary"
-            android:dialogTitle="Customize System Prompt"
-            android:inputType="textMultiLine"
-            android:defaultValue="You are a helpful assistant. Keep your replies concise and friendly."
+            android:title="AI Prompt Style"
+            android:summary="Choose from pre-made templates or create custom"
             app:iconSpaceReserved="false"
             android:dependency="pref_ai_enabled" />
 
