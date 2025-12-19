@@ -21,6 +21,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     private val KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION = "pref_is_append_watomatic_attribution"
     private val KEY_PURGE_MESSAGE_LOGS_LAST_TIME = "pref_purge_message_logs_last_time"
     private val KEY_PLAY_STORE_RATING_STATUS = "pref_play_store_rating_status"
+    private val KEY_PROMPT_MIGRATION_VERSION = "pref_prompt_migration_version"
     private var KEY_IS_SHOW_NOTIFICATIONS_ENABLED: String? = null
     private var KEY_SELECTED_APP_LANGUAGE: String? = null
     private val _sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(thisAppContext)
@@ -43,8 +44,12 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             if (!_sharedPrefs.contains(KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION)) {
                 setAppendAutoreplyAttribution(true)
             }
+            // Set migration version for fresh installs
+            _sharedPrefs.edit().putInt(KEY_PROMPT_MIGRATION_VERSION, CURRENT_PROMPT_VERSION).apply()
         } else {
             updateLegacyLanguageKey()
+            // One-time prompt migration for existing users on app update
+            migratePromptIfNeeded()
         }
     }
 
@@ -207,6 +212,37 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             )
         }
 
+    /**
+     * One-time migration to update old default prompts to new human-like prompts.
+     * Only runs once per version bump and only if user hasn't customized their prompt.
+     */
+    private fun migratePromptIfNeeded() {
+        val lastMigratedVersion = _sharedPrefs.getInt(KEY_PROMPT_MIGRATION_VERSION, 0)
+        
+        if (lastMigratedVersion < CURRENT_PROMPT_VERSION) {
+            // Check if user has the old default prompt (or similar old versions)
+            val currentPrompt = _sharedPrefs.getString(KEY_AI_SYSTEM_MESSAGE, null)
+            
+            val oldDefaultPrompts = listOf(
+                "You are a helpful assistant. Keep your replies concise and friendly.",
+                "You are a helpful assistant",
+                "You are a friendly and casual assistant. Keep your responses warm, approachable, and conversational. Use a relaxed tone while being helpful. Keep replies concise (1-2 sentences) and natural, as if texting a friend."
+            )
+            
+            // Only migrate if user has an old default prompt (not a truly custom one)
+            if (currentPrompt == null || oldDefaultPrompts.any { currentPrompt.contains(it) }) {
+                // Migrate to new human-like prompt
+                _sharedPrefs.edit()
+                    .putString(KEY_AI_SYSTEM_MESSAGE, DEFAULT_SYSTEM_MESSAGE)
+                    .putString(KEY_AI_PROMPT_TEMPLATE_ID, "friendly")
+                    .apply()
+            }
+            
+            // Mark migration as complete
+            _sharedPrefs.edit().putInt(KEY_PROMPT_MIGRATION_VERSION, CURRENT_PROMPT_VERSION).apply()
+        }
+    }
+    
     fun updateLegacyLanguageKey() {
         val thisLangStr = getSelectedLanguageStr(null)
         if (thisLangStr == null || thisLangStr.isEmpty()) {
@@ -316,7 +352,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     }
     
     var aiSystemMessage: String
-        get() = _sharedPrefs.getString(KEY_AI_SYSTEM_MESSAGE, "You are a helpful assistant. Keep your replies concise and friendly.") ?: "You are a helpful assistant. Keep your replies concise and friendly."
+        get() = _sharedPrefs.getString(KEY_AI_SYSTEM_MESSAGE, DEFAULT_SYSTEM_MESSAGE) ?: DEFAULT_SYSTEM_MESSAGE
         set(message) {
             val editor = _sharedPrefs.edit()
             editor.putString(KEY_AI_SYSTEM_MESSAGE, message)
@@ -516,6 +552,13 @@ class PreferencesManager private constructor(private val thisAppContext: Context
 
     companion object {
         private var _instance: PreferencesManager? = null
+        
+        // Prompt migration version - increment this when you want to re-migrate prompts
+        const val CURRENT_PROMPT_VERSION = 1
+        
+        // Human-like default prompt that matches response length to message length
+        const val DEFAULT_SYSTEM_MESSAGE = "Reply like a friend texting. IMPORTANT: Match response length to message length. For greetings like 'Hi', 'Hey', 'Hello' - reply with just 'Hey!' or 'Hi there!' (2-3 words max). For questions, answer briefly (1 sentence). Never be verbose or robotic. Sound natural and human."
+        
         @JvmStatic
         fun getPreferencesInstance(context: Context): PreferencesManager? {
             if (_instance == null) {
