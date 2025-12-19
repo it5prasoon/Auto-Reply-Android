@@ -4,11 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.matrix.autoreply.R
 import com.matrix.autoreply.model.App
-import com.google.gson.reflect.TypeToken
-import com.google.gson.Gson
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
-import com.matrix.autoreply.constants.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,6 +17,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     private val KEY_GROUP_REPLY_ENABLED = "pref_group_reply_enabled"
     private val KEY_AUTO_REPLY_THROTTLE_TIME_MS = "pref_auto_reply_throttle_time_ms"
     private val KEY_SELECTED_APPS_ARR = "pref_selected_apps_arr"
+    private val KEY_ENABLED_APPS_STRING = "pref_enabled_apps_string"
     private val KEY_IS_APPEND_AUTOREPLY_ATTRIBUTION = "pref_is_append_watomatic_attribution"
     private val KEY_PURGE_MESSAGE_LOGS_LAST_TIME = "pref_purge_message_logs_last_time"
     private val KEY_PLAY_STORE_RATING_STATUS = "pref_play_store_rating_status"
@@ -32,11 +30,13 @@ class PreferencesManager private constructor(private val thisAppContext: Context
         KEY_SELECTED_APP_LANGUAGE = thisAppContext.getString(R.string.key_pref_app_language)
         KEY_IS_SHOW_NOTIFICATIONS_ENABLED = thisAppContext.getString(R.string.pref_show_notification_replied_msg)
 
+        // Check for new install - must check BOTH old and new storage keys
         val newInstall = (!_sharedPrefs.contains(KEY_SERVICE_ENABLED)
-                && !_sharedPrefs.contains(KEY_SELECTED_APPS_ARR))
+                && !_sharedPrefs.contains(KEY_SELECTED_APPS_ARR)
+                && !_sharedPrefs.contains(KEY_ENABLED_APPS_STRING))
         if (newInstall) {
-            setAppsAsEnabled(Constants.SUPPORTED_APPS)
-
+            // Only enable WhatsApp by default, not all supported apps
+            setAppsAsEnabled(mutableListOf(App("WhatsApp", "com.whatsapp")))
             setShowNotificationPref(true)
         }
         if (isFirstInstall(thisAppContext)) {
@@ -95,36 +95,76 @@ class PreferencesManager private constructor(private val thisAppContext: Context
 
     val enabledApps: MutableSet<String>
         get() {
-            var enabledAppsJsonStr = _sharedPrefs.getString(KEY_SELECTED_APPS_ARR, null)
-
-            if (enabledAppsJsonStr == null || enabledAppsJsonStr == "[]") {
-                enabledAppsJsonStr = setAppsAsEnabled(mutableListOf(App("WhatsApp", "com.whatsapp")))
+            // First check for new string format
+            val storedString = _sharedPrefs.getString(KEY_ENABLED_APPS_STRING, null)
+            if (storedString != null) {
+                if (storedString.isEmpty()) {
+                    return mutableSetOf()
+                }
+                return storedString.split(",").toMutableSet()
             }
-            val type = object : TypeToken<Set<String?>?>() {}.type
-            return Gson().fromJson(enabledAppsJsonStr, type)
+            
+            // Migration: Try old StringSet format
+            try {
+                val stringSet = _sharedPrefs.getStringSet(KEY_SELECTED_APPS_ARR, null)
+                if (stringSet != null && stringSet.isNotEmpty()) {
+                    val result = stringSet.toMutableSet()
+                    // Migrate to new format
+                    setEnabledPackageList(result)
+                    return result
+                }
+            } catch (e: ClassCastException) {
+                // Try JSON format
+            }
+            
+            // Migration: Try old JSON string format
+            val jsonString = _sharedPrefs.getString(KEY_SELECTED_APPS_ARR, null)
+            if (jsonString != null && jsonString.startsWith("[")) {
+                try {
+                    val packageSet = mutableSetOf<String>()
+                    val cleaned = jsonString.trim().removeSurrounding("[", "]")
+                    if (cleaned.isNotEmpty()) {
+                        cleaned.split(",").forEach { item ->
+                            val packageName = item.trim().removeSurrounding("\"")
+                            if (packageName.isNotEmpty()) {
+                                packageSet.add(packageName)
+                            }
+                        }
+                    }
+                    if (packageSet.isNotEmpty()) {
+                        setEnabledPackageList(packageSet)
+                        return packageSet
+                    }
+                } catch (e: Exception) {
+                    // Fall through to default
+                }
+            }
+            
+            // No data found, set default (WhatsApp only)
+            val defaultSet = mutableSetOf("com.whatsapp")
+            setEnabledPackageList(defaultSet)
+            return defaultSet
         }
 
     fun isAppEnabled(thisApp: App): Boolean {
         return enabledApps.contains(thisApp.packageName)
     }
 
-    private fun serializeAndSetEnabledPackageList(packageList: Collection<String>): String {
-        val jsonStr = Gson().toJson(packageList)
-        val editor = _sharedPrefs.edit()
-        editor.putString(KEY_SELECTED_APPS_ARR, jsonStr)
-        editor.apply()
-        return jsonStr
+    private fun setEnabledPackageList(packageList: Collection<String>) {
+        // Store as comma-separated string - simpler and no Android StringSet bugs
+        val stringValue = packageList.joinToString(",")
+        _sharedPrefs.edit().putString(KEY_ENABLED_APPS_STRING, stringValue).commit()
     }
 
-    fun setAppsAsEnabled(apps: List<App>): String {
+    fun setAppsAsEnabled(apps: List<App>) {
         val packageNames: MutableSet<String> = HashSet()
         for ((_, packageName) in apps) {
             packageNames.add(packageName)
         }
-        return serializeAndSetEnabledPackageList(packageNames)
+        setEnabledPackageList(packageNames)
     }
 
-    fun saveEnabledApps(app: App, isSelected: Boolean): String {
+    fun saveEnabledApps(app: App, isSelected: Boolean) {
         val enabledPackages = enabledApps
         if (!isSelected) {
             //remove the given platform
@@ -133,7 +173,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             //add the given platform
             enabledPackages.add(app.packageName)
         }
-        return serializeAndSetEnabledPackageList(enabledPackages)
+        setEnabledPackageList(enabledPackages)
     }
 
     fun setAppendAutoreplyAttribution(enabled: Boolean) {

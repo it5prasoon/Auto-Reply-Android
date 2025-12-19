@@ -76,6 +76,7 @@ class MainFragment : Fragment() {
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
     private lateinit var adView: AdView
+    private var isUpdatingCheckboxes = false // Flag to prevent validation during programmatic updates
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -223,6 +224,8 @@ class MainFragment : Fragment() {
 
     private fun createSupportedAppCheckboxes() {
         supportedAppsLayout!!.removeAllViews()
+        supportedAppsCheckboxes.clear()
+        supportedAppsDummyViews.clear()
 
         //inflate the views
         val inflater = layoutInflater
@@ -231,9 +234,12 @@ class MainFragment : Fragment() {
             val checkBox = view.findViewById<MaterialCheckBox>(R.id.platform_checkbox)
             checkBox.text = supportedApp.name
             checkBox.tag = supportedApp
+            
+            // Set state without triggering listeners
+            checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = preferencesManager!!.isAppEnabled(supportedApp)
             checkBox.isEnabled = mainAutoReplySwitch!!.isChecked
-            checkBox.setOnCheckedChangeListener(supportedAppsCheckboxListener)
+            
             supportedAppsCheckboxes.add(checkBox)
             val platformDummyView = view.findViewById<View>(R.id.platform_dummy_view)
             if (mainAutoReplySwitch!!.isChecked) {
@@ -251,19 +257,20 @@ class MainFragment : Fragment() {
             supportedAppsDummyViews.add(platformDummyView)
             supportedAppsLayout!!.addView(view)
         }
+        
+        // Now set listeners after all checkboxes are properly initialized
+        for (checkBox in supportedAppsCheckboxes) {
+            checkBox.setOnCheckedChangeListener(supportedAppsCheckboxListener)
+        }
     }
 
     private val supportedAppsCheckboxListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-        if (!isChecked && preferencesManager!!.enabledApps.size <= 1) { // Keep at-least one app selected
-            Toast.makeText(
-                mActivity,
-                resources.getString(R.string.error_atleast_single_app_must_be_selected),
-                Toast.LENGTH_SHORT
-            ).show()
-            buttonView.isChecked = true
-        } else {
-            preferencesManager!!.saveEnabledApps((buttonView.tag as App), isChecked)
-        }
+        // Ignore programmatic updates during refresh
+        if (isUpdatingCheckboxes) return@OnCheckedChangeListener
+        
+        // Simple save without validation - let users select what they want
+        val app = buttonView.tag as App
+        preferencesManager!!.saveEnabledApps(app, isChecked)
     }
 
     private fun saveNumDays() {
@@ -337,6 +344,26 @@ class MainFragment : Fragment() {
         mainAutoReplySwitch!!.isChecked = preferencesManager!!.isAutoReplyEnabled
         groupReplySwitch!!.isEnabled = preferencesManager!!.isAutoReplyEnabled
         enableOrDisableEnabledAppsCheckboxes(mainAutoReplySwitch!!.isChecked)
+        
+        // Refresh checkbox states when returning from other tabs (especially Settings)
+        refreshCheckboxStates()
+    }
+    
+    private fun refreshCheckboxStates() {
+        isUpdatingCheckboxes = true // Flag to indicate programmatic update
+        for (checkBox in supportedAppsCheckboxes) {
+            // Remove listener before updating to prevent any state save triggers
+            checkBox.setOnCheckedChangeListener(null)
+            
+            val app = checkBox.tag as? App
+            if (app != null) {
+                checkBox.isChecked = preferencesManager!!.isAppEnabled(app)
+            }
+            
+            // Re-add listener after update
+            checkBox.setOnCheckedChangeListener(supportedAppsCheckboxListener)
+        }
+        isUpdatingCheckboxes = false // Reset flag
     }
 
     private fun openCustomReplyEditorActivity(v: View) {
