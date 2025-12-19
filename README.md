@@ -125,8 +125,8 @@
     </tr>
     <tr>
       <td align="center">
-        <h3>🎨 AI Prompt Generator</h3>
-        <p>Use AI to refine and customize your prompts</p>
+        <h3>🧠 Conversational Context</h3>
+        <p>AI remembers conversation history for coherent multi-turn chats</p>
       </td>
       <td align="center">
         <h3>📊 Analytics Dashboard</h3>
@@ -139,14 +139,20 @@
     </tr>
     <tr>
       <td align="center">
-        <h3>⏱️ Smart Timing</h3>
-        <p>Control reply frequency to avoid spam</p>
+        <h3>⏱️ Reply Delay Control</h3>
+        <p>Configurable 1-10 second delay for natural responses</p>
       </td>
       <td align="center">
         <h3>📁 Message Logs</h3>
         <p>Keep records even if messages are deleted</p>
       </td>
       <td align="center">
+        <h3>💼 WhatsApp Business</h3>
+        <p>Full support for WhatsApp Business accounts</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="3">
         <h3>🆓 Completely Free</h3>
         <p>No ads, no premium features, open source</p>
       </td>
@@ -194,6 +200,28 @@
 
 ## 🆕 What's New
 
+### 🧠 Conversational Context (AI Memory)
+The AI now remembers your conversation history for more natural, coherent responses:
+- **Multi-turn conversations** - AI maintains context across multiple messages per user
+- **Per-user isolation** - Each contact has their own separate conversation context
+- **Auto session management** - Sessions automatically expire after 30 minutes of inactivity
+- **Active contexts indicator** - See how many conversations are currently active on dashboard
+- **Smarter responses** - AI can reference previous messages for more relevant replies
+
+### ⏱️ Configurable Reply Delay
+Control how quickly auto-replies are sent with natural timing:
+- **Adjustable 1-10 seconds** - Set your preferred delay from main dashboard
+- **Default 3 seconds** - Natural, human-like response timing
+- **Prevents spam detection** - Avoids triggering platform anti-spam measures
+- **More realistic conversations** - Replies don't appear instant/robotic
+
+### 💼 WhatsApp Business Support
+Full auto-reply functionality for business accounts:
+- **Separate app support** - Works alongside regular WhatsApp
+- **Business-specific filtering** - View WA Business logs separately in MSG LOGS
+- **Professional use cases** - Perfect for business owners and customer support
+- **Same great features** - AI replies, custom messages, analytics all work seamlessly
+
 ### AI Prompt Templates System
 Choose from 10 pre-made personality styles or create your own:
 - ✏️ **Custom Prompt** - Blank slate for complete customization
@@ -238,6 +266,9 @@ Track your auto-reply activity directly on the main screen:
 - [x] **AI Prompt Generator** - Use AI to refine and customize prompts
 - [x] **Analytics Dashboard** - Track daily/total replies and usage metrics
 - [x] **Firebase Analytics** - Detailed event tracking for insights
+- [x] **WhatsApp Business Support** - Full auto-reply for WA Business accounts
+- [x] **Configurable Reply Delay** - 1-10 second adjustable delay for natural responses
+- [x] **Conversational Context** - AI remembers conversation history for multi-turn chats
 - [ ] Implement Dependency Injection (Dagger/Hilt)
 - [ ] UI/UX improvements and Material Design 3
 - [ ] MVVM architecture refactoring
@@ -245,7 +276,6 @@ Track your auto-reply activity directly on the main screen:
 - [ ] Advanced scheduling features
 - [ ] Support for additional messaging platforms (Telegram, Slack, Discord)
 - [ ] Contact-specific rules and VIP contacts
-- [ ] Time-based auto-reply scheduling
 
 ## 🚀 Getting Started
 
@@ -309,7 +339,8 @@ We welcome contributions! Here's how you can help:
 
 ## ⚠️ Important Notes
 
-- **Reply Timing**: The app includes a 10-second delay between replies to prevent spam (configurable)
+- **Reply Delay**: Configurable 1-10 second delay (default 3s) before sending replies for natural conversation flow
+- **Conversational Context**: AI conversation sessions auto-expire after 30 minutes of inactivity
 - **Privacy**: This app is not affiliated with WhatsApp, Facebook, or any messaging platform
 - **Permissions**: Notification access is required for the app to function properly
 
