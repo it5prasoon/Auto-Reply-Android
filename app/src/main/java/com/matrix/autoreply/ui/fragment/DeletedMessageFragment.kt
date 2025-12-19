@@ -45,14 +45,19 @@ open class DeletedMessageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         preferencesManager = PreferencesManager.getPreferencesInstance(mActivity!!)
-        binding.msgLogStatus.text = getString(R.string.msg_log_status_str, checkEmoji)
 
         notificationListenerUtil = NotificationListenerUtil(mActivity!!)
 
-        // WhatsApp Message Logs viewer
+        // Platform-specific message logs viewers
         binding.viewWaLogBtn.setOnClickListener {
             val intent = Intent(requireActivity(), MsgLogViewerActivity::class.java)
             intent.putExtra(APP, WHATSAPP)
+            startActivity(intent)
+        }
+
+        binding.viewWaBusinessLogBtn.setOnClickListener {
+            val intent = Intent(requireActivity(), MsgLogViewerActivity::class.java)
+            intent.putExtra(APP, "whatsapp_business")
             startActivity(intent)
         }
 

@@ -39,10 +39,12 @@ class MsgLogViewerActivity : BaseActivity() {
         actionBar.setDisplayHomeAsUpEnabled(true)
         actionBar.setDisplayShowHomeEnabled(true)
 
-        // Set up initial fragment
+        // Set up initial fragment with platform filter
         if (savedInstanceState == null) {
+            val appFilter = intent.getStringExtra("app") ?: "whatsapp"
+            val fragment = ContactNameFragment.newInstance(appFilter)
             supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.id, ContactNameFragment())
+                .replace(binding.fragmentContainer.id, fragment)
                 .commit()
         }
     }

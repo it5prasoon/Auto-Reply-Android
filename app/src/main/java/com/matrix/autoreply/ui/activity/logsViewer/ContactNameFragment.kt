@@ -16,6 +16,7 @@ class ContactNameFragment : Fragment(), RefreshListener {
     private var _binding: FragmentContactNameBinding? = null
     private val binding get() = _binding!!
     private lateinit var messageLogsDB: MessageLogsDB
+    private var platformFilter: String = "all"
     private val adapter: ContactNameAdapter by lazy {
         ContactNameAdapter(messageLogsDB) { contactName ->
             // Handle the click event here
@@ -29,6 +30,16 @@ class ContactNameFragment : Fragment(), RefreshListener {
     }
     private lateinit var contactNameList: List<String>
 
+    companion object {
+        fun newInstance(appFilter: String): ContactNameFragment {
+            val fragment = ContactNameFragment()
+            val args = Bundle()
+            args.putString("app_filter", appFilter)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,10 +52,13 @@ class ContactNameFragment : Fragment(), RefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Get platform filter from arguments
+        platformFilter = arguments?.getString("app_filter") ?: "all"
+
         // Initialize database
         messageLogsDB = MessageLogsDB.getInstance(requireContext())!!
         
-        // Getting all notification titles i.e. WhatsApp user-name from room DB
+        // Getting all notification titles filtered by platform
         updateUserNameList()
 
         // Set up RecyclerView to display notification titles
@@ -61,9 +75,40 @@ class ContactNameFragment : Fragment(), RefreshListener {
     }
 
     private fun updateUserNameList() {
-        // TODO: 1. To make all the calls using suspend function and coroutines to make database IO calls
-        // TODO: 2. To use Dagger Dependency Injection to get singleton of DB
-        contactNameList = MessageLogsDB.getInstance(requireContext())!!.messageLogsDao()!!.getDistinctNotificationTitles()
+        // Get all contacts first
+        val allContacts = MessageLogsDB.getInstance(requireContext())!!.messageLogsDao()!!.getDistinctNotificationTitles()
+        
+        // Filter by platform if specified
+        contactNameList = when (platformFilter) {
+            "whatsapp" -> {
+                // Filter to show only WhatsApp contacts by checking if messages exist for com.whatsapp
+                allContacts.filter { contactName ->
+                    hasMessagesForPackage(contactName, "com.whatsapp")
+                }
+            }
+            "whatsapp_business" -> {
+                // Filter to show only WhatsApp Business contacts by checking if messages exist for com.whatsapp.w4b
+                allContacts.filter { contactName ->
+                    hasMessagesForPackage(contactName, "com.whatsapp.w4b")
+                }
+            }
+            else -> allContacts // Show all contacts
+        }
+    }
+    
+    private fun hasMessagesForPackage(contactName: String, packageName: String): Boolean {
+        return try {
+            val messages = messageLogsDB.messageLogsDao()!!.getMessageLogsWithTitle(contactName)
+            val appPackageDao = messageLogsDB.appPackageDao()!!
+            
+            messages.any { messageLog ->
+                val packageIndex = messageLog.index
+                val actualPackageName = appPackageDao.getPackageName(packageIndex)
+                actualPackageName == packageName
+            }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     override fun onDestroyView() {
