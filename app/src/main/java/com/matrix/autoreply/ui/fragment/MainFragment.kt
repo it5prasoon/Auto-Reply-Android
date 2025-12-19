@@ -64,6 +64,10 @@ class MainFragment : Fragment() {
     private var startTimeButton: com.google.android.material.button.MaterialButton? = null
     private var endTimeButton: com.google.android.material.button.MaterialButton? = null
     private var scheduleTimesLayout: LinearLayout? = null
+    private var delayMinus: ImageView? = null
+    private var delayPlus: ImageView? = null
+    private var delaySelectedText: TextView? = null
+    private var replyDelaySeconds = 3
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
@@ -114,6 +118,9 @@ class MainFragment : Fragment() {
         startTimeButton = binding.startTimeButton
         endTimeButton = binding.endTimeButton
         scheduleTimesLayout = binding.scheduleTimesLayout
+        delayMinus = binding.delayMinus
+        delayPlus = binding.delayPlus
+        delaySelectedText = binding.delaySelectedText
         handleReplyOptionsCard()
 
         customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
@@ -125,9 +132,11 @@ class MainFragment : Fragment() {
         handleMainAutoReplySwitch()
         handleGroupReplySwitch()
         handleReplyFrequency()
+        handleReplyDelay()
         handleSchedule()
 
         setNumDays()
+        setReplyDelaySeconds()
         createSupportedAppCheckboxes()
         updateScheduleDisplay()
     }
@@ -421,6 +430,32 @@ class MainFragment : Fragment() {
             else -> hour
         }
         return String.format("%d:%02d %s", displayHour, minute, period)
+    }
+
+    private fun handleReplyDelay() {
+        delayMinus?.setOnClickListener {
+            if (replyDelaySeconds > 1) {
+                replyDelaySeconds--
+                saveReplyDelaySeconds()
+            }
+        }
+
+        delayPlus?.setOnClickListener {
+            if (replyDelaySeconds < 10) {
+                replyDelaySeconds++
+                saveReplyDelaySeconds()
+            }
+        }
+    }
+
+    private fun saveReplyDelaySeconds() {
+        preferencesManager?.replyDelaySeconds = replyDelaySeconds
+        setReplyDelaySeconds()
+    }
+
+    private fun setReplyDelaySeconds() {
+        replyDelaySeconds = preferencesManager?.replyDelaySeconds ?: 3
+        delaySelectedText?.text = "${replyDelaySeconds}s"
     }
 
 }

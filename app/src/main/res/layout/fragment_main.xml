@@ -261,13 +261,96 @@
                 android:text="@string/groupReplySwitchLabel" />
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Reply Delay Selector -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/replyDelayCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            ads:layout_constraintTop_toBottomOf="@+id/groupReplySwitchCardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/replyDelayTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/reply_delay_title"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="16sp"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/replyDelaySubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxWidth="250dp"
+                    android:maxLines="2"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/reply_delay_subtitle"
+                    android:textSize="12sp"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintStart_toStartOf="parent"
+                    ads:layout_constraintTop_toBottomOf="@+id/replyDelayTitle" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/delaySetterWidget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    ads:layout_constraintBottom_toBottomOf="parent"
+                    ads:layout_constraintEnd_toEndOf="parent"
+                    ads:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/delayMinus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/minus"
+                        ads:layout_constraintStart_toStartOf="parent"
+                        ads:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/delaySelectedText"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="3s"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        ads:layout_constraintBottom_toBottomOf="@id/delayMinus"
+                        ads:layout_constraintStart_toEndOf="@+id/delayMinus"
+                        ads:layout_constraintTop_toTopOf="@+id/delayMinus" />
+
+                    <ImageView
+                        android:id="@+id/delayPlus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/plus"
+                        ads:layout_constraintStart_toEndOf="@+id/delaySelectedText"
+                        ads:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Reply frequency Time picker -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/replyFrequencyTimePickerCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            ads:layout_constraintTop_toBottomOf="@+id/groupReplySwitchCardView"
+            ads:layout_constraintTop_toBottomOf="@+id/replyDelayCardView"
             tools:layout_editor_absoluteX="134dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

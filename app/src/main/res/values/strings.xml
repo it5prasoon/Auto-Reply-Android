@@ -34,6 +34,10 @@
     <string name="group_reply_on_info_message">Enabled auto reply for group chats</string>
     <string name="group_reply_off_info_message">Disabled auto reply for group chats</string>
 
+    <!-- Reply Delay -->
+    <string name="reply_delay_title">Reply Delay</string>
+    <string name="reply_delay_subtitle">Add natural delay before sending replies</string>
+
     <string name="time_picker_title">Reply Frequency</string>
     <string name="time_picker_sub_title_default">Respond to all messages without control</string>
     <string name="time_picker_sub_title">Respond only once every %1$d day\/s for each person\/group</string>

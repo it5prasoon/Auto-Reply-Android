@@ -308,6 +308,16 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     private val KEY_SCHEDULE_END_HOUR = "schedule_end_hour"
     private val KEY_SCHEDULE_END_MINUTE = "schedule_end_minute"
     
+    // Reply delay preferences (1-10 seconds)
+    private val KEY_REPLY_DELAY_SECONDS = "reply_delay_seconds"
+    
+    var replyDelaySeconds: Int
+        get() = _sharedPrefs.getInt(KEY_REPLY_DELAY_SECONDS, 3) // Default 3 seconds
+        set(seconds) {
+            val clampedSeconds = seconds.coerceIn(1, 10) // Ensure 1-10 range
+            _sharedPrefs.edit().putInt(KEY_REPLY_DELAY_SECONDS, clampedSeconds).apply()
+        }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {

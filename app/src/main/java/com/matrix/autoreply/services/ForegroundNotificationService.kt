@@ -10,6 +10,7 @@ import android.service.notification.StatusBarNotification
 import android.text.SpannableString
 import android.util.Log
 import androidx.core.app.RemoteInput
+import kotlinx.coroutines.*
 import com.matrix.autoreply.helpers.NotificationHelper
 import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.preferences.PreferencesManager
@@ -24,6 +25,7 @@ class ForegroundNotificationService : NotificationListenerService() {
     private val TAG = ForegroundNotificationService::class.java.simpleName
     private var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
+    private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
@@ -118,52 +120,58 @@ class ForegroundNotificationService : NotificationListenerService() {
         replyText: String,
         isAiReply: Boolean = false
     ) {
-        val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
-        val localIntent = Intent()
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val localBundle = Bundle()
+        // Launch coroutine with configurable delay to make replies feel more natural
+        serviceScope.launch {
+            val delayMs = PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)?.replyDelaySeconds?.times(1000)?.toLong() ?: 3000L
+            delay(delayMs)
+            
+            val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
+            val localIntent = Intent()
+            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val localBundle = Bundle()
 
-        for ((i, remoteIn) in remoteInputs1.withIndex()) {
-            remoteInputs[i] = remoteIn
-            localBundle.putCharSequence(remoteInputs[i]!!.resultKey, replyText)
-        }
-
-        RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
-        try {
-            if (pendingIntent != null) {
-                if (dbUtils == null) {
-                    dbUtils = DbUtils(applicationContext)
-                }
-                dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
-                pendingIntent.send(this, 0, localIntent)
-                
-                // Track analytics
-                val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
-                AnalyticsTracker.trackReplySent(
-                    applicationContext,
-                    sbn.packageName,
-                    isAiReply,
-                    isGroupMsg
-                )
-                
-                if (PreferencesManager.getPreferencesInstance(this)!!.isShowNotificationEnabled) {
-                    sbn.notification?.extras?.getString("android.title")
-                        ?.let {
-                            NotificationHelper.getInstance(applicationContext)?.sendNotification(
-                                it,
-                                replyText, sbn.packageName
-                            )
-                        }
-                }
-                cancelNotification(sbn.key)
-                if (canPurgeMessages()) {
-                    dbUtils!!.purgeMessageLogs()
-                    PreferencesManager.getPreferencesInstance(this)
-                        ?.setPurgeMessageTime(System.currentTimeMillis())
-                }
+            for ((i, remoteIn) in remoteInputs1.withIndex()) {
+                remoteInputs[i] = remoteIn
+                localBundle.putCharSequence(remoteInputs[i]!!.resultKey, replyText)
             }
-        } catch (e: CanceledException) {
-            Log.e(TAG, "replyToLastNotification error: " + e.localizedMessage)
+
+            RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
+            try {
+                if (pendingIntent != null) {
+                    if (dbUtils == null) {
+                        dbUtils = DbUtils(applicationContext)
+                    }
+                    dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
+                    pendingIntent.send(this@ForegroundNotificationService, 0, localIntent)
+                    
+                    // Track analytics
+                    val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
+                    AnalyticsTracker.trackReplySent(
+                        applicationContext,
+                        sbn.packageName,
+                        isAiReply,
+                        isGroupMsg
+                    )
+                    
+                    if (PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)!!.isShowNotificationEnabled) {
+                        sbn.notification?.extras?.getString("android.title")
+                            ?.let {
+                                NotificationHelper.getInstance(applicationContext)?.sendNotification(
+                                    it,
+                                    replyText, sbn.packageName
+                                )
+                            }
+                    }
+                    cancelNotification(sbn.key)
+                    if (canPurgeMessages()) {
+                        dbUtils!!.purgeMessageLogs()
+                        PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)
+                            ?.setPurgeMessageTime(System.currentTimeMillis())
+                    }
+                }
+            } catch (e: CanceledException) {
+                Log.e(TAG, "replyToLastNotification error: " + e.localizedMessage)
+            }
         }
     }
 
@@ -223,4 +231,9 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     private val isMessageLogsEnabled: Boolean
         get() = PreferencesManager.getPreferencesInstance(this)!!.isMessageLogsEnabled
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel() // Clean up coroutines when service is destroyed
+    }
 }
