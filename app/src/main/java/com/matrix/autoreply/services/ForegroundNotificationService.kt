@@ -18,6 +18,7 @@ import com.matrix.autoreply.utils.DbUtils
 import com.matrix.autoreply.utils.NotificationUtils
 import com.matrix.autoreply.utils.AiReplyHandler
 import com.matrix.autoreply.utils.AnalyticsTracker
+import com.matrix.autoreply.utils.ConversationContextManager
 
 
 class ForegroundNotificationService : NotificationListenerService() {
@@ -86,25 +87,74 @@ class ForegroundNotificationService : NotificationListenerService() {
 
         val preferencesManager = PreferencesManager.getPreferencesInstance(this)!!
         val incomingMessage = NotificationUtils.getMessage(sbn) ?: ""
+        val contactId = NotificationUtils.getTitle(sbn) ?: ""
+        val packageName = sbn.packageName
+        
+        // Add incoming message to conversation context if context is enabled
+        if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
+            ConversationContextManager.addIncomingMessage(
+                this,
+                contactId,
+                packageName,
+                incomingMessage,
+                sbn.notification.`when`
+            )
+        }
         
         // Check if AI is enabled and try AI reply first
         if (preferencesManager.isAiEnabled && preferencesManager.aiApiKey?.isNotEmpty() == true) {
-            AiReplyHandler.generateReply(this, incomingMessage, object : AiReplyHandler.AiReplyCallback {
-                override fun onReplyGenerated(reply: String) {
-                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply, isAiReply = true)
-                }
-                
-                override fun onError(errorMessage: String) {
-                    Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
-                    // Fallback to custom reply
-                    val customReply = getCustomReply()
-                    sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
-                }
-            })
+            AiReplyHandler.generateReply(
+                this, 
+                incomingMessage, 
+                object : AiReplyHandler.AiReplyCallback {
+                    override fun onReplyGenerated(reply: String) {
+                        sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply, isAiReply = true)
+                        
+                        // Add AI reply to conversation context
+                        if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
+                            ConversationContextManager.addOutgoingReply(
+                                this@ForegroundNotificationService,
+                                contactId,
+                                packageName,
+                                reply
+                            )
+                        }
+                    }
+                    
+                    override fun onError(errorMessage: String) {
+                        Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
+                        // Fallback to custom reply
+                        val customReply = getCustomReply()
+                        sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
+                        
+                        // Add custom reply to conversation context
+                        if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
+                            ConversationContextManager.addOutgoingReply(
+                                this@ForegroundNotificationService,
+                                contactId,
+                                packageName,
+                                customReply
+                            )
+                        }
+                    }
+                },
+                contactId,
+                packageName
+            )
         } else {
             // Use custom reply directly
             val customReply = getCustomReply()
             sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
+            
+            // Add custom reply to conversation context
+            if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
+                ConversationContextManager.addOutgoingReply(
+                    this,
+                    contactId,
+                    packageName,
+                    customReply
+                )
+            }
         }
     }
     

@@ -318,6 +318,23 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putInt(KEY_REPLY_DELAY_SECONDS, clampedSeconds).apply()
         }
     
+    // Conversational context preferences
+    private val KEY_CONTEXT_ENABLED = "conversation_context_enabled"
+    private val KEY_CONTEXT_WINDOW_MINUTES = "context_window_minutes"
+    
+    var isContextEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_CONTEXT_ENABLED, true) // Default enabled
+        set(enabled) {
+            _sharedPrefs.edit().putBoolean(KEY_CONTEXT_ENABLED, enabled).apply()
+        }
+    
+    var contextWindowMinutes: Int
+        get() = _sharedPrefs.getInt(KEY_CONTEXT_WINDOW_MINUTES, 20) // Default 20 minutes
+        set(minutes) {
+            val clampedMinutes = minutes.coerceIn(5, 1440) // 5 minutes to 24 hours
+            _sharedPrefs.edit().putInt(KEY_CONTEXT_WINDOW_MINUTES, clampedMinutes).apply()
+        }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {

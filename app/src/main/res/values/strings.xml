@@ -38,6 +38,20 @@
     <string name="reply_delay_title">Reply Delay</string>
     <string name="reply_delay_subtitle">Add natural delay before sending replies</string>
 
+    <!-- Conversational Context -->
+    <string name="context_enabled_title">Smart Conversations</string>
+    <string name="context_enabled_summary">AI remembers recent conversation history for smarter replies</string>
+    <string name="context_window_title">Context Memory</string>
+    <string name="context_window_summary">How long to remember conversation history</string>
+    <string name="context_window_5min">5 minutes</string>
+    <string name="context_window_10min">10 minutes</string>
+    <string name="context_window_20min">20 minutes (recommended)</string>
+    <string name="context_window_30min">30 minutes</string>
+    <string name="context_window_1hour">1 hour</string>
+    <string name="context_window_2hour">2 hours</string>
+    <string name="context_window_6hour">6 hours</string>
+    <string name="context_window_1day">1 day</string>
+
     <string name="time_picker_title">Reply Frequency</string>
     <string name="time_picker_sub_title_default">Respond to all messages without control</string>
     <string name="time_picker_sub_title">Respond only once every %1$d day\/s for each person\/group</string>

@@ -36,7 +36,13 @@ object AiReplyHandler {
             .build()
     }
     
-    fun generateReply(context: Context, incomingMessage: String, callback: AiReplyCallback) {
+    fun generateReply(
+        context: Context, 
+        incomingMessage: String, 
+        callback: AiReplyCallback,
+        contactId: String? = null,
+        packageName: String? = null
+    ) {
         val preferencesManager = PreferencesManager.getPreferencesInstance(context) ?: return
         
         if (!preferencesManager.isAiEnabled) {
@@ -53,11 +59,29 @@ object AiReplyHandler {
         val provider = preferencesManager.aiProvider
         val selectedModel = preferencesManager.aiSelectedModel
         val baseSystemMessage = preferencesManager.aiSystemMessage
-        val systemMessage = "$baseSystemMessage Do not include <think> or <thinking> tags in your response. Only provide the direct reply."
-        val messages = listOf(
-            AiMessage("system", systemMessage),
-            AiMessage("user", incomingMessage)
-        )
+        
+        // Build messages with or without context
+        val messages = if (preferencesManager.isContextEnabled && 
+                              !contactId.isNullOrEmpty() && 
+                              !packageName.isNullOrEmpty() &&
+                              ConversationContextManager.hasRecentContext(context, contactId, packageName)) {
+            
+            // Use conversational context
+            val conversationContext = ConversationContextManager.getFormattedContext(context, contactId, packageName)
+            val systemMessage = "$baseSystemMessage\n\n$conversationContext\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            
+            listOf(
+                AiMessage("system", systemMessage),
+                AiMessage("user", incomingMessage)
+            )
+        } else {
+            // Standard single-message reply
+            val systemMessage = "$baseSystemMessage Do not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            listOf(
+                AiMessage("system", systemMessage),
+                AiMessage("user", incomingMessage)
+            )
+        }
         
         val request = AiRequest(
             model = selectedModel,

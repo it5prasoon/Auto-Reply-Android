@@ -9,4 +9,26 @@
         <item>groq</item>
         <item>openai</item>
     </string-array>
+    
+    <string-array name="context_window_entries">
+        <item>@string/context_window_5min</item>
+        <item>@string/context_window_10min</item>
+        <item>@string/context_window_20min</item>
+        <item>@string/context_window_30min</item>
+        <item>@string/context_window_1hour</item>
+        <item>@string/context_window_2hour</item>
+        <item>@string/context_window_6hour</item>
+        <item>@string/context_window_1day</item>
+    </string-array>
+    
+    <string-array name="context_window_values">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>360</item>
+        <item>1440</item>
+    </string-array>
 </resources>

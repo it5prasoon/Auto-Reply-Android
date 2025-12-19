@@ -78,6 +78,31 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory 
+        android:title="Conversational AI"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="pref_context_enabled"
+            android:title="@string/context_enabled_title"
+            android:summary="@string/context_enabled_summary"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+        <ListPreference
+            android:key="pref_context_window"
+            android:title="@string/context_window_title"
+            android:summary="@string/context_window_summary"
+            android:entries="@array/context_window_entries"
+            android:entryValues="@array/context_window_values"
+            android:defaultValue="20"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_context_enabled" />
+
+    </PreferenceCategory>
+
     <!-- Banner Ad -->
     <Preference
         android:layout="@layout/ai_settings_banner_ad"
