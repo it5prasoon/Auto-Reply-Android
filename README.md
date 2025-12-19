@@ -18,14 +18,14 @@
 
 ## ✨ Overview
 
-**AutoReply** is the #1 free WhatsApp auto reply app for Android that automatically sends messages on WhatsApp, Facebook Messenger, Instagram, and other messaging apps. Perfect for busy professionals, students, and anyone who wants to stay connected 24/7 with automatic message responses.
+**AutoReply** is the #1 free WhatsApp auto reply app for Android that automatically sends messages on WhatsApp, WhatsApp Business, Facebook Messenger, Instagram, and other messaging apps. Perfect for busy professionals, students, and anyone who wants to stay connected 24/7 with automatic message responses.
 
 **Youtube Link:** https://youtube.com/shorts/_Dk9octBRbk?si=5lFMLGUn3D-O7VPB
 
 ### 🔥 **Why Choose AutoReply?**
 - **100% Free** auto reply for WhatsApp, Instagram & Messenger
 - **AI-Powered Smart Replies** with ChatGPT-like responses
-- **Multi-Platform Support** - WhatsApp, Instagram DMs, Facebook Messenger
+- **Multi-Platform Support** - WhatsApp, WhatsApp Business, Instagram DMs, Facebook Messenger
 - **No Root Required** - works on all Android devices
 - **Privacy First** - your messages stay on your device
 - **Works Offline** - no internet required for custom replies
@@ -88,8 +88,8 @@
     <tr>
       <td align="center" width="33%">
         <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp">
-        <br><strong>WhatsApp</strong>
-        <br>Full auto-reply support for individual and group chats
+        <br><strong>WhatsApp & Business</strong>
+        <br>Full auto-reply support for individual and group chats on both regular WhatsApp and WhatsApp Business
       </td>
       <td align="center" width="33%">
         <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram">

@@ -50,7 +50,7 @@
     <string name="sent_using_autoreply">Sent using git.io/JZCn4</string>
 
     <string name="share">Share</string>
-    <string name="share_subject">Autoreply: Auto Reply for WhatsApp</string>
+    <string name="share_subject">Autoreply: Auto Reply for WhatsApp &amp; WhatsApp Business</string>
     <string name="autoreply_subreddit_label">
         <u>Let\'s discuss\nr/autoreply</u>
     </string>

@@ -16,6 +16,7 @@ object Constants {
 
     val SUPPORTED_APPS: List<App> = mutableListOf(
             App("WhatsApp", "com.whatsapp"),
+            App("WhatsApp Business", "com.whatsapp.w4b"),
             App("Facebook Messenger", "com.facebook.orca"),
             App("Instagram", "com.instagram.android")
     )
