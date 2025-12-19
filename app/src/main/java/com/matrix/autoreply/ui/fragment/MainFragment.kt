@@ -32,6 +32,7 @@ import com.matrix.autoreply.preferences.PreferencesManager.Companion.getPreferen
 import com.matrix.autoreply.ui.CustomDialog
 import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
 import com.matrix.autoreply.utils.NotificationListenerUtil
+import com.matrix.autoreply.utils.ConversationContextManager
 
 class MainFragment : Fragment() {
 
@@ -68,6 +69,7 @@ class MainFragment : Fragment() {
     private var delayPlus: ImageView? = null
     private var delaySelectedText: TextView? = null
     private var replyDelaySeconds = 3
+    private var activeContextsCount: TextView? = null
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
@@ -121,6 +123,7 @@ class MainFragment : Fragment() {
         delayMinus = binding.delayMinus
         delayPlus = binding.delayPlus
         delaySelectedText = binding.delaySelectedText
+        activeContextsCount = binding.activeContextsCount
         handleReplyOptionsCard()
 
         customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
@@ -307,6 +310,10 @@ class MainFragment : Fragment() {
         val aiCount = preferencesManager?.getAiReplyCount() ?: 0
         val customCount = preferencesManager?.getCustomReplyCount() ?: 0
         aiVsCustomText?.text = "$aiCount / $customCount"
+        
+        // Update active contexts count
+        val activeCount = ConversationContextManager.getActiveSessionsCount()
+        activeContextsCount?.text = activeCount.toString()
     }
 
     private fun setSwitchState() {

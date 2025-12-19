@@ -619,6 +619,37 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
+                    <!-- Active Contexts -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_baseline_smart_toy_24"
+                            android:layout_marginEnd="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Active Conversations"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/activeContextsCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="?attr/colorSecondary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
