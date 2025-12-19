@@ -4,6 +4,7 @@
 *.ap_
 *.aab
 *.json
+!app/src/main/assets/feature_announcements.json
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -81,4 +82,3 @@ lint/tmp/
 # lint/reports/
 
 app/src/main/res/values/ad_mob_config.xml
-

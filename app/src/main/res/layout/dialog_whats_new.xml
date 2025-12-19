@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Header with close button -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/whatsNewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="What's New"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:contentDescription="Close" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/whatsNewSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="New features available"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <!-- Scrollable features list (75% of space) -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginTop="24dp">
+
+        <LinearLayout
+            android:id="@+id/featuresContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <!-- Features will be dynamically added from JSON here -->
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Action buttons (25% of space) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_marginTop="16dp">
+
+        <!-- Main action buttons inline -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/exploreAiSettingsButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="@string/explore_ai_settings"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/gotItButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/got_it" />
+
+        </LinearLayout>
+
+        <!-- Don't show again button below -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dontShowAgainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="Don't show again"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,54 @@
+[
+  {
+    "version": "2.1.0",
+    "title": "🎉 Major Update",
+    "subtitle": "Exciting new features to enhance your auto-reply experience!",
+    "features": [
+      {
+        "icon": "💼",
+        "title": "WhatsApp Business Support",
+        "description": "Now supports WhatsApp Business with all existing features - enable it in the app selector below!",
+        "actionText": null,
+        "actionTarget": null
+      },
+      {
+        "icon": "⏱️",
+        "title": "Natural Reply Delays",
+        "description": "Choose 1-10 second delays to make your auto-replies feel more human and natural (default: 3 seconds).",
+        "actionText": null,
+        "actionTarget": null
+      },
+      {
+        "icon": "🧠",
+        "title": "Smart Conversations (AI)",
+        "description": "Revolutionary AI feature that remembers conversation history for contextual, intelligent replies.",
+        "actionText": "Configure Now",
+        "actionTarget": "ai_settings"
+      },
+      {
+        "icon": "📊",
+        "title": "Active Context Indicators", 
+        "description": "See how many conversations the AI is actively tracking in the statistics section below.",
+        "actionText": null,
+        "actionTarget": null
+      },
+      {
+        "icon": "📸",
+        "title": "Instagram Support",
+        "description": "Full auto-reply support for Instagram Direct Messages - enable it in the app selector below!",
+        "actionText": null,
+        "actionTarget": null
+      },
+      {
+        "icon": "⏰",
+        "title": "Schedule Auto-Replies",
+        "description": "Set specific hours when auto-replies should work (e.g., 10 PM to 8 AM) - perfect for work-life balance!",
+        "actionText": "Configure Schedule",
+        "actionTarget": "main_schedule"
+      }
+    ],
+    "isEnabled": true,
+    "priority": 1,
+    "requiresAI": false
+  }
+]

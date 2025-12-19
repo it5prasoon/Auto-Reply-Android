@@ -264,4 +264,8 @@
     <string name="smart_replies">Smart Replies</string>
     <string name="configure_smart_replies">Configure Smart Replies</string>
     <string name="ai_powered_replies">AI-powered replies</string>
+
+    <!-- What's New Dialog (minimal - most content from JSON) -->
+    <string name="explore_ai_settings">AI Settings</string>
+    <string name="got_it">Got It!</string>
 </resources>

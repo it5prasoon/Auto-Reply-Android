@@ -33,6 +33,8 @@ import com.matrix.autoreply.ui.CustomDialog
 import com.matrix.autoreply.ui.activity.replyEditor.CustomReplyEditorActivity
 import com.matrix.autoreply.utils.NotificationListenerUtil
 import com.matrix.autoreply.utils.ConversationContextManager
+import com.matrix.autoreply.utils.FeatureAnnouncementManager
+import com.matrix.autoreply.ui.WhatsNewDialog
 
 class MainFragment : Fragment() {
 
@@ -302,6 +304,21 @@ class MainFragment : Fragment() {
         
         // Update schedule display
         updateScheduleDisplay()
+        
+        // Check and show "What's New" dialog if needed
+        showWhatsNewDialogIfNeeded()
+    }
+    
+    /**
+     * Show "What's New" dialog from JSON configuration if new features available
+     */
+    private fun showWhatsNewDialogIfNeeded() {
+        if (FeatureAnnouncementManager.shouldShowAnnouncement(requireContext())) {
+            val announcement = FeatureAnnouncementManager.getAnnouncementToShow(requireContext())
+            announcement?.let {
+                WhatsNewDialog(requireContext()).show(it)
+            }
+        }
     }
     
     private fun updateAnalytics() {

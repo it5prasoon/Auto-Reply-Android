@@ -335,6 +335,15 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putInt(KEY_CONTEXT_WINDOW_MINUTES, clampedMinutes).apply()
         }
     
+    // Feature announcement preferences
+    private val KEY_DONT_SHOW_FEATURE_ANNOUNCEMENTS = "dont_show_feature_announcements"
+    
+    var dontShowFeatureAnnouncements: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_DONT_SHOW_FEATURE_ANNOUNCEMENTS, false)
+        set(dontShow) {
+            _sharedPrefs.edit().putBoolean(KEY_DONT_SHOW_FEATURE_ANNOUNCEMENTS, dontShow).apply()
+        }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {
