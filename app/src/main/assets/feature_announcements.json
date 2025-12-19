@@ -45,6 +45,13 @@
         "description": "Set specific hours when auto-replies should work (e.g., 10 PM to 8 AM) - perfect for work-life balance!",
         "actionText": "Configure Schedule",
         "actionTarget": "main_schedule"
+      },
+      {
+        "icon": "🛡️",
+        "title": "Anti-Scam Safety Protection",
+        "description": "Optional AI protection against money scams, threats, and suspicious messages. Works in any language!",
+        "actionText": "Enable Protection",
+        "actionTarget": "ai_settings"
       }
     ],
     "isEnabled": true,
