@@ -42,6 +42,7 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupSystemMessagePreference()
         setupGetApiKeyPreference()
 
+        setupSafetyRulesPreference()
         setupStatusPreference()
         loadInterstitialAd()
         setupBannerAd()
@@ -170,6 +171,21 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
     private fun showApiKeyGuide(provider: String) {
         val dialog = ApiKeyGuideDialog.newInstance(provider)
         dialog.show(parentFragmentManager, "ApiKeyGuideDialog")
+    }
+    
+    private fun setupSafetyRulesPreference() {
+        val safetyRulesPref = findPreference<SwitchPreferenceCompat>("pref_safety_rules_enabled")
+        safetyRulesPref?.let { pref ->
+            pref.isChecked = preferencesManager?.isSafetyRulesEnabled ?: false
+            pref.setOnPreferenceChangeListener { _, newValue ->
+                val enabled = newValue as Boolean
+                preferencesManager?.isSafetyRulesEnabled = enabled
+                if (enabled) {
+                    showInterstitialAd()
+                }
+                true
+            }
+        }
     }
     
     private fun setupStatusPreference() {

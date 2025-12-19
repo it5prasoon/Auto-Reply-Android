@@ -226,7 +226,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             val oldDefaultPrompts = listOf(
                 "You are a helpful assistant. Keep your replies concise and friendly.",
                 "You are a helpful assistant",
-                "You are a friendly and casual assistant. Keep your responses warm, approachable, and conversational. Use a relaxed tone while being helpful. Keep replies concise (1-2 sentences) and natural, as if texting a friend."
+                "You are a friendly and casual assistant. Keep your responses warm, approachable, and conversational. Use a relaxed tone while being helpful. Keep replies concise (1-2 sentences) and natural, as if texting a friend.",
             )
             
             // Only migrate if user has an old default prompt (not a truly custom one)
@@ -394,6 +394,15 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putInt(KEY_REPLY_DELAY_SECONDS, clampedSeconds).apply()
         }
     
+    // Safety rules preferences (anti-scam/anti-crime protection)
+    private val KEY_SAFETY_RULES_ENABLED = "pref_safety_rules_enabled"
+    
+    var isSafetyRulesEnabled: Boolean
+        get() = _sharedPrefs.getBoolean(KEY_SAFETY_RULES_ENABLED, false) // Default disabled
+        set(enabled) {
+            _sharedPrefs.edit().putBoolean(KEY_SAFETY_RULES_ENABLED, enabled).apply()
+        }
+    
     // Conversational context preferences
     private val KEY_CONTEXT_ENABLED = "conversation_context_enabled"
     private val KEY_CONTEXT_WINDOW_MINUTES = "context_window_minutes"
@@ -554,10 +563,10 @@ class PreferencesManager private constructor(private val thisAppContext: Context
         private var _instance: PreferencesManager? = null
         
         // Prompt migration version - increment this when you want to re-migrate prompts
-        const val CURRENT_PROMPT_VERSION = 1
+        const val CURRENT_PROMPT_VERSION = 3
         
-        // Human-like default prompt that matches response length to message length
-        const val DEFAULT_SYSTEM_MESSAGE = "Reply like a friend texting. IMPORTANT: Match response length to message length. For greetings like 'Hi', 'Hey', 'Hello' - reply with just 'Hey!' or 'Hi there!' (2-3 words max). For questions, answer briefly (1 sentence). Never be verbose or robotic. Sound natural and human."
+        // Human-like default prompt (safety rules are added silently by AiReplyHandler)
+        const val DEFAULT_SYSTEM_MESSAGE = "Reply like a friend texting. Match response length to message length. For greetings like 'Hi' - reply with just 'Hey!' (2-3 words max). For questions, answer briefly (1 sentence). Be natural and human."
         
         @JvmStatic
         fun getPreferencesInstance(context: Context): PreferencesManager? {

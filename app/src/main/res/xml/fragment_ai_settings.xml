@@ -103,6 +103,20 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory 
+        android:title="Safety Protection"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="pref_safety_rules_enabled"
+            android:title="Anti-Scam Protection"
+            android:summary="Block replies to money requests, threats, and scam messages"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"
+            android:dependency="pref_ai_enabled" />
+
+    </PreferenceCategory>
+
     <!-- Banner Ad -->
     <Preference
         android:layout="@layout/ai_settings_banner_ad"

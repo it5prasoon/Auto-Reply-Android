@@ -256,6 +256,15 @@ Track your auto-reply activity directly on the main screen:
 - 📱 **Per-App Tracking** - WhatsApp, Instagram, Messenger stats
 - 🔥 **Firebase Analytics** - Detailed insights and usage patterns
 
+### 🛡️ Anti-Scam Safety Protection
+Optional protection against fraudulent and suspicious messages:
+- **Money scam detection** - AI refuses to agree to money requests, debt claims, payment demands
+- **Threat protection** - Deflects threats and violence-related messages
+- **OTP/password safety** - Never shares sensitive information like OTPs or passwords
+- **Language-agnostic** - Works in any language the user communicates in
+- **User-controlled** - Enable/disable in AI Settings → Safety Protection
+- **Confused responses** - AI responds with "What money? Wrong person maybe" instead of agreeing
+
 ## 📋 Roadmap
 
 - [x] **AI-Powered Smart Replies** - Groq & OpenAI integration
@@ -269,6 +278,7 @@ Track your auto-reply activity directly on the main screen:
 - [x] **WhatsApp Business Support** - Full auto-reply for WA Business accounts
 - [x] **Configurable Reply Delay** - 1-10 second adjustable delay for natural responses
 - [x] **Conversational Context** - AI remembers conversation history for multi-turn chats
+- [x] **Anti-Scam Safety Protection** - Optional protection against money scams, threats, and suspicious messages
 - [ ] Implement Dependency Injection (Dagger/Hilt)
 - [ ] UI/UX improvements and Material Design 3
 - [ ] MVVM architecture refactoring

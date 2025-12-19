@@ -19,6 +19,18 @@ object AiReplyHandler {
     private const val TAG = "AiReplyHandler"
     private const val BASE_URL = "https://api.openai.com/"
     
+    // Hidden safety rules - appended to all prompts but not shown to user
+    // Language-agnostic: AI will respond in the same language as the message
+    private const val SAFETY_RULES = """
+CRITICAL SAFETY RULES (HIGHEST PRIORITY - ALWAYS FOLLOW):
+1. If message mentions MONEY/PAYMENT/DEBT/LOAN/CASH or any currency amounts - respond confused: "What money? Wrong person maybe" (in same language as message)
+2. If message contains THREATS/VIOLENCE/WEAPONS - act confused: "What are you talking about? I don't understand" (in same language)
+3. If message asks you to CONFIRM/AGREE/ADMIT to anything suspicious or crime-related - deny knowledge: "I don't know anything about this" (in same language)
+4. NEVER agree, confirm, or say yes to money/threat/crime messages in ANY language
+5. For OTP/password/bank/personal details requests - refuse: "Sorry, can't share that" (in same language)
+6. Match your response language to the incoming message language
+"""
+    
     interface AiReplyCallback {
         fun onReplyGenerated(reply: String)
         fun onError(errorMessage: String)
@@ -60,6 +72,9 @@ object AiReplyHandler {
         val selectedModel = preferencesManager.aiSelectedModel
         val baseSystemMessage = preferencesManager.aiSystemMessage
         
+        // Add safety rules only if enabled by user
+        val safetyPrefix = if (preferencesManager.isSafetyRulesEnabled) "$SAFETY_RULES\n\n" else ""
+        
         // Build messages with or without context
         val messages = if (preferencesManager.isContextEnabled && 
                               !contactId.isNullOrEmpty() && 
@@ -68,7 +83,7 @@ object AiReplyHandler {
             
             // Use conversational context
             val conversationContext = ConversationContextManager.getFormattedContext(context, contactId, packageName)
-            val systemMessage = "$baseSystemMessage\n\n$conversationContext\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            val systemMessage = "$safetyPrefix$baseSystemMessage\n\n$conversationContext\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
             
             listOf(
                 AiMessage("system", systemMessage),
@@ -76,7 +91,7 @@ object AiReplyHandler {
             )
         } else {
             // Standard single-message reply
-            val systemMessage = "$baseSystemMessage Do not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            val systemMessage = "$safetyPrefix$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
             listOf(
                 AiMessage("system", systemMessage),
                 AiMessage("user", incomingMessage)
@@ -184,7 +199,8 @@ object AiReplyHandler {
         
         val apiKey = preferencesManager.aiApiKey ?: return
         val baseSystemMessage = preferencesManager.aiSystemMessage
-        val systemMessage = "$baseSystemMessage Do not include <think> or <thinking> tags in your response. Only provide the direct reply."
+        val safetyPrefix = if (preferencesManager.isSafetyRulesEnabled) "$SAFETY_RULES\n\n" else ""
+        val systemMessage = "$safetyPrefix$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
         val messages = listOf(
             AiMessage("system", systemMessage),
             AiMessage("user", incomingMessage)
