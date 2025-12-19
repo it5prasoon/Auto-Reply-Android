@@ -34,6 +34,20 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Message Logs">
+
+        <ListPreference
+            android:key="pref_message_log_retention"
+            android:title="@string/message_log_retention_title"
+            android:summary="@string/message_log_retention_summary"
+            android:entries="@array/retention_days_entries"
+            android:entryValues="@array/retention_days_values"
+            android:defaultValue="30"
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/ic_baseline_table_rows_24" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Troubleshoot">
 
         <Preference android:title="@string/restart_service"

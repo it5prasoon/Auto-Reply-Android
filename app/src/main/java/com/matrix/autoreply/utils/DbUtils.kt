@@ -18,7 +18,13 @@ class DbUtils(private val mContext: Context) {
 
     fun purgeMessageLogs() {
         val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-        messageLogsDB!!.replyLogsDao()!!.purgeMessageLogs()
+        val preferencesManager = com.matrix.autoreply.preferences.PreferencesManager.getPreferencesInstance(mContext)
+        val retentionDays = preferencesManager?.messageLogRetentionDays ?: 30
+        val cutoffTime = System.currentTimeMillis() - (retentionDays * 24 * 60 * 60 * 1000L)
+        
+        // Purge both incoming messages and replies older than user-configured days
+        messageLogsDB!!.messageLogsDao()!!.purgeOldMessageLogs(cutoffTime)
+        messageLogsDB.replyLogsDao()!!.purgeOldReplyLogs(cutoffTime)
     }
 
     fun logReply(sbn: StatusBarNotification, title: String?) {

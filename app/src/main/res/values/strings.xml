@@ -265,6 +265,10 @@
     <string name="configure_smart_replies">Configure Smart Replies</string>
     <string name="ai_powered_replies">AI-powered replies</string>
 
+    <!-- Message Log Retention -->
+    <string name="message_log_retention_title">Message Log Retention</string>
+    <string name="message_log_retention_summary">How long to keep message logs before auto-deletion</string>
+
     <!-- What's New Dialog (minimal - most content from JSON) -->
     <string name="explore_ai_settings">AI Settings</string>
     <string name="got_it">Got It!</string>

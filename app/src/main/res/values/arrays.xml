@@ -31,4 +31,28 @@
         <item>360</item>
         <item>1440</item>
     </string-array>
+    
+    <string-array name="retention_days_entries">
+        <item>1 day (very short)</item>
+        <item>3 days</item>
+        <item>7 days (1 week)</item>
+        <item>15 days</item>
+        <item>30 days (recommended)</item>
+        <item>60 days (2 months)</item>
+        <item>90 days (3 months)</item>
+        <item>180 days (6 months)</item>
+        <item>365 days (1 year)</item>
+    </string-array>
+    
+    <string-array name="retention_days_values">
+        <item>1</item>
+        <item>3</item>
+        <item>7</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>90</item>
+        <item>180</item>
+        <item>365</item>
+    </string-array>
 </resources>

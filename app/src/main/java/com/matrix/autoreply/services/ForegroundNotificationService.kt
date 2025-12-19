@@ -226,9 +226,11 @@ class ForegroundNotificationService : NotificationListenerService() {
     }
 
     private fun canPurgeMessages(): Boolean {
-        val daysBeforePurgeInMS = 30 * 24 * 60 * 60 * 1000L
+        val preferencesManager = PreferencesManager.getPreferencesInstance(this)
+        val retentionDays = preferencesManager?.messageLogRetentionDays ?: 30
+        val daysBeforePurgeInMS = retentionDays * 24 * 60 * 60 * 1000L
         return System.currentTimeMillis() -
-                (PreferencesManager.getPreferencesInstance(this)?.lastPurgedTime!!) > daysBeforePurgeInMS
+                (preferencesManager?.lastPurgedTime!!) > daysBeforePurgeInMS
     }
 
     private fun isSupportedPackage(sbn: StatusBarNotification): Boolean {

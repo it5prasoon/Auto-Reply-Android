@@ -344,6 +344,16 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putBoolean(KEY_DONT_SHOW_FEATURE_ANNOUNCEMENTS, dontShow).apply()
         }
     
+    // Message log retention preferences
+    private val KEY_MESSAGE_LOG_RETENTION_DAYS = "message_log_retention_days"
+    
+    var messageLogRetentionDays: Int
+        get() = _sharedPrefs.getInt(KEY_MESSAGE_LOG_RETENTION_DAYS, 30) // Default 30 days
+        set(days) {
+            val clampedDays = days.coerceIn(1, 365) // 1 day to 1 year
+            _sharedPrefs.edit().putInt(KEY_MESSAGE_LOG_RETENTION_DAYS, clampedDays).apply()
+        }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {

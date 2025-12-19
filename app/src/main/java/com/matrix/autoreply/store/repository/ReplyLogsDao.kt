@@ -25,6 +25,10 @@ interface ReplyLogsDao {
     @Query("DELETE FROM reply_logs WHERE notif_reply_time <= strftime('%s', datetime('now', '-30 days'));")
     fun purgeMessageLogs()
 
+    // Delete reply logs older than cutoff time (timestamp-based for consistency)
+    @Query("DELETE FROM reply_logs WHERE notif_reply_time < :cutoffTime")
+    fun purgeOldReplyLogs(cutoffTime: Long)
+
     @get:Query("SELECT notif_reply_time FROM REPLY_LOGS ORDER BY notif_reply_time DESC LIMIT 1")
     val firstRepliedTime: Long
 }

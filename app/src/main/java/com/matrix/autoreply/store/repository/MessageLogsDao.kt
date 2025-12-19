@@ -19,4 +19,8 @@ interface MessageLogsDao {
     @Query("SELECT * FROM message_logs WHERE notif_title = :notifTitle")
     fun getMessageLogsWithTitle(notifTitle: String): List<MessageLogs>
 
+    // Delete incoming message logs older than 30 days for privacy
+    @Query("DELETE FROM message_logs WHERE notif_arrived_time < :cutoffTime")
+    fun purgeOldMessageLogs(cutoffTime: Long)
+
 }
