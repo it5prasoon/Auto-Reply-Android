@@ -228,13 +228,9 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 var foundSelected = false
                 val selectedModelId = prefManager.aiSelectedModel
                 
-                // Filter models based on provider
+                // Use all models - no filtering to show complete model list like MultiGPT
                 val provider = prefManager.aiProvider
-                val filteredModels = when (provider) {
-                    "groq" -> models.filter { it.id.contains("llama") || it.id.contains("mixtral") || it.id.contains("gemma") }
-                    "openai" -> models.filter { it.id.contains("gpt") }
-                    else -> models.filter { it.id.contains("llama") || it.id.contains("mixtral") }
-                }
+                val filteredModels = models  // Show all available models from API
                 
                 filteredModels.forEach { model ->
                     entries.add(model.id)
