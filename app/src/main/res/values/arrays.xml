@@ -2,12 +2,16 @@
 <resources>
     <string-array name="ai_provider_entries">
         <item>Groq (Free &amp; Fast)</item>
-        <item>OpenAI (Paid)</item>
+        <item>OpenAI</item>
+        <item>Anthropic Claude</item>
+        <item>Google Gemini</item>
     </string-array>
     
     <string-array name="ai_provider_values">
         <item>groq</item>
         <item>openai</item>
+        <item>anthropic</item>
+        <item>google</item>
     </string-array>
     
     <string-array name="context_window_entries">

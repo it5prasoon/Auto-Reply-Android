@@ -88,12 +88,22 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 val provider = newValue as String
                 preferencesManager?.aiProvider = provider
                 
+                // Clear API key when provider changes (each provider needs different keys)
+                preferencesManager?.aiApiKey = ""
+                
                 // Reset model selection when provider changes
                 preferencesManager?.aiSelectedModel = when (provider) {
                     "groq" -> "llama-3.1-70b-versatile"
-                    "openai" -> "gpt-3.5-turbo"
+                    "openai" -> "gpt-4o-mini" 
+                    "anthropic" -> "claude-3-5-sonnet-20241022"
+                    "google" -> "gemini-1.5-pro-latest"
                     else -> "llama-3.1-70b-versatile"
                 }
+                
+                // Update API key field and summary to reflect cleared state
+                val apiKeyPref = findPreference<EditTextPreference>("pref_ai_api_key")
+                apiKeyPref?.text = ""  // Clear the UI field
+                updateApiKeySummary(apiKeyPref!!, "")
                 
                 // Reload models for new provider
                 AiHelper.invalidateCache()
@@ -227,10 +237,13 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 val entryValues = mutableListOf<CharSequence>()
                 var foundSelected = false
                 val selectedModelId = prefManager.aiSelectedModel
-                
-                // Use all models - no filtering to show complete model list like MultiGPT
+
+                // Filter models based on provider
                 val provider = prefManager.aiProvider
-                val filteredModels = models  // Show all available models from API
+                val filteredModels = when (provider) {
+                    "groq" -> models.filter { it.id.contains("llama") || it.id.contains("mixtral") || it.id.contains("gemma") }
+                    else -> models
+                }
                 
                 filteredModels.forEach { model ->
                     entries.add(model.id)

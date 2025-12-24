@@ -102,6 +102,10 @@ class ApiKeyGuideDialog : DialogFragment() {
         stepDescription.text = when (provider) {
             "groq" -> "Groq provides FREE AI models that work great for auto-replies. No credit card required!"
             "openai" -> "OpenAI provides powerful AI models. Note: This requires payment after free trial."
+            "anthropic" -> "Anthropic Claude provides intelligent AI models. Requires API credits for usage."
+            "google" -> "Google Gemini offers powerful AI capabilities. Free tier available with usage limits."
+            "ollama" -> "Ollama runs AI models locally on your computer. FREE but requires setup on your PC/Mac."
+            "bedrock" -> "AWS Bedrock provides enterprise AI models. Requires AWS account and billing setup."
             else -> "Let's get your API key to enable smart AI replies."
         }
         stepImage.setImageResource(android.R.drawable.ic_dialog_info)
@@ -113,11 +117,18 @@ class ApiKeyGuideDialog : DialogFragment() {
         stepDescription.text = when (provider) {
             "groq" -> "1. Click 'Open Groq Console' below\n2. Click 'Sign Up' if you don't have an account\n3. Use your Google account or email to sign up\n4. It's completely FREE!"
             "openai" -> "1. Click 'Open OpenAI Platform' below\n2. Click 'Sign Up' if you don't have an account\n3. Use your Google account or email to sign up\n4. Note: You'll need to add payment info after free trial"
+            "anthropic" -> "1. Click 'Open Anthropic Console' below\n2. Sign up with your email address\n3. Verify your email and complete setup\n4. Add payment method for API credits"
+            "google" -> "1. Click 'Open Google AI Studio' below\n2. Sign in with your Google account\n3. Accept the terms of service\n4. Free tier includes generous usage limits"
+            "ollama" -> "1. Click 'Download Ollama' below\n2. Install Ollama on your computer\n3. Open terminal/command prompt\n4. Run: ollama serve (to start the server)"
+            "bedrock" -> "1. Click 'Open AWS Console' below\n2. Create AWS account if needed\n3. Set up billing and payment\n4. Request access to Bedrock models"
             else -> "Create your account on the provider's website"
         }
         stepImage.setImageResource(android.R.drawable.ic_menu_add)
         btnOpenWebsite.visibility = View.VISIBLE
-        btnOpenWebsite.text = "Open ${getProviderName()} Console"
+        btnOpenWebsite.text = when (provider) {
+            "ollama" -> "Download Ollama"
+            else -> "Open ${getProviderName()} Console"
+        }
     }
     
     private fun showStep3() {
@@ -125,11 +136,18 @@ class ApiKeyGuideDialog : DialogFragment() {
         stepDescription.text = when (provider) {
             "groq" -> "1. After logging in, look for 'API Keys' in the menu\n2. Click 'Create API Key'\n3. Give it a name like 'AutoReply'\n4. Copy the key that appears (it starts with 'gsk_')"
             "openai" -> "1. After logging in, go to 'API Keys' section\n2. Click 'Create new secret key'\n3. Give it a name like 'AutoReply'\n4. Copy the key that appears (it starts with 'sk-')"
+            "anthropic" -> "1. Go to 'API Keys' in your console\n2. Click 'Create Key'\n3. Give it a name like 'AutoReply'\n4. Copy the key (it starts with 'sk-ant-')"
+            "google" -> "1. In AI Studio, click 'Get API key'\n2. Click 'Create API key'\n3. Select your Google Cloud project\n4. Copy the generated API key"
+            "ollama" -> "1. Make sure Ollama is running: ollama serve\n2. In the API Key field, enter your server URL\n3. Example: http://192.168.1.100:11434\n4. Use localhost:11434 if running on same device"
+            "bedrock" -> "1. Set up AWS CLI credentials\n2. In the API Key field, enter your AWS Access Key\n3. You'll also need Secret Key and Region\n4. Contact admin for enterprise setup"
             else -> "Navigate to the API Keys section and create a new key"
         }
         stepImage.setImageResource(android.R.drawable.ic_menu_manage)
-        btnOpenWebsite.visibility = View.VISIBLE
-        btnOpenWebsite.text = "Open ${getProviderName()} Console"
+        btnOpenWebsite.visibility = if (provider == "bedrock") View.GONE else View.VISIBLE
+        btnOpenWebsite.text = when (provider) {
+            "ollama" -> "Download Ollama"
+            else -> "Open ${getProviderName()} Console"
+        }
     }
     
     private fun showStep4() {
@@ -143,6 +161,10 @@ class ApiKeyGuideDialog : DialogFragment() {
         return when (provider) {
             "groq" -> "Groq"
             "openai" -> "OpenAI"
+            "anthropic" -> "Anthropic"
+            "google" -> "Google AI"
+            "ollama" -> "Ollama"
+            "bedrock" -> "AWS Bedrock"
             else -> "AI Provider"
         }
     }
@@ -151,6 +173,10 @@ class ApiKeyGuideDialog : DialogFragment() {
         val url = when (provider) {
             "groq" -> "https://console.groq.com/keys"
             "openai" -> "https://platform.openai.com/api-keys"
+            "anthropic" -> "https://console.anthropic.com/settings/keys"
+            "google" -> "https://aistudio.google.com/app/apikey"
+            "ollama" -> "https://ollama.com/download"
+            "bedrock" -> "https://console.aws.amazon.com/bedrock/"
             else -> "https://console.groq.com/keys"
         }
         
