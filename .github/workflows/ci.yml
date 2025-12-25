@@ -36,7 +36,6 @@ jobs:
 
     - name: Create dummy google-services.json for CI
       run: |
-        mkdir -p app/src/main
         echo '{
           "project_info": {
             "project_number": "123456789",
@@ -65,7 +64,7 @@ jobs:
             }
           ],
           "configuration_version": "1"
-        }' > app/src/main/google-services.json
+        }' > app/google-services.json
 
     - name: Run unit tests
       run: ./gradlew test
@@ -117,7 +116,6 @@ jobs:
 
     - name: Create dummy google-services.json for CI
       run: |
-        mkdir -p app/src/main
         echo '{
           "project_info": {
             "project_number": "123456789",
@@ -146,7 +144,7 @@ jobs:
             }
           ],
           "configuration_version": "1"
-        }' > app/src/main/google-services.json
+        }' > app/google-services.json
 
     - name: Build debug APK
       run: ./gradlew assembleDebug
