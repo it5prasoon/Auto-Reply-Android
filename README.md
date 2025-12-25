@@ -12,9 +12,23 @@
     <img alt="Android" src="https://img.shields.io/badge/Platform-Android-green.svg">
     <img alt="API" src="https://img.shields.io/badge/API-23%2B-brightgreen.svg">
     <img alt="Kotlin" src="https://img.shields.io/badge/Language-Kotlin-blue.svg">
-    <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+    <img alt="License" src="https://img.shields.io/badge/License-GPL--3.0-red.svg">
   </p>
 </div>
+
+## ⚠️ **IMPORTANT: Commercial Use Restrictions**
+
+**AutoReply is open source for personal and educational use only.**
+
+📵 **Commercial distribution on Google Play, App Store, or other platforms requires explicit written permission.**
+
+🚨 **Unauthorized commercial uploads will result in DMCA takedown requests.**
+
+📧 **For commercial licensing**: [prasoonkumar008@gmail.com](mailto:prasoonkumar008@gmail.com)
+
+📖 **Full policy**: See [COMMERCIAL_USE.md](COMMERCIAL_USE.md)
+
+---
 
 ## ✨ Overview
 
@@ -369,25 +383,23 @@ We welcome contributions! Here's how you can help:
 
 ## 📜 License
 
-```
-MIT License
+**GPL-3.0 License with Commercial Distribution Restrictions**
 
-Copyright (c) 2024 AutoReply
+This project is licensed under GPL v3 for open source use. Commercial distribution on app stores requires explicit permission.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+**Open Source Use:** ✅ Allowed
+- Personal use, education, research
+- Code contributions and forks
+- Learning and studying the code
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+**Commercial Distribution:** ❌ Requires Permission  
+- App store uploads (Google Play, Apple App Store)
+- Commercial redistribution
+- Monetized versions
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-```
+**Full License**: See [LICENSE](LICENSE) file  
+**Commercial Policy**: See [COMMERCIAL_USE.md](COMMERCIAL_USE.md)  
+**Contact**: [prasoonkumar008@gmail.com](mailto:prasoonkumar008@gmail.com)
 
 ---
 

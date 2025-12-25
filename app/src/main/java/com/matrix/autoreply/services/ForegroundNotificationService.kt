@@ -1,3 +1,17 @@
+/*
+ * AutoReply - AI-Powered Smart Auto Reply App
+ * Copyright (c) 2024 Prasoon Kumar
+ * 
+ * This file contains the core notification service that powers AutoReply's functionality.
+ * Licensed under GPL v3. Commercial distribution on app stores requires explicit permission.
+ * 
+ * Contact: prasoonkumar008@gmail.com
+ * GitHub: https://github.com/it5prasoon/Auto-Reply-Android
+ * 
+ * WARNING: This is proprietary core functionality. Unauthorized commercial use will
+ * result in DMCA takedown requests and legal action for copyright violation.
+ */
+
 package com.matrix.autoreply.services
 
 import android.app.Notification
