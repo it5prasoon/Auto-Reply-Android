@@ -66,6 +66,19 @@ jobs:
           "configuration_version": "1"
         }' > app/google-services.json
 
+    - name: Create dummy AdMob config for CI
+      run: |
+        mkdir -p app/src/main/res/values
+        echo '<?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+            <string name="msg_logs_banner">ca-app-pub-3940256099942544/6300978111</string>
+            <string name="main_banner">ca-app-pub-3940256099942544/6300978111</string>
+            <string name="save_custom_reply_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+            <string name="ai_enable_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+            <string name="ai_settings_banner">ca-app-pub-3940256099942544/6300978111</string>
+        </resources>' > app/src/main/res/values/ad_mob_config.xml
+
     - name: Run unit tests
       run: ./gradlew test
 
@@ -145,6 +158,19 @@ jobs:
           ],
           "configuration_version": "1"
         }' > app/google-services.json
+
+    - name: Create dummy AdMob config for CI
+      run: |
+        mkdir -p app/src/main/res/values
+        echo '<?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+            <string name="msg_logs_banner">ca-app-pub-3940256099942544/6300978111</string>
+            <string name="main_banner">ca-app-pub-3940256099942544/6300978111</string>
+            <string name="save_custom_reply_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+            <string name="ai_enable_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+            <string name="ai_settings_banner">ca-app-pub-3940256099942544/6300978111</string>
+        </resources>' > app/src/main/res/values/ad_mob_config.xml
 
     - name: Build debug APK
       run: ./gradlew assembleDebug
