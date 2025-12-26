@@ -10,7 +10,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -34,11 +36,23 @@ class TabbedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Fix window insets to prevent excessive spacing
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        // Handle window insets manually for better control over navigation bar spacing
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         
         binding = ActivityTabbedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Handle system insets to prevent UI going behind navigation bars
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                insets.left,
+                insets.top,
+                insets.right,
+                insets.bottom
+            )
+            windowInsets
+        }
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         binding.toolbar.title = TOOLBAR_TITLE_TEXT

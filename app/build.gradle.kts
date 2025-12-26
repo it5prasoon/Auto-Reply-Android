@@ -6,7 +6,6 @@ plugins {
     kotlin("android")
 }
 
-
 android {
     namespace = Configuration.artifactGroup
     compileSdk = Configuration.compileSdk
