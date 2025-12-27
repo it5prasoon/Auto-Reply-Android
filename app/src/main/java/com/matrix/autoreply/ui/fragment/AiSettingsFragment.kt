@@ -39,7 +39,6 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
         setupProviderPreference()
         setupApiKeyPreference()
         setupModelPreference()
-        setupReplyStylePreference()
         setupSystemMessagePreference()
         setupGetApiKeyPreference()
 
@@ -155,18 +154,6 @@ class AiSettingsFragment : PreferenceFragmentCompat() {
                 true
             }
             loadAiModels()
-        }
-    }
-    
-    private fun setupReplyStylePreference() {
-        val replyStylePref = findPreference<ListPreference>("pref_user_reply_style")
-        replyStylePref?.let { pref ->
-            pref.value = preferencesManager?.userReplyStyle ?: "neutral"
-            pref.setOnPreferenceChangeListener { _, newValue ->
-                val style = newValue as String
-                preferencesManager?.userReplyStyle = style
-                true
-            }
         }
     }
     

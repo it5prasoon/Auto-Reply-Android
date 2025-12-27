@@ -62,17 +62,6 @@
             app:iconSpaceReserved="false"
             android:dependency="pref_ai_enabled" />
 
-        <ListPreference
-            android:key="pref_user_reply_style"
-            android:title="Your Reply Style"
-            android:summary="How should AI reply on your behalf"
-            android:entries="@array/reply_style_entries"
-            android:entryValues="@array/reply_style_values"
-            android:defaultValue="neutral"
-            app:useSimpleSummaryProvider="true"
-            app:iconSpaceReserved="false"
-            android:dependency="pref_ai_enabled" />
-
         <Preference
             android:key="pref_ai_system_message"
             android:title="AI Prompt Style"

@@ -59,17 +59,4 @@
         <item>180</item>
         <item>365</item>
     </string-array>
-    <!-- Reply Style Options -->
-    <string-array name="reply_style_entries">
-        <item>Neutral (Default)</item>
-        <item>Reply as Male</item>
-        <item>Reply as Female</item>
-    </string-array>
-
-    <string-array name="reply_style_values">
-        <item>neutral</item>
-        <item>male</item>
-        <item>female</item>
-    </string-array>
-
 </resources>

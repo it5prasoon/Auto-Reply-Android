@@ -89,34 +89,6 @@ CRITICAL SAFETY RULES (HIGHEST PRIORITY - ALWAYS FOLLOW):
         // Add safety rules only if enabled by user
         val safetyPrefix = if (preferencesManager.isSafetyRulesEnabled) "$SAFETY_RULES\n\n" else ""
         
-        // Build VERY explicit gender context based on user preference
-        val userStyle = preferencesManager.userReplyStyle
-        val genderContext = when (userStyle) {
-            "male" -> """
-                [CRITICAL INSTRUCTION - HIGHEST PRIORITY]
-                You are a MAN. Your gender is MALE.
-                In Hindi: Use ONLY masculine forms: 'tha' (NOT 'thi'), 'tha hun' (NOT 'thi hoon'), 'gaya' (NOT 'gayi'), 'kiya' (NOT 'ki'), 'tha' (NOT 'thi')
-                NEVER use feminine verb endings even if the question uses them.
-                Example: Question "Kya kr rhi?" → Reply "Phone pe busy THA" (use 'tha' NOT 'thi')
-            """.trimIndent()
-            "female" -> """
-                [CRITICAL INSTRUCTION - HIGHEST PRIORITY]
-                You are a WOMAN. Your gender is FEMALE.
-                In Hindi: Use ONLY feminine forms: 'thi' (NOT 'tha'), 'thi hoon' (NOT 'tha hun'), 'gayi' (NOT 'gaya'), 'ki' (NOT 'kiya'), 'thi' (NOT 'tha')
-                Example: Question "Kya kr rha?" → Reply "Phone pe busy THI" (use 'thi' NOT 'tha')
-            """.trimIndent()
-            else -> "You are replying"
-        }
-        
-        // Add contact name context if available
-        val contactContext = if (!contactId.isNullOrEmpty()) {
-            "\nReplying to: $contactId"
-        } else {
-            ""
-        }
-        
-        val personalityInstruction = "$genderContext$contactContext\n\n"
-        
         // Build messages with or without context
         val messages = if (preferencesManager.isContextEnabled && 
                               !contactId.isNullOrEmpty() && 
@@ -125,7 +97,7 @@ CRITICAL SAFETY RULES (HIGHEST PRIORITY - ALWAYS FOLLOW):
             
             // Use conversational context
             val conversationContext = ConversationContextManager.getFormattedContext(context, contactId, packageName)
-            val systemMessage = "$safetyPrefix$personalityInstruction$baseSystemMessage\n\n$conversationContext\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            val systemMessage = "$safetyPrefix$baseSystemMessage\n\n$conversationContext\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
             
             listOf(
                 AiMessage("system", systemMessage),
@@ -133,7 +105,7 @@ CRITICAL SAFETY RULES (HIGHEST PRIORITY - ALWAYS FOLLOW):
             )
         } else {
             // Standard single-message reply
-            val systemMessage = "$safetyPrefix$personalityInstruction$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
+            val systemMessage = "$safetyPrefix$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
             listOf(
                 AiMessage("system", systemMessage),
                 AiMessage("user", incomingMessage)
@@ -242,16 +214,7 @@ CRITICAL SAFETY RULES (HIGHEST PRIORITY - ALWAYS FOLLOW):
         val apiKey = preferencesManager.aiApiKey ?: return
         val baseSystemMessage = preferencesManager.aiSystemMessage
         val safetyPrefix = if (preferencesManager.isSafetyRulesEnabled) "$SAFETY_RULES\n\n" else ""
-        
-        // Add explicit gender context for retry too
-        val userStyle = preferencesManager.userReplyStyle
-        val genderContext = when (userStyle) {
-            "male" -> "[CRITICAL] You are a MAN. In Hindi use: 'tha' NOT 'thi', 'tha hun' NOT 'thi hoon'. Example: 'Phone pe busy THA'. "
-            "female" -> "[CRITICAL] You are a WOMAN. In Hindi use: 'thi' NOT 'tha', 'thi hoon' NOT 'tha hun'. Example: 'Phone pe busy THI'. "
-            else -> ""
-        }
-        
-        val systemMessage = "$safetyPrefix$genderContext$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
+        val systemMessage = "$safetyPrefix$baseSystemMessage\n\nDo not include <think> or <thinking> tags in your response. Only provide the direct reply."
         val messages = listOf(
             AiMessage("system", systemMessage),
             AiMessage("user", incomingMessage)
