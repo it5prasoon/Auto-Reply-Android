@@ -7,72 +7,78 @@ import android.service.notification.StatusBarNotification
 import com.matrix.autoreply.store.data.AppPackage
 import com.matrix.autoreply.store.data.MessageLogs
 import com.matrix.autoreply.store.data.ReplyLogs
+import com.matrix.autoreply.preferences.PreferencesManager
 
 class DbUtils(private val mContext: Context) {
+    private val TAG = "DbUtils"
     private var customRepliesData: CustomRepliesData? = null
+    
+    // Lazy database instance - Room guarantees non-null after proper initialization
+    private val messageLogsDB: MessageLogsDB by lazy {
+        MessageLogsDB.getInstance(mContext.applicationContext)
+            ?: throw IllegalStateException("MessageLogsDB failed to initialize")
+    }
+    
     val nunReplies: Long
-        get() {
-            val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-            return messageLogsDB!!.replyLogsDao()!!.numReplies
-        }
+        get() = messageLogsDB.replyLogsDao()?.numReplies ?: 0L
 
     fun purgeMessageLogs() {
-        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-        val preferencesManager = com.matrix.autoreply.preferences.PreferencesManager.getPreferencesInstance(mContext)
+        val preferencesManager = PreferencesManager.getPreferencesInstance(mContext)
         val retentionDays = preferencesManager?.messageLogRetentionDays ?: 30
         val cutoffTime = System.currentTimeMillis() - (retentionDays * 24 * 60 * 60 * 1000L)
         
-        // Purge both incoming messages and replies older than user-configured days
-        messageLogsDB!!.messageLogsDao()!!.purgeOldMessageLogs(cutoffTime)
-        messageLogsDB.replyLogsDao()!!.purgeOldReplyLogs(cutoffTime)
+        messageLogsDB.messageLogsDao()?.purgeOldMessageLogs(cutoffTime)
+        messageLogsDB.replyLogsDao()?.purgeOldReplyLogs(cutoffTime)
     }
 
     fun logReply(sbn: StatusBarNotification, title: String?) {
+        // Title is required - skip if null (legitimate case for some notifications)
+        if (title.isNullOrEmpty()) return
+        
         customRepliesData = CustomRepliesData.getInstance(mContext)
-        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-        var packageIndex = messageLogsDB!!.appPackageDao()!!.getPackageIndex(sbn.packageName)
+        
+        var packageIndex = messageLogsDB.appPackageDao()?.getPackageIndex(sbn.packageName) ?: 0
         if (packageIndex <= 0) {
-            val appPackage = AppPackage(sbn.packageName)
-            messageLogsDB.appPackageDao()!!.insertAppPackage(appPackage)
-            packageIndex = messageLogsDB.appPackageDao()!!.getPackageIndex(sbn.packageName)
+            messageLogsDB.appPackageDao()?.insertAppPackage(AppPackage(sbn.packageName))
+            packageIndex = messageLogsDB.appPackageDao()?.getPackageIndex(sbn.packageName) ?: 0
         }
 
+        val replyText = customRepliesData?.getTextToSendOrElse(null) ?: "Thanks for your message!"
         val logs = ReplyLogs(
             packageIndex,
-            title!!,
+            title,
             sbn.notification.`when`,
-            customRepliesData!!.getTextToSendOrElse(null),
+            replyText,
             System.currentTimeMillis()
         )
-        messageLogsDB.replyLogsDao()!!.logReply(logs)
+        messageLogsDB.replyLogsDao()?.logReply(logs)
     }
 
     fun saveLogs(sbn: StatusBarNotification, title: String?, message: String?) {
-        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-        var packageIndex = messageLogsDB!!.appPackageDao()!!.getPackageIndex(sbn.packageName)
+        // Title is required - skip if null (legitimate case for some notifications)
+        if (title.isNullOrEmpty()) return
+        
+        var packageIndex = messageLogsDB.appPackageDao()?.getPackageIndex(sbn.packageName) ?: 0
         if (packageIndex <= 0) {
-            val appPackage = AppPackage(sbn.packageName)
-            messageLogsDB.appPackageDao()!!.insertAppPackage(appPackage)
-            packageIndex = messageLogsDB.appPackageDao()!!.getPackageIndex(sbn.packageName)
+            messageLogsDB.appPackageDao()?.insertAppPackage(AppPackage(sbn.packageName))
+            packageIndex = messageLogsDB.appPackageDao()?.getPackageIndex(sbn.packageName) ?: 0
         }
+        
         val logs = MessageLogs(
             packageIndex,
-            title!!,
+            title,
             message,
             sbn.notification.`when`,
             sbn.id
         )
-        messageLogsDB.messageLogsDao()!!.logMessage(logs)
+        messageLogsDB.messageLogsDao()?.logMessage(logs)
     }
 
     fun getLastRepliedTime(packageName: String?, title: String?): Long {
-        val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-        return messageLogsDB!!.replyLogsDao()!!.getLastReplyTimeStamp(title, packageName)
+        if (packageName.isNullOrEmpty() || title.isNullOrEmpty()) return 0L
+        return messageLogsDB.replyLogsDao()?.getLastReplyTimeStamp(title, packageName) ?: 0L
     }
 
     val firstRepliedTime: Long
-        get() {
-            val messageLogsDB = MessageLogsDB.getInstance(mContext.applicationContext)
-            return messageLogsDB!!.replyLogsDao()!!.firstRepliedTime
-        }
+        get() = messageLogsDB.replyLogsDao()?.firstRepliedTime ?: 0L
 }

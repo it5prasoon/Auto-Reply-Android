@@ -560,6 +560,7 @@ class PreferencesManager private constructor(private val thisAppContext: Context
     }
 
     companion object {
+        @Volatile
         private var _instance: PreferencesManager? = null
         
         // Prompt migration version - increment this when you want to re-migrate prompts
@@ -568,13 +569,40 @@ class PreferencesManager private constructor(private val thisAppContext: Context
         // Human-like default prompt (safety rules are added silently by AiReplyHandler)
         const val DEFAULT_SYSTEM_MESSAGE = "Reply like a friend texting. Match response length to message length. For greetings like 'Hi' - reply with just 'Hey!' (2-3 words max). For questions, answer briefly (1 sentence). Be natural and human."
         
+        /**
+         * Initialize PreferencesManager. Must be called from Application.onCreate()
+         */
+        @JvmStatic
+        fun initialize(context: Context) {
+            if (_instance == null) {
+                synchronized(this) {
+                    if (_instance == null) {
+                        _instance = PreferencesManager(context.applicationContext)
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Get the PreferencesManager instance.
+         * Returns null only if not initialized (should never happen after Application.onCreate)
+         */
         @JvmStatic
         fun getPreferencesInstance(context: Context): PreferencesManager? {
-            if (_instance == null) {
-                _instance = PreferencesManager(context.applicationContext)
+            return _instance ?: synchronized(this) {
+                _instance ?: PreferencesManager(context.applicationContext).also { _instance = it }
             }
-            return _instance
         }
+        
+        /**
+         * Get the PreferencesManager instance, throwing if not initialized.
+         * Use this in code paths where initialization is guaranteed.
+         */
+        @JvmStatic
+        val instance: PreferencesManager
+            get() = _instance ?: throw IllegalStateException(
+                "PreferencesManager not initialized. Call initialize() from Application.onCreate()"
+            )
 
         /**
          * Check if it is first install on this device.

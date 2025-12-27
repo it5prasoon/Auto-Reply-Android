@@ -41,56 +41,70 @@ class ForegroundNotificationService : NotificationListenerService() {
     private var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    
+    // Use lazy initialization to ensure PreferencesManager is available
+    private val preferencesManager: PreferencesManager by lazy {
+        PreferencesManager.getPreferencesInstance(this) 
+            ?: throw IllegalStateException("PreferencesManager not initialized")
+    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (canReply(sbn)) {
-            sendReply(sbn)
-        }
+        
+        try {
+            if (canReply(sbn)) {
+                sendReply(sbn)
+            }
 
-        if ((sbn.notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0) {
-            //Ignore the notification
-            return
-        }
+            if ((sbn.notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0) {
+                return
+            }
 
-        if (canSaveLogs(sbn)) {
-            saveLogs(sbn)
+            if (canSaveLogs(sbn)) {
+                saveLogs(sbn)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error processing notification: ${e.message}", e)
         }
     }
 
     private fun canSaveLogs(sbn: StatusBarNotification): Boolean {
-        return isServiceEnabled &&
-                isMessageLogsEnabled &&
+        return preferencesManager.isServiceEnabled &&
+                preferencesManager.isMessageLogsEnabled &&
                 isSupportedPackage(sbn) &&
                 NotificationUtils.isNewNotification(sbn) &&
                 isGroupMessageAndReplyAllowed(sbn)
     }
 
     private fun canReply(sbn: StatusBarNotification): Boolean {
-        return isServiceEnabled &&
-                isAutoReplyEnabled &&
+        return preferencesManager.isServiceEnabled &&
+                preferencesManager.isAutoReplyEnabled &&
                 isSupportedPackage(sbn) &&
                 NotificationUtils.isNewNotification(sbn) &&
                 isGroupMessageAndReplyAllowed(sbn) &&
                 canSendReplyNow(sbn) &&
-                isWithinScheduledTime()
-    }
-    
-    private fun isWithinScheduledTime(): Boolean {
-        return PreferencesManager.getPreferencesInstance(this)?.isWithinScheduledTime() ?: true
+                preferencesManager.isWithinScheduledTime()
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        //START_STICKY  to order the system to restart your service as soon as possible when it was killed.
         return START_STICKY
     }
 
     private fun saveLogs(sbn: StatusBarNotification) {
+        val title = NotificationUtils.getTitle(sbn)
+        val message = NotificationUtils.getMessage(sbn)
+        
+        // Skip logging if title is null (can't identify the conversation)
+        if (title.isNullOrEmpty()) {
+            Log.d(TAG, "Skipping log - no title available")
+            return
+        }
+        
         if (dbUtils == null) {
             dbUtils = DbUtils(applicationContext)
         }
-        dbUtils!!.saveLogs(sbn, NotificationUtils.getTitle(sbn), NotificationUtils.getMessage(sbn))
+        dbUtils?.saveLogs(sbn, title, message)
     }
 
     private fun sendReply(sbn: StatusBarNotification) {
@@ -99,7 +113,6 @@ class ForegroundNotificationService : NotificationListenerService() {
             return
         }
 
-        val preferencesManager = PreferencesManager.getPreferencesInstance(this)!!
         val incomingMessage = NotificationUtils.getMessage(sbn) ?: ""
         val contactId = NotificationUtils.getTitle(sbn) ?: ""
         val packageName = sbn.packageName
@@ -116,7 +129,7 @@ class ForegroundNotificationService : NotificationListenerService() {
         }
         
         // Check if AI is enabled and try AI reply first
-        if (preferencesManager.isAiEnabled && preferencesManager.aiApiKey?.isNotEmpty() == true) {
+        if (preferencesManager.isAiEnabled && !preferencesManager.aiApiKey.isNullOrEmpty()) {
             AiReplyHandler.generateReply(
                 this, 
                 incomingMessage, 
@@ -124,7 +137,6 @@ class ForegroundNotificationService : NotificationListenerService() {
                     override fun onReplyGenerated(reply: String) {
                         sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply, isAiReply = true)
                         
-                        // Add AI reply to conversation context
                         if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
                             ConversationContextManager.addOutgoingReply(
                                 this@ForegroundNotificationService,
@@ -137,11 +149,9 @@ class ForegroundNotificationService : NotificationListenerService() {
                     
                     override fun onError(errorMessage: String) {
                         Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
-                        // Fallback to custom reply
                         val customReply = getCustomReply()
                         sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
                         
-                        // Add custom reply to conversation context
                         if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
                             ConversationContextManager.addOutgoingReply(
                                 this@ForegroundNotificationService,
@@ -156,11 +166,9 @@ class ForegroundNotificationService : NotificationListenerService() {
                 packageName
             )
         } else {
-            // Use custom reply directly
             val customReply = getCustomReply()
             sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
             
-            // Add custom reply to conversation context
             if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
                 ConversationContextManager.addOutgoingReply(
                     this,
@@ -184,9 +192,8 @@ class ForegroundNotificationService : NotificationListenerService() {
         replyText: String,
         isAiReply: Boolean = false
     ) {
-        // Launch coroutine with configurable delay to make replies feel more natural
         serviceScope.launch {
-            val delayMs = PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)?.replyDelaySeconds?.times(1000)?.toLong() ?: 3000L
+            val delayMs = preferencesManager.replyDelaySeconds * 1000L
             delay(delayMs)
             
             val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
@@ -205,10 +212,14 @@ class ForegroundNotificationService : NotificationListenerService() {
                     if (dbUtils == null) {
                         dbUtils = DbUtils(applicationContext)
                     }
-                    dbUtils!!.logReply(sbn, NotificationUtils.getTitle(sbn))
+                    
+                    val title = NotificationUtils.getTitle(sbn)
+                    if (!title.isNullOrEmpty()) {
+                        dbUtils?.logReply(sbn, title)
+                    }
+                    
                     pendingIntent.send(this@ForegroundNotificationService, 0, localIntent)
                     
-                    // Track analytics
                     val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
                     AnalyticsTracker.trackReplySent(
                         applicationContext,
@@ -217,45 +228,41 @@ class ForegroundNotificationService : NotificationListenerService() {
                         isGroupMsg
                     )
                     
-                    if (PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)!!.isShowNotificationEnabled) {
-                        sbn.notification?.extras?.getString("android.title")
-                            ?.let {
-                                NotificationHelper.getInstance(applicationContext)?.sendNotification(
-                                    it,
-                                    replyText, sbn.packageName
-                                )
-                            }
+                    if (preferencesManager.isShowNotificationEnabled) {
+                        sbn.notification?.extras?.getString("android.title")?.let {
+                            NotificationHelper.getInstance(applicationContext)?.sendNotification(
+                                it,
+                                replyText, 
+                                sbn.packageName
+                            )
+                        }
                     }
+                    
                     cancelNotification(sbn.key)
+                    
                     if (canPurgeMessages()) {
-                        dbUtils!!.purgeMessageLogs()
-                        PreferencesManager.getPreferencesInstance(this@ForegroundNotificationService)
-                            ?.setPurgeMessageTime(System.currentTimeMillis())
+                        dbUtils?.purgeMessageLogs()
+                        preferencesManager.setPurgeMessageTime(System.currentTimeMillis())
                     }
                 }
             } catch (e: CanceledException) {
-                Log.e(TAG, "replyToLastNotification error: " + e.localizedMessage)
+                Log.e(TAG, "replyToLastNotification error: ${e.localizedMessage}")
             }
         }
     }
 
     private fun canPurgeMessages(): Boolean {
-        val preferencesManager = PreferencesManager.getPreferencesInstance(this)
-        val retentionDays = preferencesManager?.messageLogRetentionDays ?: 30
+        val retentionDays = preferencesManager.messageLogRetentionDays
         val daysBeforePurgeInMS = retentionDays * 24 * 60 * 60 * 1000L
-        return System.currentTimeMillis() -
-                (preferencesManager?.lastPurgedTime!!) > daysBeforePurgeInMS
+        val lastPurgedTime = preferencesManager.lastPurgedTime
+        return System.currentTimeMillis() - lastPurgedTime > daysBeforePurgeInMS
     }
 
     private fun isSupportedPackage(sbn: StatusBarNotification): Boolean {
-        return PreferencesManager.getPreferencesInstance(this)!!
-            .enabledApps
-            .contains(sbn.packageName)
+        return preferencesManager.enabledApps.contains(sbn.packageName)
     }
 
     private fun canSendReplyNow(sbn: StatusBarNotification): Boolean {
-
-        // Time between consecutive replies is 10 secs
         val DELAY_BETWEEN_REPLY_IN_MILLISEC = 10 * 1000
         val title = NotificationUtils.getTitle(sbn)
         val selfDisplayName = sbn.notification.extras.getString("android.selfDisplayName")
@@ -268,11 +275,10 @@ class ForegroundNotificationService : NotificationListenerService() {
             dbUtils = DbUtils(applicationContext)
         }
 
-        val timeDelay = PreferencesManager.getPreferencesInstance(this)!!.autoReplyDelay
-        return System.currentTimeMillis() - dbUtils!!.getLastRepliedTime(
-            sbn.packageName,
-            title
-        ) >= timeDelay.coerceAtLeast(
+        val timeDelay = preferencesManager.autoReplyDelay
+        val lastRepliedTime = dbUtils?.getLastRepliedTime(sbn.packageName, title) ?: 0L
+        
+        return System.currentTimeMillis() - lastRepliedTime >= timeDelay.coerceAtLeast(
             DELAY_BETWEEN_REPLY_IN_MILLISEC.toLong()
         )
     }
@@ -281,25 +287,17 @@ class ForegroundNotificationService : NotificationListenerService() {
         val rawTitle = NotificationUtils.getTitleRaw(sbn)
         val rawText = SpannableString.valueOf("" + sbn.notification.extras["android.text"])
         val isPossiblyAnImageGrpMsg = (rawTitle != null && ": ".contains(rawTitle)
-                && rawText != null && rawText.toString().startsWith("\uD83D\uDCF7"))
+                && rawText.toString().startsWith("\uD83D\uDCF7"))
+        
         return if (!sbn.notification.extras.getBoolean("android.isGroupConversation")) {
             !isPossiblyAnImageGrpMsg
         } else {
-            PreferencesManager.getPreferencesInstance(this)!!.isGroupReplyEnabled
+            preferencesManager.isGroupReplyEnabled
         }
     }
 
-    private val isServiceEnabled: Boolean
-        get() = PreferencesManager.getPreferencesInstance(this)!!.isServiceEnabled
-
-    private val isAutoReplyEnabled: Boolean
-        get() = PreferencesManager.getPreferencesInstance(this)!!.isAutoReplyEnabled
-
-    private val isMessageLogsEnabled: Boolean
-        get() = PreferencesManager.getPreferencesInstance(this)!!.isMessageLogsEnabled
-
     override fun onDestroy() {
         super.onDestroy()
-        serviceScope.cancel() // Clean up coroutines when service is destroyed
+        serviceScope.cancel()
     }
 }
