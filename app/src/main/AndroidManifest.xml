@@ -77,6 +77,18 @@
         <service
                 android:name=".services.KeepAliveService"
                 android:stopWithTask="false"/> <!-- https://techstop.github.io/android-broadcastreceiver/ -->
+        <service
+                android:name=".services.LiveChatAccessibilityService"
+                android:label="@string/live_chat_service_name"
+                android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/live_chat_accessibility_service_config"/>
+        </service>
         <receiver
                 android:name=".receivers.NotificationServiceRestartReceiver"
                 android:enabled="true"

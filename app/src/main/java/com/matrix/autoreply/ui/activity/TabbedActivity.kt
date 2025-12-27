@@ -60,8 +60,8 @@ class TabbedActivity : AppCompatActivity() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
-        // Keep all 3 fragments in memory to prevent state issues
-        binding.viewPager.offscreenPageLimit = 2
+        // Keep all 4 fragments in memory to prevent state issues
+        binding.viewPager.offscreenPageLimit = 3
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 

@@ -8,11 +8,13 @@ import com.matrix.autoreply.R
 import com.matrix.autoreply.ui.fragment.MainFragment
 import com.matrix.autoreply.ui.fragment.SettingsFragment
 import com.matrix.autoreply.ui.fragment.DeletedMessageFragment
+import com.matrix.autoreply.ui.fragment.LiveChatFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_text_1,
         R.string.tab_text_2,
-        R.string.tab_text_3
+        R.string.tab_text_3,
+        R.string.tab_text_4
 )
 
 /**
@@ -28,7 +30,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
         when (position) {
             0 -> fragment = MainFragment()
             1 -> fragment = DeletedMessageFragment()
-            2 -> fragment = SettingsFragment()
+            2 -> fragment = LiveChatFragment()
+            3 -> fragment = SettingsFragment()
         }
 
         return fragment!!
@@ -39,7 +42,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
-        return 3
+        // Show 4 total pages.
+        return 4
     }
 }

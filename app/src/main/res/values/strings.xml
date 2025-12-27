@@ -162,7 +162,8 @@
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Main</string>
     <string name="tab_text_2">Msg Logs</string>
-    <string name="tab_text_3">Settings</string>
+    <string name="tab_text_3">Live Chat</string>
+    <string name="tab_text_4">Settings</string>
 
 
     <!-- activity_main.xml -->
@@ -272,4 +273,14 @@
     <!-- What's New Dialog (minimal - most content from JSON) -->
     <string name="explore_ai_settings">AI Settings</string>
     <string name="got_it">Got It!</string>
+
+    <!-- Live Chat Feature -->
+    <string name="live_chat_service_name">Auto Reply Live Chat</string>
+    <string name="live_chat_service_description">Monitors messaging apps and automatically sends replies in real-time using accessibility service</string>
+    <string name="live_chat_enabled_title">Enable Live Chat</string>
+    <string name="live_chat_enabled_summary">Toggle live chat auto-replies</string>
+    <string name="live_chat_permission_required">Accessibility Permission Required</string>
+    <string name="live_chat_permission_message">Live Chat requires Accessibility Service permission to read messages and send replies in real-time.</string>
+    <string name="live_chat_setup_complete">Live Chat setup is complete!</string>
+    <string name="live_chat_test_instructions">To test Live Chat:\n\n1. Open WhatsApp or another enabled app\n2. Have someone send you a message\n3. Watch as Auto Reply responds automatically!\n\nNote: Keep the chat window open for Live Chat to work</string>
 </resources>
