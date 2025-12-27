@@ -246,7 +246,12 @@ Generate an improved system prompt that incorporates the user's request. Return 
             customPromptInput.setText(template.prompt)
         }
         
-        customPromptInput.requestFocus()
+        // Enhanced focus handling for Android 12+ compatibility
+        customPromptInput.post {
+            customPromptInput.requestFocus()
+            customPromptInput.isFocusableInTouchMode = true
+            customPromptInput.setSelection(customPromptInput.text?.length ?: 0)
+        }
     }
 
     private fun saveSelectedPrompt() {

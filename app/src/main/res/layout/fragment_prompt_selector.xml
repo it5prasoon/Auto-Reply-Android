@@ -84,7 +84,11 @@
                     android:minLines="3"
                     android:maxLines="6"
                     android:gravity="top|start"
-                    android:inputType="textMultiLine|textCapSentences" />
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:cursorVisible="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
