@@ -449,6 +449,39 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putString(KEY_USER_REPLY_STYLE, style).apply()
         }
     
+    // Achievement badges
+    private val KEY_EARNED_BADGES = "earned_badges"
+    
+    /**
+     * Get list of earned badge IDs
+     */
+    fun getEarnedBadges(): Set<String> {
+        val badgesString = _sharedPrefs.getString(KEY_EARNED_BADGES, "")
+        return if (badgesString.isNullOrEmpty()) {
+            emptySet()
+        } else {
+            badgesString.split(",").toSet()
+        }
+    }
+    
+    /**
+     * Award a badge to the user
+     */
+    fun awardBadge(badgeId: String) {
+        val currentBadges = getEarnedBadges().toMutableSet()
+        if (currentBadges.add(badgeId)) {
+            val badgesString = currentBadges.joinToString(",")
+            _sharedPrefs.edit().putString(KEY_EARNED_BADGES, badgesString).apply()
+        }
+    }
+    
+    /**
+     * Check if user has earned a specific badge
+     */
+    fun hasBadge(badgeId: String): Boolean {
+        return getEarnedBadges().contains(badgeId)
+    }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {

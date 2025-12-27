@@ -13,12 +13,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.matrix.autoreply.R
+import com.matrix.autoreply.model.BadgeRegistry
+import com.matrix.autoreply.ui.adapters.BadgeAdapter
 import com.matrix.autoreply.constants.Constants
 import com.matrix.autoreply.constants.Constants.MAX_DAYS
 import com.matrix.autoreply.constants.Constants.MIN_DAYS
@@ -72,6 +76,8 @@ class MainFragment : Fragment() {
     private var delaySelectedText: TextView? = null
     private var replyDelaySeconds = 3
     private var activeContextsCount: TextView? = null
+    private var badgesRecyclerView: RecyclerView? = null
+    private var nextBadgeInfo: TextView? = null
     private var mActivity: Activity? = null
     private lateinit var notificationListenerUtil: NotificationListenerUtil
     private lateinit var notificationListenerPermissionLauncher: ActivityResultLauncher<Intent>
@@ -127,7 +133,10 @@ class MainFragment : Fragment() {
         delayPlus = binding.delayPlus
         delaySelectedText = binding.delaySelectedText
         activeContextsCount = binding.activeContextsCount
+        badgesRecyclerView = binding.badgesRecyclerView
+        nextBadgeInfo = binding.nextBadgeInfo
         handleReplyOptionsCard()
+        setupBadgesDisplay()
 
         customTextPreview?.text = customRepliesData!!.getTextToSendOrElse(autoReplyTextPlaceholder)
 
@@ -338,6 +347,72 @@ class MainFragment : Fragment() {
         // Update active contexts count
         val activeCount = ConversationContextManager.getActiveSessionsCount()
         activeContextsCount?.text = activeCount.toString()
+        
+        // Update badges display
+        updateBadgesDisplay()
+    }
+    
+    private fun setupBadgesDisplay() {
+        badgesRecyclerView?.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        
+        // One-time sync: Award all deserved badges based on current reply count
+        syncBadgesWithReplyCount()
+        
+        updateBadgesDisplay()
+    }
+    
+    /**
+     * One-time sync to award badges user already deserves based on reply count
+     * This handles existing users who have replies but no badges
+     */
+    private fun syncBadgesWithReplyCount() {
+        val totalReplies = preferencesManager?.getTotalReplyCount() ?: 0
+        val earnedBadges = preferencesManager?.getEarnedBadges() ?: emptySet()
+        
+        // Find all badges user should have
+        val deservedBadges = BadgeRegistry.getBadgesForCount(totalReplies)
+        
+        // Award any missing badges
+        var newBadgesAwarded = false
+        for (badge in deservedBadges) {
+            if (!earnedBadges.contains(badge.id)) {
+                preferencesManager?.awardBadge(badge.id)
+                newBadgesAwarded = true
+            }
+        }
+        
+        // Show toast if badges were just awarded
+        if (newBadgesAwarded) {
+            Toast.makeText(
+                requireContext(),
+                "Badges synced! You've unlocked ${deservedBadges.size} achievements!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+    
+    private fun updateBadgesDisplay() {
+        val earnedBadges = preferencesManager?.getEarnedBadges() ?: emptySet()
+        val totalReplies = preferencesManager?.getTotalReplyCount() ?: 0
+        
+        // Set up adapter with all badges
+        val adapter = BadgeAdapter(BadgeRegistry.ALL_BADGES, earnedBadges)
+        badgesRecyclerView?.adapter = adapter
+        
+        // Update next badge info
+        val nextBadge = BadgeRegistry.getNextBadge(totalReplies)
+        if (nextBadge != null) {
+            val remaining = nextBadge.threshold - totalReplies
+            nextBadgeInfo?.text = "Next: ${nextBadge.emoji} ${nextBadge.title} in $remaining replies"
+            nextBadgeInfo?.visibility = View.VISIBLE
+        } else {
+            nextBadgeInfo?.text = "All badges unlocked! You're a legend!"
+            nextBadgeInfo?.visibility = View.VISIBLE
+        }
     }
 
     private fun setSwitchState() {

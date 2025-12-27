@@ -3,6 +3,8 @@ package com.matrix.autoreply.utils
 import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.matrix.autoreply.helpers.NotificationHelper
+import com.matrix.autoreply.model.BadgeRegistry
 import com.matrix.autoreply.preferences.PreferencesManager
 import java.text.SimpleDateFormat
 import java.util.*
@@ -10,6 +12,9 @@ import java.util.*
 object AnalyticsTracker {
     
     private var firebaseAnalytics: FirebaseAnalytics? = null
+    
+    // Achievement milestones
+    private val MILESTONES = listOf(50, 100, 250, 500, 750, 1000, 2000, 5000, 10000)
     
     fun initialize(context: Context) {
         if (firebaseAnalytics == null) {
@@ -35,9 +40,11 @@ object AnalyticsTracker {
         }
         firebaseAnalytics?.logEvent("auto_reply_sent", bundle)
         
-        // Update local counters
+        // Update local counters and check for milestones
         val prefsManager = PreferencesManager.getPreferencesInstance(context)
         prefsManager?.let {
+            val previousTotal = it.getTotalReplyCount()
+            
             it.incrementDailyReplyCount()
             it.incrementTotalReplyCount()
             it.incrementAppSpecificCount(appPackage)
@@ -46,7 +53,78 @@ object AnalyticsTracker {
             } else {
                 it.incrementCustomReplyCount()
             }
+            
+            // Check if we hit a milestone
+            val newTotal = it.getTotalReplyCount()
+            checkAndCelebrateMilestone(context, previousTotal, newTotal)
         }
+    }
+    
+    /**
+     * Check if a milestone was reached and send celebration notification
+     */
+    private fun checkAndCelebrateMilestone(context: Context, previousCount: Int, newCount: Int) {
+        // Find if we crossed any milestone
+        val milestoneCrossed = MILESTONES.firstOrNull { milestone ->
+            previousCount < milestone && newCount >= milestone
+        }
+        
+        milestoneCrossed?.let { milestone ->
+            // Award the badge
+            val badge = BadgeRegistry.getBadgeByThreshold(milestone)
+            badge?.let {
+                val prefsManager = PreferencesManager.getPreferencesInstance(context)
+                prefsManager?.awardBadge(it.id)
+            }
+            
+            // Send celebration notification
+            sendMilestoneNotification(context, milestone, badge)
+            
+            // Log milestone achievement to Firebase
+            val bundle = Bundle().apply {
+                putInt("milestone", milestone)
+                putInt("total_replies", newCount)
+                putString("badge_id", badge?.id)
+                putString("badge_rarity", badge?.rarity?.name)
+            }
+            firebaseAnalytics?.logEvent("milestone_achieved", bundle)
+        }
+    }
+    
+    /**
+     * Send a celebration notification for reaching a milestone
+     */
+    private fun sendMilestoneNotification(context: Context, milestone: Int, badge: com.matrix.autoreply.model.Badge?) {
+        val badgeInfo = badge?.let { "${it.emoji} Badge Unlocked: ${it.title}!" } ?: ""
+        
+        val (title, message) = when {
+            milestone < 100 -> Pair(
+                "🎉 Achievement Unlocked!",
+                "$badgeInfo You've sent $milestone auto-replies!"
+            )
+            milestone < 500 -> Pair(
+                "🚀 ${badge?.rarity?.name?.lowercase()?.capitalize()} Badge!",
+                "$badgeInfo $milestone auto-replies sent! You're saving so much time!"
+            )
+            milestone < 1000 -> Pair(
+                "🏆 ${badge?.rarity?.name?.lowercase()?.capitalize()} Badge!",
+                "$badgeInfo $milestone auto-replies! You're a power user!"
+            )
+            milestone < 5000 -> Pair(
+                "👑 ${badge?.rarity?.name?.lowercase()?.capitalize()} Badge!",
+                "$badgeInfo $milestone auto-replies! You've mastered automation!"
+            )
+            else -> Pair(
+                "🌟 ${badge?.rarity?.name?.lowercase()?.capitalize()} Badge!",
+                "$badgeInfo $milestone auto-replies! You're a legend! 🔥"
+            )
+        }
+        
+        NotificationHelper.getInstance(context)?.sendNotification(
+            title,
+            message,
+            "com.matrix.autoreply"
+        )
     }
     
     // Track message received
