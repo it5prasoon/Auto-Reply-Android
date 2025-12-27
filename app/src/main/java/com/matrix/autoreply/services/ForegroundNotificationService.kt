@@ -25,6 +25,8 @@ import android.text.SpannableString
 import android.util.Log
 import androidx.core.app.RemoteInput
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import com.matrix.autoreply.helpers.NotificationHelper
 import com.matrix.autoreply.model.CustomRepliesData
 import com.matrix.autoreply.preferences.PreferencesManager
@@ -34,37 +36,119 @@ import com.matrix.autoreply.utils.AiReplyHandler
 import com.matrix.autoreply.utils.AnalyticsTracker
 import com.matrix.autoreply.utils.ConversationContextManager
 
+/**
+ * Data class to hold notification processing request
+ */
+private data class NotificationRequest(
+    val sbn: StatusBarNotification,
+    val shouldReply: Boolean,
+    val shouldLog: Boolean
+)
 
 class ForegroundNotificationService : NotificationListenerService() {
 
     private val TAG = ForegroundNotificationService::class.java.simpleName
     private var customRepliesData: CustomRepliesData? = null
     private var dbUtils: DbUtils? = null
-    private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    
+    // Queue-based notification processing system
+    private val notificationQueue = Channel<NotificationRequest>(Channel.UNLIMITED)
     
     // Use lazy initialization to ensure PreferencesManager is available
     private val preferencesManager: PreferencesManager by lazy {
         PreferencesManager.getPreferencesInstance(this) 
             ?: throw IllegalStateException("PreferencesManager not initialized")
     }
+    
+    init {
+        // Start queue processor coroutine
+        serviceScope.launch {
+            processNotificationQueue()
+        }
+    }
+    
+    /**
+     * Process notifications from queue sequentially to avoid race conditions
+     */
+    private suspend fun processNotificationQueue() {
+        notificationQueue.consumeEach { request ->
+            try {
+                if (request.shouldLog) {
+                    saveLogs(request.sbn)
+                }
+                
+                if (request.shouldReply) {
+                    val title = NotificationUtils.getTitle(request.sbn)
+                    Log.d(TAG, "Processing reply for notification from $title")
+                    
+                    // Check if we should respect the timing delay
+                    if (canSendReplyNow(request.sbn)) {
+                        processReply(request.sbn)
+                    } else {
+                        // Wait until the delay period passes, then process
+                        val timeToWait = calculateWaitTime(request.sbn)
+                        if (timeToWait > 0) {
+                            Log.d(TAG, "Waiting ${timeToWait}ms before replying to $title")
+                            delay(timeToWait)
+                        }
+                        processReply(request.sbn)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error processing queued notification: ${e.message}", e)
+            }
+        }
+    }
+    
+    /**
+     * Calculate how long to wait before replying to respect timing constraints
+     */
+    private fun calculateWaitTime(sbn: StatusBarNotification): Long {
+        if (dbUtils == null) {
+            dbUtils = DbUtils(applicationContext)
+        }
+        
+        val title = NotificationUtils.getTitle(sbn)
+        val timeDelay = preferencesManager.autoReplyDelay.coerceAtLeast(10000L)
+        val lastRepliedTime = dbUtils?.getLastRepliedTime(sbn.packageName, title) ?: 0L
+        val timeSinceLastReply = System.currentTimeMillis() - lastRepliedTime
+        
+        return if (timeSinceLastReply < timeDelay) {
+            timeDelay - timeSinceLastReply
+        } else {
+            0L
+        }
+    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         
         try {
-            if (canReply(sbn)) {
-                sendReply(sbn)
-            }
-
+            // Skip group summary notifications
             if ((sbn.notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0) {
                 return
             }
-
-            if (canSaveLogs(sbn)) {
-                saveLogs(sbn)
+            
+            // Perform basic checks before queuing (don't check timing yet - that's done in queue)
+            val passesBasicReplyChecks = preferencesManager.isServiceEnabled &&
+                    preferencesManager.isAutoReplyEnabled &&
+                    isSupportedPackage(sbn) &&
+                    NotificationUtils.isNewNotification(sbn) &&
+                    isGroupMessageAndReplyAllowed(sbn) &&
+                    preferencesManager.isWithinScheduledTime()
+            
+            val shouldLog = canSaveLogs(sbn)
+            
+            // Add to queue for sequential processing
+            if (passesBasicReplyChecks || shouldLog) {
+                serviceScope.launch {
+                    notificationQueue.send(NotificationRequest(sbn, passesBasicReplyChecks, shouldLog))
+                }
+                Log.d(TAG, "Notification queued. Basic reply check: $passesBasicReplyChecks, Log: $shouldLog")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error processing notification: ${e.message}", e)
+            Log.e(TAG, "Error queueing notification: ${e.message}", e)
         }
     }
 
@@ -76,15 +160,6 @@ class ForegroundNotificationService : NotificationListenerService() {
                 isGroupMessageAndReplyAllowed(sbn)
     }
 
-    private fun canReply(sbn: StatusBarNotification): Boolean {
-        return preferencesManager.isServiceEnabled &&
-                preferencesManager.isAutoReplyEnabled &&
-                isSupportedPackage(sbn) &&
-                NotificationUtils.isNewNotification(sbn) &&
-                isGroupMessageAndReplyAllowed(sbn) &&
-                canSendReplyNow(sbn) &&
-                preferencesManager.isWithinScheduledTime()
-    }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
@@ -107,7 +182,10 @@ class ForegroundNotificationService : NotificationListenerService() {
         dbUtils?.saveLogs(sbn, title, message)
     }
 
-    private fun sendReply(sbn: StatusBarNotification) {
+    /**
+     * Process reply for a notification from the queue
+     */
+    private suspend fun processReply(sbn: StatusBarNotification) {
         val (_, pendingIntent, remoteInputs1) = NotificationUtils.extractWearNotification(sbn)
         if (remoteInputs1.isEmpty()) {
             return
@@ -130,41 +208,41 @@ class ForegroundNotificationService : NotificationListenerService() {
         
         // Check if AI is enabled and try AI reply first
         if (preferencesManager.isAiEnabled && !preferencesManager.aiApiKey.isNullOrEmpty()) {
-            AiReplyHandler.generateReply(
-                this, 
-                incomingMessage, 
-                object : AiReplyHandler.AiReplyCallback {
-                    override fun onReplyGenerated(reply: String) {
-                        sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), reply, isAiReply = true)
-                        
-                        if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
-                            ConversationContextManager.addOutgoingReply(
-                                this@ForegroundNotificationService,
-                                contactId,
-                                packageName,
-                                reply
-                            )
+            // Use suspendCancellableCoroutine to make async callback synchronous
+            val replyText = suspendCancellableCoroutine<String> { continuation ->
+                AiReplyHandler.generateReply(
+                    this, 
+                    incomingMessage, 
+                    object : AiReplyHandler.AiReplyCallback {
+                        override fun onReplyGenerated(reply: String) {
+                            if (continuation.isActive) {
+                                continuation.resume(reply) {}
+                            }
                         }
-                    }
-                    
-                    override fun onError(errorMessage: String) {
-                        Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
-                        val customReply = getCustomReply()
-                        sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
                         
-                        if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
-                            ConversationContextManager.addOutgoingReply(
-                                this@ForegroundNotificationService,
-                                contactId,
-                                packageName,
-                                customReply
-                            )
+                        override fun onError(errorMessage: String) {
+                            Log.w(TAG, "AI reply failed: $errorMessage, falling back to custom reply")
+                            if (continuation.isActive) {
+                                continuation.resume(getCustomReply()) {}
+                            }
                         }
-                    }
-                },
-                contactId,
-                packageName
-            )
+                    },
+                    contactId,
+                    packageName
+                )
+            }
+            
+            val isAiReply = replyText != getCustomReply()
+            sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), replyText, isAiReply)
+            
+            if (preferencesManager.isContextEnabled && contactId.isNotEmpty()) {
+                ConversationContextManager.addOutgoingReply(
+                    this@ForegroundNotificationService,
+                    contactId,
+                    packageName,
+                    replyText
+                )
+            }
         } else {
             val customReply = getCustomReply()
             sendActualReply(sbn, pendingIntent, remoteInputs1.toTypedArray(), customReply, isAiReply = false)
@@ -185,69 +263,67 @@ class ForegroundNotificationService : NotificationListenerService() {
         return customRepliesData?.getTextToSendOrElse(null) ?: "Thanks for your message!"
     }
     
-    private fun sendActualReply(
+    private suspend fun sendActualReply(
         sbn: StatusBarNotification, 
         pendingIntent: PendingIntent?, 
         remoteInputs1: Array<RemoteInput>, 
         replyText: String,
         isAiReply: Boolean = false
     ) {
-        serviceScope.launch {
-            val delayMs = preferencesManager.replyDelaySeconds * 1000L
-            delay(delayMs)
-            
-            val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
-            val localIntent = Intent()
-            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val localBundle = Bundle()
+        val delayMs = preferencesManager.replyDelaySeconds * 1000L
+        delay(delayMs)
+        
+        val remoteInputs = arrayOfNulls<RemoteInput>(remoteInputs1.size)
+        val localIntent = Intent()
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val localBundle = Bundle()
 
-            for ((i, remoteIn) in remoteInputs1.withIndex()) {
-                remoteInputs[i] = remoteIn
-                localBundle.putCharSequence(remoteInputs[i]!!.resultKey, replyText)
-            }
+        for ((i, remoteIn) in remoteInputs1.withIndex()) {
+            remoteInputs[i] = remoteIn
+            localBundle.putCharSequence(remoteInputs[i]!!.resultKey, replyText)
+        }
 
-            RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
-            try {
-                if (pendingIntent != null) {
-                    if (dbUtils == null) {
-                        dbUtils = DbUtils(applicationContext)
-                    }
-                    
-                    val title = NotificationUtils.getTitle(sbn)
-                    if (!title.isNullOrEmpty()) {
-                        dbUtils?.logReply(sbn, title)
-                    }
-                    
-                    pendingIntent.send(this@ForegroundNotificationService, 0, localIntent)
-                    
-                    val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
-                    AnalyticsTracker.trackReplySent(
-                        applicationContext,
-                        sbn.packageName,
-                        isAiReply,
-                        isGroupMsg
-                    )
-                    
-                    if (preferencesManager.isShowNotificationEnabled) {
-                        sbn.notification?.extras?.getString("android.title")?.let {
-                            NotificationHelper.getInstance(applicationContext)?.sendNotification(
-                                it,
-                                replyText, 
-                                sbn.packageName
-                            )
-                        }
-                    }
-                    
-                    cancelNotification(sbn.key)
-                    
-                    if (canPurgeMessages()) {
-                        dbUtils?.purgeMessageLogs()
-                        preferencesManager.setPurgeMessageTime(System.currentTimeMillis())
+        RemoteInput.addResultsToIntent(remoteInputs, localIntent, localBundle)
+        try {
+            if (pendingIntent != null) {
+                if (dbUtils == null) {
+                    dbUtils = DbUtils(applicationContext)
+                }
+                
+                val title = NotificationUtils.getTitle(sbn)
+                if (!title.isNullOrEmpty()) {
+                    dbUtils?.logReply(sbn, title)
+                }
+                
+                pendingIntent.send(this@ForegroundNotificationService, 0, localIntent)
+                
+                val isGroupMsg = sbn.notification.extras.getBoolean("android.isGroupConversation")
+                AnalyticsTracker.trackReplySent(
+                    applicationContext,
+                    sbn.packageName,
+                    isAiReply,
+                    isGroupMsg
+                )
+                
+                if (preferencesManager.isShowNotificationEnabled) {
+                    sbn.notification?.extras?.getString("android.title")?.let {
+                        NotificationHelper.getInstance(applicationContext)?.sendNotification(
+                            it,
+                            replyText, 
+                            sbn.packageName
+                        )
                     }
                 }
-            } catch (e: CanceledException) {
-                Log.e(TAG, "replyToLastNotification error: ${e.localizedMessage}")
+                
+                cancelNotification(sbn.key)
+                
+                if (canPurgeMessages()) {
+                    dbUtils?.purgeMessageLogs()
+                    preferencesManager.setPurgeMessageTime(System.currentTimeMillis())
+                }
             }
+        } catch (e: CanceledException) {
+            Log.e(TAG, "replyToLastNotification error: ${e.localizedMessage}")
         }
     }
 
@@ -298,6 +374,7 @@ class ForegroundNotificationService : NotificationListenerService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        notificationQueue.close()
         serviceScope.cancel()
     }
 }
