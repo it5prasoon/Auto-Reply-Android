@@ -439,6 +439,16 @@ class PreferencesManager private constructor(private val thisAppContext: Context
             _sharedPrefs.edit().putInt(KEY_MESSAGE_LOG_RETENTION_DAYS, clampedDays).apply()
         }
     
+    // Gender context preferences for AI replies
+    private val KEY_USER_REPLY_STYLE = "user_reply_style"
+    
+    var userReplyStyle: String
+        get() = _sharedPrefs.getString(KEY_USER_REPLY_STYLE, "neutral") ?: "neutral"
+        set(style) {
+            // Options: "male", "female", "neutral"
+            _sharedPrefs.edit().putString(KEY_USER_REPLY_STYLE, style).apply()
+        }
+    
     var isScheduleEnabled: Boolean
         get() = _sharedPrefs.getBoolean(KEY_SCHEDULE_ENABLED, false)
         set(enabled) {
